@@ -3,5 +3,6 @@
 	email = smkent@smkent.net
 [core]
 	editor = vim
+	pager = less -F -R -X
 [color]
 	ui = true
