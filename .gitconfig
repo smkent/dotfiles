@@ -1,0 +1,7 @@
+[user]
+	name = Stephen Kent
+	email = smkent@smkent.net
+[core]
+	editor = vim
+[color]
+	ui = true
