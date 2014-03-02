@@ -1,0 +1,8 @@
+sorendition kG
+defscrollback 30000
+defbce on
+bindkey -k k7 prev # change window with F7
+bindkey -k k8 next # change window with F8
+# hardstatus alwayslastline "%{=b} %{b}%-w%{W}%n %t%{-}%+w %{=b W}%{dR} %= %{Y}%c "
+hardstatus alwayslastline "%{= kG}[ %{G}%H%{B}%0` %{g}] %{=b}%{b}%-w%{W}%n %t%{-}%+w %{=b W}%{dR} %= %{Y}%c"
+backtick 0 600 600 sh -c 'echo "$(screen -ls | grep --color=no -o "$PPID[^[:space:]]*" | sed -e "s%\.% %g" | awk "{print \$NF}" | sed -e "s%`hostname -s`%%g" | awk "{print (NF? \" \" \$NF :\"\")}")"'

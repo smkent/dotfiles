@@ -4,3 +4,5 @@
 /*
 !.gitconfig
 !.gitignore
+!.screenrc
+!.tmux.conf
