@@ -6,3 +6,6 @@
 !.gitignore
 !.screenrc
 !.tmux.conf
+!.vimrc
+.vim/.netrwhist
+!.vim/
