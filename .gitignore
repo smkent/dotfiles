@@ -4,6 +4,7 @@
 /*
 *.swp
 !.bashrc
+!.face
 !.gitconfig
 !.gitignore
 !.screenrc
