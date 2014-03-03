@@ -16,6 +16,7 @@ set shiftwidth=4
 set expandtab       " Insert spaces instead of tabs
 " Don't insert spaces instead of tabs in Makefiles
 autocmd filetype make set noexpandtab
+filetype indent plugin on
 
 set hlsearch        " Highlight search results
 set incsearch       " Show search matches as you type
