@@ -17,8 +17,8 @@ set expandtab       " Insert spaces instead of tabs
 " Don't insert spaces instead of tabs in Makefiles
 autocmd filetype make set noexpandtab
 
-" Highlight search results
-set hlsearch
+set hlsearch        " Highlight search results
+set incsearch       " Show search matches as you type
 
 " Color settings
 set t_Co=256        " Enable 256 colors
