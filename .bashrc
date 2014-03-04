@@ -111,19 +111,25 @@ __prompt_generator()
     fi
 
     # Set window title
+    local __set_title=0;
     local __title_prefix="";
-    if [[ "${TERM}" =~ screen* && -z "${SSH_CLIENT}" ]]; then
-        if [ -z "${TMUX}" ]; then
-            __title_prefix="${__title_prefix}screen: ";
-        else
-            __title_prefix="${__title_prefix}tmux: ";
-        fi
-    fi
     case ${TERM} in
-        screen*|xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|mate*|interix)
-            echo -ne "\033]0;${__title_prefix}${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"
+        xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|mate*|interix)
+            __set_title=1;
+            ;;
+        screen*)
+            __set_title=1;
+            if [ ! -z "${TMUX}" ]; then
+                __title_prefix="$(tmux display-message -p "tmux:#S #I:#W") ";
+            elif [ ! -z "${STY}" ]; then
+                __title_prefix="screen:$(echo "${STY}" | sed -e 's/^[0-9]\+\.//g' \
+                                -e "s/\.${HOSTNAME}$//g") ${WINDOW} ";
+            fi
             ;;
     esac
+    if [ ${__set_title} -ne 0 ]; then
+        echo -ne "\033]0;${__title_prefix}${USER}@${HOSTNAME%%.*} ${PWD/#$HOME/~}\007"
+    fi
 
 }
 PROMPT_COMMAND=__prompt_generator
