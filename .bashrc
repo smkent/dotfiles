@@ -109,6 +109,22 @@ __prompt_generator()
     else
         PS2="${__bold}${__c_blue}> ${__reset}";
     fi
+
+    # Set window title
+    local __title_prefix="";
+    if [[ "${TERM}" =~ screen* && -z "${SSH_CLIENT}" ]]; then
+        if [ -z "${TMUX}" ]; then
+            __title_prefix="${__title_prefix}screen: ";
+        else
+            __title_prefix="${__title_prefix}tmux: ";
+        fi
+    fi
+    case ${TERM} in
+        screen*|xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|mate*|interix)
+            echo -ne "\033]0;${__title_prefix}${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"
+            ;;
+    esac
+
 }
 PROMPT_COMMAND=__prompt_generator
 

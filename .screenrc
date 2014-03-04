@@ -1,11 +1,15 @@
+startup_message off
 sorendition kG
 defscrollback 30000
 defbce on
 term screen-256color-bce
 bindkey -k k7 prev # change window with F7
 bindkey -k k8 next # change window with F8
-# hardstatus alwayslastline "%{=b} %{b}%-w%{W}%n %t%{-}%+w %{=b W}%{dR} %= %{Y}%c "
-hardstatus alwayslastline "%{= kG}[ %{G}%H%{B}%0` %{g}] %{=b}%{b}%-w%{W}%n %t%{-}%+w %{=b W}%{dR} %= %{Y}%c"
+caption always "%{= kG}[ %{G}%H%{B}%0` %{g}] %{=b}%{b}%-w%{W}%n %t%{-}%+w %{=b W}%{dR} %= %{Y}%c"
 backtick 0 600 600 sh -c 'echo "$(screen -ls | grep --color=no -o "$PPID[^[:space:]]*" | sed -e "s%\.% %g" | awk "{print \$NF}" | sed -e "s%`hostname -s`%%g" | awk "{print (NF? \" \" \$NF :\"\")}")"'
 # Don't let Esc interfere with vim
 maptimeout 5
+# Set terminal emulator window titles
+termcapinfo xterm*|rxvt*|kterm*|Eterm* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
+defhstatus "screen ^E (^Et) ${USER}@^EH"
+hardstatus off
