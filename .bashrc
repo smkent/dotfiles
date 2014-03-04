@@ -50,6 +50,7 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
             # Instead you need to compare it and perform some guesses
             # based upon the value. This is, perhaps, too simplistic.
             TERM="xterm-256color"
+            __colors_supported=256;
             ;;
         *)
             echo "Warning: Unrecognized COLORTERM: $COLORTERM"
@@ -57,20 +58,59 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
     esac
 fi
 
-__c_red="\033[1;31m"
-__c_green="\033[1;32m"
-__c_blue="\033[1;34m"
-__c_white="\033[1;37m"
-__c_reset="\033[0m"
-
-# Prompt colors
-if [ ${UID} -eq 0 ]; then
-    export PS1="\[${__c_red}\]\h\[${__c_blue}\] \W #\[${__c_reset}\] "
-    export PS2="\[${__c_red}\]> \[${__c_reset}\]"
+# Shell prompt generator
+if [ ${__colors_supported} -ge 256 ]; then
+    __c_red="\[$(tput setaf 196)\]";
+    __c_green="\[$(tput setaf 2)\]";
+    __c_yellow="\[$(tput setaf 227)\]";
+    __c_orange="\[$(tput setaf 202)\]";
+    __c_blue="\[$(tput setaf 4)\]";
 else
-    export PS1="\[${__c_green}\]\u@\h\[${__c_blue}\] \W \$\[${__c_reset}\] "
-    export PS2="\[${__c_blue}\]> \[${__c_reset}\]"
+    __c_red="\[$(tput setaf 1)\]";
+    __c_green="\[$(tput setaf 2)\]";
+    __c_yellow="\[$(tput setaf 3)\]";
+    __c_orange="${__c_yellow}";
+    __c_blue="\[$(tput setaf 4)\]";
 fi
+__bold="\[$(tput bold)\]";
+__reset="\[$(tput sgr0)\]";
+
+__prompt_generator()
+{
+    # Exit code
+    local exit_code=${?}
+    local exit_code_disp="${exit_code}";
+    local exit_color="${__c_red}";
+    __prompt_exit_section="";
+    if [ ${exit_code} -ne 0 ]; then
+        case ${exit_code} in
+            130)    exit_code_disp="C-c";   exit_color="${__c_yellow}";;
+            148)    exit_code_disp="bg";    exit_color="${__c_orange}";;
+        esac
+        __prompt_exit_section="${exit_color}[${__bold}${exit_code_disp}${__reset}${exit_color}] ";
+    fi
+    # Main section
+    __prompt_main_section="";
+    if [ ${EUID} -eq 0 ]; then
+        __prompt_main_section="${__prompt_main_section}${__c_red}${__bold}\h ${__c_blue}\W${__reset} "
+        __prompt_lastchar="${__c_red}${__bold}#${__reset}";
+    else
+        __prompt_main_section="${__prompt_main_section}${__c_green}${__bold}\u@\h ${__c_blue}\W${__reset} ";
+        __prompt_lastchar="${__c_blue}${__bold}\$${__reset}";
+    fi
+    # Background jobs
+    __prompt_jobs_section="";
+    if [ ! -z "$(jobs -p)" ]; then
+        __prompt_jobs_section="${__c_orange}[+\j] ";
+    fi
+    PS1="${__prompt_exit_section}${__prompt_main_section}${__prompt_jobs_section}${__prompt_lastchar} "
+    if [ ${EUID} -eq 0 ]; then
+        PS2="${__bold}${__c_red}> ${__reset}";
+    else
+        PS2="${__bold}${__c_blue}> ${__reset}";
+    fi
+}
+PROMPT_COMMAND=__prompt_generator
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -86,7 +126,6 @@ fi
 
 # Try to keep environment pollution down, EPA loves us.
 unset __colors_supported
-unset __c_red __c_green __c_blue __c_white __c_reset
 
 # Add PATH customizations
 append_path_if_exists()
