@@ -31,6 +31,7 @@ fi
 
 # Color support
 [ -x /usr/bin/tput ] && __colors_supported=$(tput colors)
+[ -z "${__colors_supported}" ] && __colors_supported=0;
 
 if [ ${__colors_supported} -ge 2 ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || \
@@ -57,6 +58,11 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
             ;;
     esac
 fi
+
+# grep highlight color (bold orange)
+[ ${__colors_supported} -ge 256 ] && \
+    export GREP_COLORS="mt=1;38;5;202:cs=02;38:se=34:fn=35:ln=32:bn=32" || \
+    export GREP_COLORS="mt=01;31:cs=02;38:se=34:fn=35:ln=32:bn=32"
 
 # Shell prompt generator
 if [ ${__colors_supported} -ge 256 ]; then
@@ -152,6 +158,7 @@ unset __colors_supported
 # Add PATH customizations
 append_path_if_exists()
 {
+    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return;
     [ -d "${1}" ] && PATH="${PATH}:${1}";
 }
 append_path_if_exists "${HOME}/bin"

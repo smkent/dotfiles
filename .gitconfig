@@ -10,3 +10,10 @@
 	default = upstream
 [branch]
 	autosetuprebase = always
+[color "grep"]
+    context = white dim
+    filename = magenta
+    function = yellow
+    linenumber = green
+    match = red bold
+    separator = blue

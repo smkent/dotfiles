@@ -58,6 +58,9 @@ imap <F2> <ESC>:w<CR>i
 " F3: Clear last search highlighting
 nnoremap <F3> :noh<return><esc>
 
+" F4: Toggle paste mode
+set pastetoggle=<F4>
+
 " Ctrl+[H|J|K|L]: Move between vim splits
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
