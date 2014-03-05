@@ -81,6 +81,9 @@ fi
 __bold="\[$(tput bold)\]";
 __reset="\[$(tput sgr0)\]";
 
+# Default user prompt colors
+__c_prompt="${__c_green}${__bold}";
+
 __prompt_generator()
 {
     # Exit code
@@ -101,7 +104,7 @@ __prompt_generator()
         __prompt_main_section="${__prompt_main_section}${__c_red}${__bold}\h ${__c_blue}\W${__reset} "
         __prompt_lastchar="${__c_red}${__bold}#${__reset}";
     else
-        __prompt_main_section="${__prompt_main_section}${__c_green}${__bold}\u@\h ${__c_blue}\W${__reset} ";
+        __prompt_main_section="${__prompt_main_section}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} ";
         __prompt_lastchar="${__c_blue}${__bold}\$${__reset}";
     fi
     # Background jobs
@@ -152,13 +155,10 @@ if [ -x /usr/bin/notify-send ]; then
     alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 fi
 
-# Try to keep environment pollution down, EPA loves us.
-unset __colors_supported
-
 # Add PATH customizations
-append_path_if_exists()
+__append_path_if_exists()
 {
     echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return;
     [ -d "${1}" ] && PATH="${PATH}:${1}";
 }
-append_path_if_exists "${HOME}/bin"
+__append_path_if_exists "${HOME}/bin"
