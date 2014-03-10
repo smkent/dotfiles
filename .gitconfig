@@ -1,15 +1,15 @@
 [user]
-	name = Stephen Kent
-	email = smkent@smkent.net
+    name = Stephen Kent
+    email = smkent@smkent.net
 [core]
-	editor = vim
-	pager = less -F -R -X
+    editor = vim
+    pager = less -F -R -X
 [color]
-	ui = true
+    ui = true
 [push]
-	default = upstream
+    default = upstream
 [branch]
-	autosetuprebase = always
+    autosetuprebase = always
 [color "grep"]
     context = white dim
     filename = magenta
