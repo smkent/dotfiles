@@ -2,11 +2,11 @@
 # This uses the method described here: http://stackoverflow.com/a/1248601
 # which is based on information from here: https://gist.github.com/444295
 /*
-*.swp
 !.bashrc
 !.face
 !.gitconfig
 !.gitignore
+!.gitignore.global
 !.screenrc
 !.tmux.conf
 !.vimrc

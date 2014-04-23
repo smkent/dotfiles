@@ -3,7 +3,8 @@
     email = smkent@smkent.net
 [core]
     editor = vim
-    pager = less -F -R -X
+    pager = less -F -R -X -x1,5
+	excludesfile = ~/.gitignore.global
 [color]
     ui = true
 [push]
@@ -17,3 +18,5 @@
     linenumber = green
     match = red bold
     separator = blue
+[merge]
+	conflictstyle = diff3
