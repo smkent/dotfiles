@@ -160,6 +160,7 @@ __append_path_if_exists()
 {
     echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return;
     [ -d "${1}" ] && PATH="${PATH}:${1}";
+    return 0
 }
 __append_path_if_exists "${HOME}/bin"
 __append_path_if_exists "/opt/smkent/bin"
