@@ -20,3 +20,5 @@
     separator = blue
 [merge]
     conflictstyle = diff3
+[log]
+    date = local
