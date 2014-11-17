@@ -164,3 +164,19 @@ __append_path_if_exists()
 }
 __append_path_if_exists "${HOME}/bin"
 __append_path_if_exists "/opt/smkent/bin"
+
+# Detect SSH_AUTH_SOCK if it is empty
+if [ -z "${SSH_AUTH_SOCK}" -a $(id -u) -ne 0 ]; then
+    for d in $(ls -dt $(find /tmp /run/user/$(id -u) -maxdepth 1 \
+                        -iname 'keyring-*' -or -iname 'ssh-*' 2>/dev/null)); do
+        if [ -S "${d}/ssh" ]; then
+            export SSH_AUTH_SOCK="${d}/ssh";
+            break;
+        fi
+        agent_fn=$(ls "${d}" 2>/dev/null | grep -Ee '^agent\.[0-9]+' | tail -n1)
+        if [ -S "${d}/${agent_fn}" ]; then
+            export SSH_AUTH_SOCK="${d}/${agent_fn}";
+            break;
+        fi
+    done
+fi
