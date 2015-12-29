@@ -33,8 +33,16 @@ set nowrap          " Don't wrap long lines
 
 " Highlight trailing whitespace in red
 highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+au WinEnter * call matchadd('ExtraWhitespace', '\s\+$', 4)
+au BufWinEnter * call matchadd('ExtraWhitespace', '\s\+$', 5)
+if version >= 702
+    au BufWinLeave * call clearmatches()
+endif
+
+" Highlight certain nonprintable characters
+set list
+set listchars=nbsp:¬,tab:»\ ,extends:»,precedes:«
+hi SpecialKey ctermfg=red
 
 set mouse=a         " Enable mouse support (and scroll wheel)
 set so=8            " so is "Scrolloff", or the minimum number of context
@@ -69,3 +77,12 @@ nnoremap <c-l> <c-w>l
 
 " Disable Ex Mode
 nnoremap Q <nop>
+
+" 80-character column highlight
+" http://stackoverflow.com/a/3765575
+if exists('+colorcolumn')
+    set colorcolumn=81
+    highlight ColorColumn ctermbg=236
+else
+    au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+endif
