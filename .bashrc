@@ -54,7 +54,7 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
             __colors_supported=256;
             ;;
         *)
-            echo "Warning: Unrecognized COLORTERM: $COLORTERM"
+            echo "Warning: Unrecognized COLORTERM: $COLORTERM" >&2
             ;;
     esac
 fi
@@ -124,54 +124,55 @@ __prompt_generator()
     local exit_code_disp="${exit_code}";
     local exit_color="${__c_red}";
     local dir_stack_count=$(($(dirs | wc -w) - 1))
-    local git_toplevel="";
+    local git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
     # Stop command timer
     local last_command_time=$((${SECONDS} - ${timer}))
     unset timer
-    __prompt_timer_section="";
+    # Prompt sections
+    local __p_timer="";
+    local __p_exit="";
+    local __p_main="";
+    local __p_dirs="";
+    local __p_git="";
+    local __p_jobs="";
+    local __p_lastchar="";
     if [ ${last_command_time} -ge 10 ]; then
-        __prompt_timer_section="${__c_yellow}[$(__timer_formatter ${last_command_time})] "
+        __p_timer="${__c_yellow}[$(__timer_formatter ${last_command_time})] "
     fi
-    __prompt_exit_section="";
     if [ ${exit_code} -ne 0 ]; then
         case ${exit_code} in
             130)    exit_code_disp="C-c";   exit_color="${__c_yellow}";;
             148)    exit_code_disp="bg";    exit_color="${__c_orange}";;
         esac
-        __prompt_exit_section="${exit_color}[${__bold}${exit_code_disp}${__reset}${exit_color}] ";
+        __p_exit="${exit_color}[${__bold}${exit_code_disp}${__reset}${exit_color}] ";
     fi
     # Main section
-    __prompt_main_section="";
     if [ ${EUID} -eq 0 ]; then
-        __prompt_main_section="${__prompt_main_section}${__c_red}${__bold}\h ${__c_blue}\W${__reset} "
-        __prompt_lastchar="${__c_red}${__bold}#${__reset}";
+        __p_main="${__p_main}${__c_red}${__bold}\h ${__c_blue}\W${__reset} "
+        __p_lastchar="${__c_red}${__bold}#${__reset}";
     else
-        __prompt_main_section="${__prompt_main_section}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} ";
-        __prompt_lastchar="${__c_blue}${__bold}\$${__reset}";
+        __p_main="${__p_main}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} ";
+        __p_lastchar="${__c_blue}${__bold}\$${__reset}";
     fi
     # Directory stack
-    __prompt_dirs_section="";
     if [ ${dir_stack_count} -gt 0 ]; then
-        __prompt_dirs_section="${__c_blue}+${dir_stack_count} ";
+        __p_dirs="${__c_blue}+${dir_stack_count} ";
     fi
     # Git branch
-    __prompt_git_section="";
-    git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
     if [ -n "${git_toplevel}" -a "${git_toplevel}" != "${HOME}" ]; then
         local git_branch=$(git rev-parse --abbrev-ref HEAD)
         if [ -n "${git_branch}" ]; then
             if [ "${git_branch}" = "HEAD" ]; then
                 git_branch=$(git rev-parse --short HEAD)
             fi
-            __prompt_git_section="${__c_purple}[${git_branch}] ";
+            __p_git="${__c_purple}[${git_branch}] ";
         fi
     fi
     # Background jobs
-    __prompt_jobs_section="";
     if [ -n "$(jobs -p)" ]; then
-        __prompt_jobs_section="${__c_orange}[+\j] ";
+        __p_jobs="${__c_orange}[+\j] ";
     fi
-    PS1="${__prompt_timer_section}${__prompt_exit_section}${__prompt_main_section}${__prompt_dirs_section}${__prompt_git_section}${__prompt_jobs_section}${__prompt_lastchar} "
+    PS1="${__p_timer}${__p_exit}${__p_main}${__p_dirs}${__p_git}${__p_jobs}${__p_lastchar} "
     if [ ${EUID} -eq 0 ]; then
         PS2="${__bold}${__c_red}> ${__reset}";
     else
