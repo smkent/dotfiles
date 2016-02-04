@@ -123,6 +123,7 @@ __prompt_generator()
     local exit_code=${?}
     local exit_code_disp="${exit_code}";
     local exit_color="${__c_red}";
+    local dir_stack_count=$(($(dirs | wc -w) - 1))
     local git_toplevel="";
     # Stop command timer
     local last_command_time=$((${SECONDS} - ${timer}))
@@ -148,6 +149,11 @@ __prompt_generator()
         __prompt_main_section="${__prompt_main_section}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} ";
         __prompt_lastchar="${__c_blue}${__bold}\$${__reset}";
     fi
+    # Directory stack
+    __prompt_dirs_section="";
+    if [ ${dir_stack_count} -gt 0 ]; then
+        __prompt_dirs_section="${__c_blue}+${dir_stack_count} ";
+    fi
     # Git branch
     __prompt_git_section="";
     git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -165,7 +171,7 @@ __prompt_generator()
     if [ -n "$(jobs -p)" ]; then
         __prompt_jobs_section="${__c_orange}[+\j] ";
     fi
-    PS1="${__prompt_timer_section}${__prompt_exit_section}${__prompt_main_section}${__prompt_git_section}${__prompt_jobs_section}${__prompt_lastchar} "
+    PS1="${__prompt_timer_section}${__prompt_exit_section}${__prompt_main_section}${__prompt_dirs_section}${__prompt_git_section}${__prompt_jobs_section}${__prompt_lastchar} "
     if [ ${EUID} -eq 0 ]; then
         PS2="${__bold}${__c_red}> ${__reset}";
     else
