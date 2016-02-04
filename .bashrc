@@ -86,6 +86,37 @@ __reset="\[$(tput sgr0)\]";
 # Default user prompt colors
 __c_prompt="${__c_green}${__bold}";
 
+__timer_start()
+{
+    timer=${timer:-$SECONDS}
+}
+
+# Converts number of seconds to human-readable time (ex. "1h 3m 30s")
+__timer_formatter()
+{
+    local str=""
+    local mod=0
+    local count=${1}
+    for i in s m h d; do
+        [ ${count} -le 0 ] && break
+        case ${i} in
+            d)  str="${count}${i} ${str}";;
+            h)
+                mod=$((${count}%24));
+                count=$((${count}/24));
+                str="${mod}${i} ${str}";;
+            m|s)
+                mod=$((${count}%60));
+                count=$((${count}/60));
+                str="${mod}${i} ${str}";;
+        esac
+    done
+    echo ${str}
+}
+
+# Start command timer
+trap '__timer_start' DEBUG
+
 __prompt_generator()
 {
     # Exit code
@@ -93,6 +124,13 @@ __prompt_generator()
     local exit_code_disp="${exit_code}";
     local exit_color="${__c_red}";
     local git_toplevel="";
+    # Stop command timer
+    local last_command_time=$((${SECONDS} - ${timer}))
+    unset timer
+    __prompt_timer_section="";
+    if [ ${last_command_time} -ge 10 ]; then
+        __prompt_timer_section="${__c_yellow}[$(__timer_formatter ${last_command_time})] "
+    fi
     __prompt_exit_section="";
     if [ ${exit_code} -ne 0 ]; then
         case ${exit_code} in
@@ -127,7 +165,7 @@ __prompt_generator()
     if [ -n "$(jobs -p)" ]; then
         __prompt_jobs_section="${__c_orange}[+\j] ";
     fi
-    PS1="${__prompt_exit_section}${__prompt_main_section}${__prompt_git_section}${__prompt_jobs_section}${__prompt_lastchar} "
+    PS1="${__prompt_timer_section}${__prompt_exit_section}${__prompt_main_section}${__prompt_git_section}${__prompt_jobs_section}${__prompt_lastchar} "
     if [ ${EUID} -eq 0 ]; then
         PS2="${__bold}${__c_red}> ${__reset}";
     else
