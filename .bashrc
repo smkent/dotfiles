@@ -123,7 +123,7 @@ __prompt_generator()
     local exit_code=${?}
     local exit_code_disp="${exit_code}";
     local exit_color="${__c_red}";
-    local dir_stack_count=$(($(dirs | wc -w) - 1))
+    local dir_stack_count=$((${#DIRSTACK[@]}  - 1))
     local git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
     # Stop command timer
     local last_command_time=$((${SECONDS} - ${timer}))
