@@ -71,12 +71,14 @@ if [ ${__colors_supported} -ge 256 ]; then
     __c_yellow="\[$(tput setaf 227)\]";
     __c_orange="\[$(tput setaf 202)\]";
     __c_blue="\[$(tput setaf 4)\]";
+    __c_purple="\[$(tput setaf 5)\]";
 else
     __c_red="\[$(tput setaf 1)\]";
     __c_green="\[$(tput setaf 2)\]";
     __c_yellow="\[$(tput setaf 3)\]";
     __c_orange="${__c_yellow}";
     __c_blue="\[$(tput setaf 4)\]";
+    __c_purple="\[$(tput setaf 5)\]";
 fi
 __bold="\[$(tput bold)\]";
 __reset="\[$(tput sgr0)\]";
@@ -109,7 +111,7 @@ __prompt_generator()
     fi
     # Background jobs
     __prompt_jobs_section="";
-    if [ ! -z "$(jobs -p)" ]; then
+    if [ -n "$(jobs -p)" ]; then
         __prompt_jobs_section="${__c_orange}[+\j] ";
     fi
     PS1="${__prompt_exit_section}${__prompt_main_section}${__prompt_jobs_section}${__prompt_lastchar} "
@@ -128,9 +130,9 @@ __prompt_generator()
             ;;
         screen*)
             __set_title=1;
-            if [ ! -z "${TMUX}" ]; then
+            if [ -n "${TMUX}" ]; then
                 __title_prefix="$(tmux display-message -p "tmux:#S #I:#W") ";
-            elif [ ! -z "${STY}" ]; then
+            elif [ -n "${STY}" ]; then
                 __title_prefix="screen:$(echo "${STY}" | sed -e 's/^[0-9]\+\.//g' \
                                 -e "s/\.${HOSTNAME}$//g") ${WINDOW} ";
             fi
