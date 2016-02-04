@@ -92,6 +92,7 @@ __prompt_generator()
     local exit_code=${?}
     local exit_code_disp="${exit_code}";
     local exit_color="${__c_red}";
+    local git_toplevel="";
     __prompt_exit_section="";
     if [ ${exit_code} -ne 0 ]; then
         case ${exit_code} in
@@ -109,12 +110,24 @@ __prompt_generator()
         __prompt_main_section="${__prompt_main_section}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} ";
         __prompt_lastchar="${__c_blue}${__bold}\$${__reset}";
     fi
+    # Git branch
+    __prompt_git_section="";
+    git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [ -n "${git_toplevel}" -a "${git_toplevel}" != "${HOME}" ]; then
+        local git_branch=$(git rev-parse --abbrev-ref HEAD)
+        if [ -n "${git_branch}" ]; then
+            if [ "${git_branch}" = "HEAD" ]; then
+                git_branch=$(git rev-parse --short HEAD)
+            fi
+            __prompt_git_section="${__c_purple}[${git_branch}] ";
+        fi
+    fi
     # Background jobs
     __prompt_jobs_section="";
     if [ -n "$(jobs -p)" ]; then
         __prompt_jobs_section="${__c_orange}[+\j] ";
     fi
-    PS1="${__prompt_exit_section}${__prompt_main_section}${__prompt_jobs_section}${__prompt_lastchar} "
+    PS1="${__prompt_exit_section}${__prompt_main_section}${__prompt_git_section}${__prompt_jobs_section}${__prompt_lastchar} "
     if [ ${EUID} -eq 0 ]; then
         PS2="${__bold}${__c_red}> ${__reset}";
     else
