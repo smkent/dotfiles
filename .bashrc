@@ -136,9 +136,11 @@ __prompt_generator()
     local __p_git="";
     local __p_jobs="";
     local __p_lastchar="";
+    # Last command run timer
     if [ ${last_command_time} -ge 10 ]; then
         __p_timer="${__c_yellow}[$(__timer_formatter ${last_command_time})] "
     fi
+    # Last command exit code
     if [ ${exit_code} -ne 0 ]; then
         case ${exit_code} in
             130)    exit_code_disp="C-c";   exit_color="${__c_yellow}";;
@@ -172,6 +174,7 @@ __prompt_generator()
     if [ -n "$(jobs -p)" ]; then
         __p_jobs="${__c_orange}[+\j] ";
     fi
+    # Assemble prompt
     PS1="${__p_timer}${__p_exit}${__p_main}${__p_dirs}${__p_git}${__p_jobs}${__p_lastchar} "
     if [ ${EUID} -eq 0 ]; then
         PS2="${__bold}${__c_red}> ${__reset}";
