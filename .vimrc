@@ -91,6 +91,7 @@ endif
 
 " Define list of plugins to be installed
 call plug#begin()
+Plug('https://github.com/ctrlpvim/ctrlp.vim')
 Plug('https://github.com/mhinz/vim-signify/')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/vim-airline/vim-airline')
@@ -145,3 +146,13 @@ let g:signify_mapping_prev_hunk = '[c'
 " vim-signify integration with vim-airline
 " Only show modified counts in the status bar if they're non zero
 let g:airline#extensions#hunks#non_zero_only = 1
+
+" ctrlp configuration
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_max_depth = 5
+let g:ctrlp_max_files = 30000
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_clear_cache_on_exit = 0
+set wildignore+=*/.git/*,*/.svn/*
+set wildignore+=*.pyc,*.tar,*.tar.gz,*.tar.bz2,*.tgz
