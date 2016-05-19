@@ -105,7 +105,7 @@ endif
 set laststatus=2    " Always show the status bar
 
 " Enable powerline fonts if vim is running locally, or if VIM_AIRLINE is set
-if empty($SSH_CLIENT) || !empty($VIM_AIRLINE)
+if empty($VIM_AIRLINE) || $VIM_AIRLINE != 0
     let g:airline_powerline_fonts = 1
 else
     let g:airline_powerline_fonts = 0
