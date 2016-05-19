@@ -86,3 +86,16 @@ if exists('+colorcolumn')
 else
     au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
+
+" Plugin configuration
+
+" Define list of plugins to be installed
+call plug#begin()
+call plug#end()
+
+" Install plugins automatically if needed and if VIM_SKIP_PLUGINS is unset or 0
+if empty($VIM_SKIP_PLUGINS) || $VIM_SKIP_PLUGINS == 0
+    if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
+        PlugInstall | q
+    endif
+endif
