@@ -3,6 +3,7 @@
 # which is based on information from here: https://gist.github.com/444295
 /*
 !.bashrc
+!.dotfiles/
 !.face
 !.gitconfig
 !.gitignore

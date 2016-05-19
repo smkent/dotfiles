@@ -228,6 +228,7 @@ __append_path_if_exists()
     [ -d "${1}" ] && PATH="${PATH}:${1}";
     return 0
 }
+__append_path_if_exists "${HOME}/.dotfiles/bin"
 __append_path_if_exists "${HOME}/bin"
 __append_path_if_exists "/opt/smkent/bin"
 
