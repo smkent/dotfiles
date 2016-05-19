@@ -87,6 +87,10 @@ else
     au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
 
+" Disable vim requesting the terminal version
+" This prevents extraneous garbage from being printed on startup
+set t_RV=
+
 " Plugin configuration
 
 " Define list of plugins to be installed
