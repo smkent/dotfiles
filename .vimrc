@@ -92,6 +92,7 @@ endif
 " Define list of plugins to be installed
 call plug#begin()
 Plug('https://github.com/mhinz/vim-signify/')
+Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/vim-airline/vim-airline')
 call plug#end()
 
