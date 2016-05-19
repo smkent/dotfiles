@@ -14,7 +14,7 @@ let s:N1 = [ '#005f00' , '#afd700' , 22  , 148 ] " darkestgreen   & brightgreen
 "let s:N2 = [ '#00cc00' , '#001100' , 148 , 22 ] " darkestgreen   & brightgreen
 let s:N2 = [ '#afd700' , '#303030' , 148 , 236 ] " gray8          & gray2
 let s:NB = [ '#9e9e9e' , '#303030' , 247 , 236 ] " gray8          & gray2
-let s:N3 = [ '#ffffff' , '#121212' , 231 , 233 ] " white          & gray4
+let s:N3 = [ '#ffffff' , '#121212' , 231 , 234 ]
 let s:N4 = [ '#666462' , 241 ]                   " mediumgravel
 
 " Insert mode                                    " fg             & bg
@@ -49,7 +49,7 @@ let g:airline#themes#smkent#palette.replace.airline_a = [ s:RE[0] , s:RE[1] , s:
 let g:airline#themes#smkent#palette.replace_modified = g:airline#themes#smkent#palette.normal_modified
 
 
-let s:IA = [ s:N2[1] , s:N3[1] , s:N2[3] , s:N3[3] , '' ]
+let s:IA = [ '#9e9e9e' , '#303030' , 247 , 234 ]
 let g:airline#themes#smkent#palette.inactive = airline#themes#generate_color_map(s:IA, s:IA, s:IA)
 let g:airline#themes#smkent#palette.inactive_modified = {
       \ 'airline_c': [ s:V1[1]   , ''        , s:V1[3]   , ''        , ''     ] }
