@@ -91,6 +91,7 @@ endif
 
 " Define list of plugins to be installed
 call plug#begin()
+Plug('https://github.com/vim-airline/vim-airline')
 call plug#end()
 
 " Install plugins automatically if needed and if VIM_SKIP_PLUGINS is unset or 0
@@ -99,3 +100,30 @@ if empty($VIM_SKIP_PLUGINS) || $VIM_SKIP_PLUGINS == 0
         PlugInstall | q
     endif
 endif
+
+" vim-airline configuration
+set laststatus=2    " Always show the status bar
+
+" Enable powerline fonts if vim is running locally, or if VIM_AIRLINE is set
+if empty($SSH_CLIENT) || !empty($VIM_AIRLINE)
+    let g:airline_powerline_fonts = 1
+else
+    let g:airline_powerline_fonts = 0
+    " Use spaces instead of carats if custom fonts are disabled
+    if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+    endif
+    let g:airline_left_sep=' '
+    let g:airline_right_sep=' '
+    let g:airline_left_alt_sep=' '
+    let g:airline_right_alt_sep=' '
+endif
+
+" Set vim-airline color theme to smkent
+let g:airline_theme = "smkent"
+
+" Customize right statusbar section contents
+let g:airline_section_x = airline#section#create_right(
+    \ ['tagbar', 'filetype', 'ffenc'])
+let g:airline_section_y = airline#section#create(['%3p%%'])
+let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
