@@ -95,8 +95,8 @@ set t_RV=
 
 " Define list of plugins to be installed
 call plug#begin()
+Plug('https://github.com/airblade/vim-gitgutter')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
-Plug('https://github.com/mhinz/vim-signify/')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/vim-airline/vim-airline')
 call plug#end()
@@ -135,21 +135,31 @@ let g:airline_section_x = airline#section#create_right(
 let g:airline_section_y = airline#section#create(['%3p%%'])
 let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
 
-" vim-signify configuration
-let g:signify_vcs_list = [ 'git' ]
-
-" Set Sy sign colors
-highlight SignifySignAdd    cterm=bold ctermbg=233  ctermfg=119
-highlight SignifySignDelete cterm=bold ctermbg=233  ctermfg=167
-highlight SignifySignChange cterm=bold ctermbg=233  ctermfg=227
-
-" Map [c and ]c shortcuts to jump between hunks
-let g:signify_mapping_next_hunk = ']c'
-let g:signify_mapping_prev_hunk = '[c'
-
-" vim-signify integration with vim-airline
 " Only show modified counts in the status bar if they're non zero
 let g:airline#extensions#hunks#non_zero_only = 1
+
+" vim-gitgutter configuration
+" Reduce default refresh time from 4 seconds to 0.25 seconds
+set updatetime=250
+
+" Customize sign characters
+let g:gitgutter_highlight_lines = 1
+let g:gitgutter_sign_removed = '< '
+let g:gitgutter_sign_removed_first_line = '^^'
+let g:gitgutter_sign_modified_removed = '~!'
+
+" Customize sign column highlight
+let g:gitgutter_override_sign_column_highlight = 0
+highlight GitGutterAdd          cterm=bold ctermbg=233  ctermfg=119
+highlight GitGutterDelete       cterm=bold ctermbg=233  ctermfg=167
+highlight GitGutterChange       cterm=bold ctermbg=233  ctermfg=227
+highlight GitGutterChangeDelete cterm=bold ctermbg=233  ctermfg=227
+
+" Highlight lines with signs
+highlight GitGutterAddLine          ctermbg=234
+highlight GitGutterDeleteLine       ctermbg=234
+highlight GitGutterChangeLine       ctermbg=234
+highlight GitGutterChangeDeleteLine ctermbg=234
 
 " ctrlp configuration
 let g:ctrlp_map = '<c-p>'
