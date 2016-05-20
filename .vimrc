@@ -168,5 +168,10 @@ let g:ctrlp_max_depth = 5
 let g:ctrlp_max_files = 30000
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_clear_cache_on_exit = 0
-set wildignore+=*/.git/*,*/.svn/*
-set wildignore+=*.pyc,*.tar,*.tar.gz,*.tar.bz2,*.tgz
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_user_command = {
+    \ 'types': {
+        \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
+        \ },
+    \ 'fallback': 'find %s -type f'
+    \ }
