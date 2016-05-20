@@ -247,3 +247,8 @@ if [ -z "${SSH_AUTH_SOCK}" -a $(id -u) -ne 0 ]; then
         fi
     done
 fi
+
+# Load host-specific bashrc if available
+if [ -f ".dotfiles/lib/bashrc.${HOSTNAME}" ]; then
+    . ".dotfiles/lib/bashrc.${HOSTNAME}"
+fi
