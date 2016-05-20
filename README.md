@@ -30,7 +30,7 @@ My vim-airline configuration requires the
 
 ### .bashrc
 
-* Display exit code of the previous command if nonzero (or "bg" / "C-C" when
+* Display exit code of the previous command if nonzero (or "bg" / "C-c" when
 backgrounding a job or typing Ctrl-C, respectively)
 * Display runtime of the previous command if longer than 10 seconds
 * Display size of the directory stack if not empty
