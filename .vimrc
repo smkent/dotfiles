@@ -94,7 +94,7 @@ set t_RV=
 " Plugin configuration
 
 " Define list of plugins to be installed
-call plug#begin()
+silent call plug#begin()  " Suppress error message if git is not installed
 Plug('https://github.com/airblade/vim-gitgutter')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
 Plug('https://github.com/tpope/vim-fugitive')
