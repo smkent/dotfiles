@@ -44,7 +44,7 @@ set list
 set listchars=nbsp:¬,tab:»\ ,extends:»,precedes:«
 hi SpecialKey ctermfg=red
 
-set mouse=a         " Enable mouse support (and scroll wheel)
+set mouse=          " Disable mouse support
 set so=8            " so is "Scrolloff", or the minimum number of context
                     " lines that are displayed above/below the cursor.
 
