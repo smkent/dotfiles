@@ -162,12 +162,14 @@ __prompt_generator()
     fi
     # Git branch
     if [ -n "${git_toplevel}" -a "${git_toplevel}" != "${HOME}" ]; then
-        local git_branch=$(git rev-parse --abbrev-ref HEAD)
+        local git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
         if [ -n "${git_branch}" -a "${git_branch}" != "master" ]; then
             if [ "${git_branch}" = "HEAD" ]; then
-                git_branch=$(git rev-parse --short HEAD)
+                git_branch=$(git rev-parse --short HEAD 2>/dev/null)
             fi
-            __p_git="${__c_purple}[${git_branch}] ";
+            if [ -n "${git_branch}" ]; then
+                __p_git="${__c_purple}[${git_branch}] ";
+            fi
         fi
     fi
     # Background jobs
