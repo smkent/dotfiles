@@ -24,7 +24,8 @@ your name and email address and remove `.face`.
 ## Additional dependencies
 
 My vim-airline configuration requires the
-[Powerline Fonts](https://github.com/powerline/fonts).
+[Powerline Fonts](https://github.com/powerline/fonts), which can be installed
+using the [install-fonts](/.dotfiles/bin/install-fonts) script.
 
 ## Features
 
