@@ -22,10 +22,10 @@ shopt -s checkwinsize
 
 # Make less more friendly for non-text input files, see lesspipe(1)
 if [ -x /usr/bin/lesspipe ]; then
-    if grep -qe '^\s\+echo\ "export' $(which lesspipe); then
+    if grep -qe '^\s\+echo\ "export' "$(which lesspipe)"; then
         eval "$(lesspipe)"
     else
-        LESSOPEN="|lesspipe %s"
+        export LESSOPEN="|lesspipe %s"
     fi
 fi
 
@@ -34,8 +34,11 @@ fi
 [ -z "${__colors_supported}" ] && __colors_supported=0;
 
 if [ ${__colors_supported} -ge 2 ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || \
-                            eval "$(dircolors -b)"
+    if test -r ~/.dircolors; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
     # Color command aliases
     alias ls='ls --color=auto'
     alias grep='grep --color=auto'
@@ -60,9 +63,11 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
 fi
 
 # grep highlight color (bold orange)
-[ ${__colors_supported} -ge 256 ] && \
-    export GREP_COLORS="mt=1;38;5;202:cs=02;38:se=34:fn=35:ln=32:bn=32" || \
+if [ ${__colors_supported} -ge 256 ]; then
+    export GREP_COLORS="mt=1;38;5;202:cs=02;38:se=34:fn=35:ln=32:bn=32"
+else
     export GREP_COLORS="mt=01;31:cs=02;38:se=34:fn=35:ln=32:bn=32"
+fi
 
 # Shell prompt generator
 if [ ${__colors_supported} -ge 256 ]; then
@@ -98,20 +103,20 @@ __timer_formatter()
     local mod=0
     local count=${1}
     for i in s m h d; do
-        [ ${count} -le 0 ] && break
+        [ "${count}" -le 0 ] && break
         case ${i} in
             d)  str="${count}${i} ${str}";;
             h)
-                mod=$((${count}%24));
-                count=$((${count}/24));
+                mod=$((count % 24));
+                count=$((count / 24));
                 str="${mod}${i} ${str}";;
             m|s)
-                mod=$((${count}%60));
-                count=$((${count}/60));
+                mod=$((count % 60));
+                count=$((count / 60));
                 str="${mod}${i} ${str}";;
         esac
     done
-    echo ${str}
+    echo "${str%% *}"
 }
 
 # Start command timer
@@ -126,7 +131,7 @@ __prompt_generator()
     local dir_stack_count=$((${#DIRSTACK[@]}  - 1))
     local git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
     # Stop command timer
-    local last_command_time=$((${SECONDS} - ${timer}))
+    local last_command_time=$((SECONDS - timer))
     unset timer
     # Prompt sections
     local __p_timer="";
@@ -235,14 +240,15 @@ __append_path_if_exists "${HOME}/bin"
 __append_path_if_exists "/opt/smkent/bin"
 
 # Detect SSH_AUTH_SOCK if it is empty
-if [ -z "${SSH_AUTH_SOCK}" -a $(id -u) -ne 0 ]; then
-    for d in $(ls -dt $(find /tmp /run/user/$(id -u) -maxdepth 1 \
+if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
+    for d in $(ls -dt $(find /tmp "/run/user/$(id -u)" -maxdepth 1 \
                         -iname 'keyring-*' -or -iname 'ssh-*' 2>/dev/null)); do
         if [ -S "${d}/ssh" ]; then
             export SSH_AUTH_SOCK="${d}/ssh";
             break;
         fi
-        agent_fn=$(ls "${d}" 2>/dev/null | grep -Ee '^agent\.[0-9]+' | tail -n1)
+        agent_fn=$(find "${d}" -mindepth 1 -maxdepth 1 -printf '%f\0' | \
+                           grep -z '^agent\.[0-9]\+$' | tail -n1)
         if [ -S "${d}/${agent_fn}" ]; then
             export SSH_AUTH_SOCK="${d}/${agent_fn}";
             break;
