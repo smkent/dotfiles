@@ -9,7 +9,7 @@ import subprocess
 import sys
 import tempfile
 
-description='Install fonts from Github'
+description = 'Install fonts from Github'
 ap = argparse.ArgumentParser(description=description)
 ap.add_argument('-n', '--no-update-cache', dest='update_cache',
                 action='store_false',
@@ -26,6 +26,7 @@ if not args.directory:
 
 fonts = {'smkent': 'https://github.com/smkent/fonts',
          'powerline': 'https://github.com/powerline/fonts'}
+
 
 def download_fonts(dir_name, url):
     temp_dir = None

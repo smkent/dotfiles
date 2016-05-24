@@ -4,7 +4,7 @@ import argparse
 import os
 import subprocess
 
-description='Copy the currently installed set of dotfiles to a remote host'
+description = 'Copy the currently installed set of dotfiles to a remote host'
 ap = argparse.ArgumentParser(description=description)
 ap.add_argument('-p', '--pretend', action='store_true',
                 help='Only list the files that would be copied')
