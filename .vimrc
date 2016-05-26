@@ -27,6 +27,7 @@ syntax on           " Enable syntax highlighting
 colorscheme smkent256
 
 set number          " Show line numbers
+set relativenumber  " Show relative line numbers (except for the current line)
 set showmatch       " Show matching braces
 
 set nowrap          " Don't wrap long lines
@@ -87,6 +88,11 @@ else
     au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
 
+" Set current line number highlight color for use with relativenumber
+" To use the same color as the rest of the line numbers, use:
+" highlight CursorLineNr ctermfg=243 ctermbg=232
+highlight CursorLineNr cterm=bold, ctermfg=250 ctermbg=232
+
 " Disable vim requesting the terminal version
 " This prevents extraneous garbage from being printed on startup
 set t_RV=
@@ -97,6 +103,7 @@ set t_RV=
 silent call plug#begin()  " Suppress error message if git is not installed
 Plug('https://github.com/airblade/vim-gitgutter')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
+Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/vim-airline/vim-airline')
 call plug#end()
