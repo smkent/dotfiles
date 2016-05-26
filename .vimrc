@@ -101,11 +101,19 @@ set t_RV=
 
 " Define list of plugins to be installed
 silent call plug#begin()  " Suppress error message if git is not installed
-Plug('https://github.com/airblade/vim-gitgutter')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
 Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/vim-airline/vim-airline')
+" vim-gitgutter with real-time sign updates enabled occasionally produced
+" rendering errors prior to Vim 7.4.427. For more information, see:
+" - https://github.com/airblade/vim-gitgutter/issues/171
+" - http://ftp.vim.org/vim/patches/7.4/7.4.427
+if has("patch-7.4.427")
+    Plug('https://github.com/airblade/vim-gitgutter')
+else
+    Plug('https://github.com/mhinz/vim-signify')
+endif
 call plug#end()
 
 " Install plugins automatically if needed and if VIM_SKIP_PLUGINS is unset or 0
@@ -142,6 +150,19 @@ let g:airline_section_x = airline#section#create_right(
 let g:airline_section_y = airline#section#create(['%3p%%'])
 let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
 
+" vim-signify configuration
+let g:signify_vcs_list = [ 'git' ]
+
+" Set Sy sign colors
+highlight SignifySignAdd    cterm=bold ctermbg=233  ctermfg=119
+highlight SignifySignDelete cterm=bold ctermbg=233  ctermfg=167
+highlight SignifySignChange cterm=bold ctermbg=233  ctermfg=227
+
+" Map [c and ]c shortcuts to jump between hunks
+let g:signify_mapping_next_hunk = ']c'
+let g:signify_mapping_prev_hunk = '[c'
+
+" vim-signify integration with vim-airline
 " Only show modified counts in the status bar if they're non zero
 let g:airline#extensions#hunks#non_zero_only = 1
 
