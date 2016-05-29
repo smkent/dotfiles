@@ -22,3 +22,8 @@
     conflictstyle = diff3
 [log]
     date = local
+[advice]
+    statusHints = false
+[diff]
+    mnemonicprefix = true
+    renames = copies
