@@ -7,16 +7,21 @@ My Linux environment configuration
 I recommend looking at the code and trying out individual parts you are
 interested in before installing the entire set of dotfiles.
 
-To install these dotfiles in your home directory, run:
+To install these dotfiles in your home directory, first clone the repository:
 
 ```shell
-git clone https://github.com/smkent/dotfiles
-mv dotfiles/.git .
-git checkout .
+$ cd ~
+$ git clone https://github.com/smkent/dotfiles
+$ mv dotfiles/.git .
+$ rm -rf dotfiles/
 ```
 
-You should run `git status` and review any differences before running
-`git checkout .`
+Next, run `git status` and review any differences you may want to keep. Then,
+install the cloned dotfiles with:
+
+```shell
+$ git checkout .
+```
 
 If you use or fork this repository, you'll want to update `.gitconfig` with
 your name and email address and remove `.face`.
