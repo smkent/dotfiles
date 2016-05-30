@@ -39,3 +39,13 @@
 [diff]
     mnemonicprefix = true
     renames = copies
+[alias]
+    br = branch
+    ca = commit --amend
+    cf = commit --amend --no-edit
+    ci = commit
+    co = checkout
+    ds = diff --staged
+    rh = reset HEAD
+    st = status
+    s = status -s
