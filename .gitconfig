@@ -11,6 +11,12 @@
     default = upstream
 [branch]
     autosetuprebase = always
+[color "branch"]
+    remote = 9      # Lighter red
+    upstream = blue bold
+[color "diff"]
+    frag = blue bold
+    func = magenta bold
 [color "grep"]
     context = white dim
     filename = magenta
@@ -18,6 +24,12 @@
     linenumber = green
     match = red bold
     separator = blue
+[color "status"]
+    added = green
+    branch = white bold ul
+    changed = 9     # Bright red
+    unmerged = 11   # Bright yellow
+    untracked = 32  # Brighter blue
 [merge]
     conflictstyle = diff3
 [log]
