@@ -16,7 +16,12 @@ ap.add_argument('-n', '--no-update-cache', dest='update_cache',
                 help='Don\'t update the font cache after installing fonts')
 ap.add_argument('-d', '--directory', dest='directory', metavar='dir',
                 help='Font installation directory')
+ap.add_argument('-r', '--root', dest='root', action='store_true',
+                help='Install fonts as root')
 args = ap.parse_args()
+
+if args.root and os.getuid() != 0:
+    sys.exit(subprocess.call(['sudo'] + sys.argv))
 
 if not args.directory:
     if os.geteuid() == 0:
