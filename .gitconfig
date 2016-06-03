@@ -62,12 +62,15 @@
           '{sub(/^alias\\./,\"\")};{printf(\"\\033[1;34m%10s\\033[0;0m\", $1)};\
            {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
            print \"\\033[0;39m\"}'; }; f"
-    lo = log --oneline --decorate  # "log oneline"
-    l1 = log -n 1  # "log 1"
-    # "log date", using committer date instead of author date
-    ld = log --oneline --date=short \
-             --pretty=format:'%C(yellow)%h %C(blue)%cd%C(cyan)%C(reset) %s %C(green)[%aN]'
-    lf = log --oneline --decorate --numstat  # "log files"
+    # "log"; git log with extra colors, commit date, and relative commit date
+    l = log --pretty=format:'%C(auto,yellow)commit %H%C(auto,reset)%n%C(auto,12)Author: %an <%ae>%C(reset)%n%C(auto,blue)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
+    # "log compact"; git log with metadata on one line
+    lc = log --date=relative --pretty=format:'%C(auto,yellow)%H %C(auto,12)%<(20)%an %C(auto,blue)%cd%C(auto,reset)%n%w(0,2,2)%s%n%+b'
+    # "log files"; one line per commit followed by the changed file list
+    lf = log --numstat --date=relative --pretty=format:'%C(auto,yellow)%<(8)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,blue) %cd%C(auto,reset)'
+    # "log oneline"
+    lo = log --date=relative --pretty=format:'%C(auto,yellow)%h %C(auto,blue)%>(14)%cd%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,reset)'
+    l1 = "!git l -n 1" # "log 1"; depends on the "l" alias
     rh = reset HEAD
     # "rebase interactive"; $1 is either a ref or a number of commits to rebase
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
