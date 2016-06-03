@@ -44,12 +44,38 @@
     mnemonicprefix = true
     renames = copies
 [alias]
-    br = branch
+    au = add -u
+    b = branch
+    br = branch -vv
     ca = commit --amend
-    cf = commit --amend --no-edit
+    cf = commit --amend --no-edit  # "commit fixup"
     ci = commit
     co = checkout
+    d = diff
     ds = diff --staged
+    dw = diff --word-diff=color  # "diff words"
+    ec = config --global -e  # "edit config"
+    # "find alias"; based on "finda" from: http://brettterpstra.com/2014/08/04/
+    # shell-tricks-one-git-alias-to-rule-them-all/
+    fa = "!f() { git config --global --get-regexp alias | \
+          grep -i \"$1\" | awk -v nr=2 \
+          '{sub(/^alias\\./,\"\")};{printf(\"\\033[1;34m%10s\\033[0;0m\", $1)};\
+           {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
+           print \"\\033[0;39m\"}'; }; f"
+    lo = log --oneline --decorate  # "log oneline"
+    l1 = log -n 1  # "log 1"
+    # "log date", using committer date instead of author date
+    ld = log --oneline --date=short \
+             --pretty=format:'%C(yellow)%h %C(blue)%cd%C(cyan)%C(reset) %s %C(green)[%aN]'
+    lf = log --oneline --decorate --numstat  # "log files"
     rh = reset HEAD
+    # "rebase interactive"; $1 is either a ref or a number of commits to rebase
+    ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
+                 fi >/dev/null 2>&1; git rebase -i \"${r}\"; }; f"
+    sb = show-branch
     st = status
     s = status -s
+    # "upstream branch"; compare local and remote tracking branch histories
+    ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)} && git show-branch \
+                 $(git for-each-ref --format='%(upstream:short)' \
+                   \"refs/heads/${h#refs/heads/}\") \"${h}\"; }; f"
