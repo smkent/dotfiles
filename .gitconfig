@@ -14,6 +14,10 @@
 [color "branch"]
     remote = 9      # Lighter red
     upstream = blue bold
+[color "decorate"]
+    HEAD = red bold
+    remoteBranch = blue bold
+    tag = yellow bold
 [color "diff"]
     frag = blue bold
     func = magenta bold
