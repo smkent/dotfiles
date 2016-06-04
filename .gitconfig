@@ -71,6 +71,7 @@
     # "log oneline"
     lo = log --date=relative --pretty=format:'%C(auto,blue)%>(14)%cd %C(auto,yellow)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,reset)'
     l1 = "!git l -n 1" # "log 1"; depends on the "l" alias
+    p = pull
     rh = reset HEAD
     # "rebase interactive"; $1 is either a ref or a number of commits to rebase
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
