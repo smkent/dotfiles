@@ -63,7 +63,7 @@
            {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
            print \"\\033[0;39m\"}'; }; f"
     # "log"; git log with extra colors, commit date, and relative commit date
-    l = log --pretty=format:'%C(auto,yellow)commit %H%C(auto,reset)%n%C(auto,12)Author: %an <%ae>%C(reset)%n%C(auto,blue)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
+    l = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author: %an <%ae>%C(reset)%n%C(auto,blue)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     # "log compact"; git log with metadata on one line
     lc = log --date=relative --pretty=format:'%C(auto,yellow)%H %C(auto,12)%<(20)%an %C(auto,blue)%cd%C(auto,reset)%n%w(0,2,2)%s%n%+b'
     # "log files"; one line per commit followed by the changed file list
