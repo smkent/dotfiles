@@ -70,6 +70,8 @@
     lf = log --numstat --date=relative --pretty=format:'%C(auto,yellow)%<(8)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,blue) %cd%C(auto,reset)'
     # "log oneline"
     lo = log --date=relative --pretty=format:'%C(auto,blue)%>(14)%cd %C(auto,yellow)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,reset)'
+    # "log eXtra"; git log with both author and committer information
+    lx = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author:    %an <%ae> %C(auto,blue)%ad (%ar)%C(auto,reset)%n%C(auto,12)Committer: %cn <%ce> %C(auto,blue)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     l1 = "!git l -n 1" # "log 1"; depends on the "l" alias
     p = pull
     rh = reset HEAD
