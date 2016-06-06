@@ -228,6 +228,8 @@ fi
 # Alias "dirs" to print directory stack one per line
 alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
 
+alias ll='ls -l'
+
 # Add PATH customizations
 __append_path_if_exists()
 {
