@@ -54,3 +54,55 @@ git repository
 * Custom [vim-airline](https://github.com/vim-airline/vim-airline) color scheme
 
 ![vim screenshot](/.dotfiles/img/screenshot-vim.png)
+
+### Git
+
+#### Basic settings
+
+* Use `less` with 4-column tab stops
+* Set push default to `upstream`
+* Enable `diff3` conflict resolution style
+* Disable `git status` hints
+* Enable rename and copy detection by default
+* Enable mnemonic prefixes in `git diff`
+
+#### Custom colors
+
+* `git branch`: Remote branches in lighter red, upstream branches in blue bold
+* `--decorate` (with `git log`, etc.): HEAD in red bold, remote branches in
+blue bold, tags in yellow bold
+* `git diff`: Hunk header (line numbers changed) in blue bold, hunk function
+header in magenta bold
+* `git grep`: Several customizations, mostly to colorize matching file names
+(in magenta). See the `[color "grep"]` section in [.gitconfig](/.gitconfig) for
+the full details.
+* `git status`: Branch name in bold and underlined, changed files in brighter
+red, files with conflicts in yellow, and untracked files in blue
+
+#### Aliases
+
+Some of the useful aliases I have defined are:
+
+* `ca`: "commit amend" (`git commit --amend`)
+* `cf`: "commit fixup" (`git commit --amend --no-edit`)
+* `ds`: "diff staged" (`git diff --staged`)
+* `dw`: "word diff" (`git diff --word-diff=color`)
+* `fa`: "find alias," based on [the "finda" alias from
+here](http://brettterpstra.com/2014/08/04/shell-tricks-one-git-alias-to-rule-them-all/)
+(Type "git fa" followed by an optional grep term to see all configured aliases,
+or aliases matching the specified search term)
+* log aliases:
+  * `l`: "log" (Similar to basic `git log`, but with extra colors, commit date
+and relative date instead of author date)
+  * `lc`: "log compact" (Log format with commit and metadata on one line
+followed by full commit messages)
+  * `lf`: "log files" (One line per commit followed by the changed file list
+produced by `--numstat`)
+  * `lo`: "Log oneline" (One line per commit, with the relative commit date on
+the left)
+  * `lx`: "log eXtra" (Similar to the `l` alias, but with both author and
+committer information)
+* `ri`: "rebase interactive" (specify either a base commit or number of commits
+to rebase, e.g. `git ri @~3` or `git ri 3`)
+* `ub`: "upstream branch" (shows the output of `git show-branch` for the
+current branch and its upstream tracking branch)
