@@ -12,9 +12,9 @@
 
 # History control settings
 # append to the history file, don't overwrite it
-shopt -s histappend
-# Ignore duplicate entries and commands beginning with a space
-HISTCONTROL=ignoredups:ignorespace
+shopt -s histappend     # Append to the history file, don't overwrite it
+HISTCONTROL=ignoreboth  # Ignore duplicates and commands beginning with a space
+HISTSIZE=10000          # Increase session history size from the default 500
 
 # Check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
