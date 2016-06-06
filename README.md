@@ -98,7 +98,7 @@ and relative date instead of author date)
 followed by full commit messages)
   * `lf`: "log files" (One line per commit followed by the changed file list
 produced by `--numstat`)
-  * `lo`: "Log oneline" (One line per commit, with the relative commit date on
+  * `lo`: "log oneline" (One line per commit, with the relative commit date on
 the left)
   * `lx`: "log eXtra" (Similar to the `l` alias, but with both author and
 committer information)
