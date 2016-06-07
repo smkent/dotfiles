@@ -44,12 +44,14 @@
     mnemonicprefix = true
     renames = copies
 [alias]
+    a = add
     au = add -u
     b = branch
     br = branch -vv
     ca = commit --amend
     cf = commit --amend --no-edit  # "commit fixup"
     ci = commit
+    cm = commit -m
     co = checkout
     d = diff
     ds = diff --staged
