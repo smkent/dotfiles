@@ -119,7 +119,9 @@ call plug#end()
 " Install plugins automatically if needed and if VIM_SKIP_PLUGINS is unset or 0
 if empty($VIM_SKIP_PLUGINS) || $VIM_SKIP_PLUGINS == 0
     if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
-        PlugInstall | q
+        if executable('git')
+            PlugInstall | q
+        endif
     endif
 endif
 
