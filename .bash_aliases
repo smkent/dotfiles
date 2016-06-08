@@ -10,4 +10,13 @@ fi
 # Alias "dirs" to print directory stack one per line
 alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
 
+# ls aliases
 alias ll='ls -l'
+alias la='ls -lA'
+
+png2jpg() {
+    for i in "${@}"; do
+        echo "${i}"
+        convert "${i}" "${i%%.png}.jpg"
+    done
+};
