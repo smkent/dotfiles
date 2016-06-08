@@ -84,6 +84,8 @@ red, files with conflicts in yellow, and untracked files in blue
 Some of the useful aliases I have defined are:
 
 * `ca`: "commit amend" (`git commit --amend`)
+* `cb`: "create branch" (Creates a new branch at either the specified point or
+current HEAD, copying remote tracking branch information if available)
 * `cf`: "commit fixup" (`git commit --amend --no-edit`)
 * `ds`: "diff staged" (`git diff --staged`)
 * `dw`: "word diff" (`git diff --word-diff=color`)

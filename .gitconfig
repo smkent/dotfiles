@@ -49,6 +49,10 @@
     b = branch
     br = branch -vv
     ca = commit --amend
+    # "create branch"; checkout a new branch with same tracking info if possible
+    cb = "!f() { [ ${#} -lt 1 ] && return 1; set -x; u=$(git rb \"${2}\"); \
+                 git checkout -b \"${1}\" \"${2:-HEAD}\" || return ${?}; \
+                 [ -n \"${u}\" ] && git branch --set-upstream-to \"${u}\"; }; f"
     cf = commit --amend --no-edit  # "commit fixup"
     ci = commit
     cm = commit -m
@@ -64,6 +68,10 @@
           '{sub(/^alias\\./,\"\")};{printf(\"\\033[1;34m%10s\\033[0;0m\", $1)};\
            {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
            print \"\\033[0;39m\"}'; }; f"
+    # "remote branch"; print remote tracking branch
+    rb = "!f() { h=${1:-$(git symbolic-ref -q HEAD)} && \
+                 git for-each-ref --format='%(upstream:short)' \
+                 \"refs/heads/${h#refs/heads/}\" | grep -ve '^$' || true; }; f"
     # "log"; git log with extra colors, commit date, and relative commit date
     l = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author: %an <%ae>%C(reset)%n%C(auto,blue)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     # "log compact"; git log with metadata on one line
@@ -80,10 +88,10 @@
     # "rebase interactive"; $1 is either a ref or a number of commits to rebase
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i \"${r}\"; }; f"
+    su = branch --set-upstream-to  # "set upstream"
     sb = show-branch
     st = status
     s = status -s
     # "upstream branch"; compare local and remote tracking branch histories
-    ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)} && git show-branch \
-                 $(git for-each-ref --format='%(upstream:short)' \
-                   \"refs/heads/${h#refs/heads/}\") \"${h}\"; }; f"
+    ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)}; u=$(git rb \"${h}\"); \
+                 [ -n \"${u}\" ] && git show-branch \"${u}\" \"${h}\"; }; f"
