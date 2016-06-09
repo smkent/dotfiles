@@ -50,7 +50,7 @@
     br = branch -vv
     ca = commit --amend
     # "create branch"; checkout a new branch with same tracking info if possible
-    cb = "!f() { [ ${#} -lt 1 ] && return 1; set -x; u=$(git rb \"${2}\"); \
+    cb = "!f() { [ ${#} -lt 1 ] && return 1; u=$(git rb \"${2}\"); \
                  git checkout -b \"${1}\" \"${2:-HEAD}\" || return ${?}; \
                  [ -n \"${u}\" ] && git branch --set-upstream-to \"${u}\"; }; f"
     cf = commit --amend --no-edit  # "commit fixup"
@@ -88,9 +88,9 @@
     # "rebase interactive"; $1 is either a ref or a number of commits to rebase
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i \"${r}\"; }; f"
-    su = branch --set-upstream-to  # "set upstream"
     sb = show-branch
     st = status
+    su = branch --set-upstream-to  # "set upstream"
     s = status -s
     # "upstream branch"; compare local and remote tracking branch histories
     ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)}; u=$(git rb \"${h}\"); \
