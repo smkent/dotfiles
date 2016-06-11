@@ -3,6 +3,7 @@
 import argparse
 import os
 import subprocess
+import sys
 
 description = 'Copy the currently installed set of dotfiles to a remote host'
 ap = argparse.ArgumentParser(description=description)
@@ -15,6 +16,7 @@ ap.add_argument('-n', '--no-overwrite', action='store_true',
 ap.add_argument('host', help='Host to copy dotfiles to')
 args = ap.parse_args()
 
+os.chdir(os.path.dirname(sys.argv[0]))
 git_toplevel = subprocess.check_output(['git', 'rev-parse',
                                         '--show-toplevel']).strip()
 os.chdir(git_toplevel)
