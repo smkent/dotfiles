@@ -3,6 +3,8 @@
 # which is based on information from here: https://gist.github.com/444295
 /*
 !.bash_aliases
+!.bash_logout
+!.bash_profile
 !.bashrc
 !.dotfiles/
 !.face
