@@ -46,7 +46,9 @@
 [alias]
     a = add
     au = add -u
+    ap = add -u -p
     b = branch
+    bd = branch -d
     br = branch -vv
     ca = commit --amend
     # "create branch"; checkout a new branch with same tracking info if possible
@@ -84,6 +86,8 @@
     lx = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author:    %an <%ae> %C(auto,blue)%ad (%ar)%C(auto,reset)%n%C(auto,12)Committer: %cn <%ce> %C(auto,blue)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     l1 = "!git l -n 1" # "log 1"; depends on the "l" alias
     p = pull
+    ra = rebase --abort
+    rc = rebase --continue
     rh = reset HEAD
     # "rebase interactive"; $1 is either a ref or a number of commits to rebase
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
