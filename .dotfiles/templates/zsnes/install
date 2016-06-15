@@ -1,0 +1,4 @@
+#!/bin/sh
+[ -z "${DEST}" -o ! -d "${DEST}" ] && exit 1
+mkdir -p "${DEST}/.zsnes"
+cp -n zsnesl.cfg "${DEST}/.zsnes/zsnesl.cfg"
