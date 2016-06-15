@@ -9,6 +9,9 @@
 !.dotfiles/
 .dotfiles/templates/timestamp
 !.face
+.gimp-2.8/*
+!.gimp-2.8
+!.gimp-2.8/scripts
 !.gitconfig
 !.gitignore
 !.gitignore.global
