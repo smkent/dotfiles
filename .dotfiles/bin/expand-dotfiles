@@ -7,7 +7,9 @@ while getopts "fhv" opt; do case ${opt} in
     h|\?)   echo "Usage: $(basename "${0}") [-f] [-v]" >&2; exit 1;;
     v)      opt_verbose=1;;
 esac; done
-[ ${opt_force} -eq 0 -a -z "$(find . -newer timestamp -print -quit)" ] && exit 0
+[ ${opt_force} -eq 0 -a \
+  \( -f timestamp -a \
+     -z "$(find . -newer timestamp -print -quit)" \) ] && exit 0
 [ ${opt_verbose} -eq 1 ] && set -x
 find . -mindepth 2 -maxdepth 2 -executable -name install -printf '%h\n' | \
     while read d; do

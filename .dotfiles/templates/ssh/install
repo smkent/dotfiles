@@ -6,6 +6,6 @@ if [ ! -d "${DEST}/.ssh" ]; then
 fi
 if [ -f "${DEST}/.ssh/config" ]; then
     cp "${DEST}/.ssh/config" "${DEST}/.ssh/config.dotfiles_backup"
+    sed -i "${DEST}/.ssh/config" -e '/### DOTFILES AUTO CONFIG/,$d'
 fi
-sed -i "${DEST}/.ssh/config" -e '/### DOTFILES AUTO CONFIG/,$d'
 cat config_append >> "${DEST}/.ssh/config"
