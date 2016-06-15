@@ -9,7 +9,7 @@ while getopts "fhv" opt; do case ${opt} in
 esac; done
 [ ${opt_force} -eq 0 -a \
   \( -f timestamp -a \
-     -z "$(find . -newer timestamp -print -quit)" \) ] && exit 0
+     -z "$(find . -newer timestamp -print -quit 2>/dev/null)" \) ] && exit 0
 [ ${opt_verbose} -eq 1 ] && set -x
 find . -mindepth 2 -maxdepth 2 -executable -name install -printf '%h\n' | \
     while read d; do
