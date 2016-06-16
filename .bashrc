@@ -34,19 +34,6 @@ fi
 [ -x /usr/bin/tput ] && __colors_supported=$(tput colors)
 [ -z "${__colors_supported}" ] && __colors_supported=0;
 
-if [ ${__colors_supported} -ge 2 ]; then
-    if test -r ~/.dircolors; then
-        eval "$(dircolors -b ~/.dircolors)"
-    else
-        eval "$(dircolors -b)"
-    fi
-    # Color command aliases
-    alias ls='ls --color=auto'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
 if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
     case "${COLORTERM}" in
         gnome-terminal|mate-terminal)
@@ -61,6 +48,19 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
             echo "Warning: Unrecognized COLORTERM: $COLORTERM" >&2
             ;;
     esac
+fi
+
+if [ ${__colors_supported} -ge 2 ]; then
+    if [ ${__colors_supported} -ge 256 -a -r ~/.dircolors ]; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+    # Color command aliases
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
 # grep highlight color (bold orange)

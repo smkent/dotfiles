@@ -6,6 +6,7 @@
 !.bash_logout
 !.bash_profile
 !.bashrc
+!.dircolors
 !.dotfiles/
 .dotfiles/templates/timestamp
 !.face
