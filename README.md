@@ -2,6 +2,25 @@
 
 My Linux environment configuration
 
+## Design
+
+My dotfiles are designed to be:
+* Portable with minimal dependencies (git, bash, and Python).
+* Easy to set up and use. This repository can simply be cloned to `$HOME`. [See
+below for installation](#installation).
+
+Most of my dotfiles are in the top level of the repository, but a few others
+are located in [`.dotfiles/templates/`](/.dotfiles/templates/). These templates
+are typically files that are modified on a machine during normal use (e.g.
+[`.ssh/config`](/.dotfiles/templates/ssh/config_append)). Templates are
+organized into subdirectories, each with its own `install` script that may
+perform arbitrary installation actions.
+
+Template installation happens when a new login shell is started and any of the
+template files are newer than the previous template installation timestamp.
+Template installation may also happen manually by running
+[`expand-dotfiles -f`](/.dotfiles/bin/expand-dotfiles).
+
 ## Installation
 
 I recommend looking at the code and trying out individual parts you are
