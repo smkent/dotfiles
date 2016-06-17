@@ -45,7 +45,7 @@ $ git checkout .
 If you use or fork this repository, you'll want to update `.gitconfig` with
 your name and email address and remove `.face`.
 
-## Additional dependencies
+### External components
 
 My vim-airline configuration requires the
 [Powerline Fonts](https://github.com/powerline/fonts), which can be installed
