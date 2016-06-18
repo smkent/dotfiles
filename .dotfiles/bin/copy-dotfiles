@@ -16,11 +16,15 @@ ap.add_argument('-n', '--no-overwrite', action='store_true',
 ap.add_argument('host', help='Host to copy dotfiles to')
 args = ap.parse_args()
 
+excludes = ['.gitignore', 'README.md', '.dotfiles/img/screenshot-*']
+full_dirs = ['.vim']
+
 os.chdir(os.path.dirname(sys.argv[0]))
 git_toplevel = subprocess.check_output(['git', 'rev-parse',
                                         '--show-toplevel']).strip()
 os.chdir(git_toplevel)
-cmd = ['rsync', '-av', '-r', '--files-from=-', '--exclude=.gitignore']
+cmd = ['rsync', '-av', '-r', '--files-from=-']
+cmd += ['--exclude={}'.format(x) for x in excludes]
 if args.pretend:
     cmd.append('--dry-run')
 if args.no_overwrite:
@@ -29,7 +33,8 @@ cmd += ['.', '{}:{}'.format(args.host, args.directory)]
 # Copy only tracked files (not full directories containing any tracked files)
 git_files = subprocess.check_output(['git', 'ls-files'])
 # Copy full .vim directory instead of just tracked files
-others = subprocess.check_output(['git', 'ls-files', '--others', '--', '.vim'])
+others = subprocess.check_output(['git', 'ls-files', '--others', '--'] +
+                                 full_dirs)
 p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 p.stdin.write(git_files)
 p.stdin.write(others)
