@@ -74,6 +74,10 @@ git repository
 * Move between windows with F7/F8
 * Alt+&lt;arrow keys&gt; for resizing panes
 * Custom status bar configuration
+* Bash helper aliases:
+  * `tn`: New session. Takes an optional session name argument.
+  * `ta`: Attach to session. Takes an optional session name argument.
+  * `tl`: List sessions.
 
 ![tmux screenshot](/.dotfiles/img/screenshot-tmux.png)
 
