@@ -74,6 +74,8 @@ git repository
 * Move between windows with F7/F8
 * Alt+&lt;arrow keys&gt; for resizing panes
 * Custom status bar configuration
+  * Window ID highlight inspired by [the screenshot in this
+thread](http://crunchbang.org/forums/viewtopic.php?id=20504)
 * Bash helper aliases:
   * `tn`: New session. Takes an optional session name argument.
   * `ta`: Attach to session. Takes an optional session name argument.
