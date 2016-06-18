@@ -109,10 +109,12 @@ Plug('https://github.com/vim-airline/vim-airline')
 " rendering errors prior to Vim 7.4.427. For more information, see:
 " - https://github.com/airblade/vim-gitgutter/issues/171
 " - http://ftp.vim.org/vim/patches/7.4/7.4.427
-if has("patch-7.4.427")
-    Plug('https://github.com/airblade/vim-gitgutter')
-else
-    Plug('https://github.com/mhinz/vim-signify')
+if executable('git')
+    if has("patch-7.4.427")
+        Plug('https://github.com/airblade/vim-gitgutter')
+    else
+        Plug('https://github.com/mhinz/vim-signify')
+    endif
 endif
 call plug#end()
 
