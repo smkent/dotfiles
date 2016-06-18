@@ -19,17 +19,18 @@
     remoteBranch = blue bold
     tag = yellow bold
 [color "diff"]
-    frag = blue bold
+    old = 9
+    new = 70
+    frag = 74 bold
     func = magenta bold
 [color "grep"]
-    context = white dim
-    filename = magenta
-    function = yellow
-    linenumber = green
-    match = red bold
-    separator = blue
+    filename = 147
+    function = 11
+    linenumber = 70
+    match = 202 bold
+    separator = 245
 [color "status"]
-    added = green
+    added = 70
     branch = white bold ul
     changed = 9     # Bright red
     unmerged = 11   # Bright yellow
