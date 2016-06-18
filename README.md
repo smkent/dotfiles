@@ -145,7 +145,7 @@ the left)
 committer information)
 * `ri`: "rebase interactive" (Specify either a base commit or number of commits
 to rebase, e.g. `git ri @~3` or `git ri 3`)
-* `rn`: "rebase new" (Starts an interactive rebase for all commits not on the
-current branch's remote tracking branch)
+* `rn`: "rebase new" (`git rebase -i`; Starts an interactive rebase for all
+commits not on the current branch's remote tracking branch)
 * `ub`: "upstream branch" (Shows the output of `git show-branch` for the
 current branch and its upstream tracking branch)

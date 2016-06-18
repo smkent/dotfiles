@@ -94,8 +94,7 @@
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i \"${r}\"; }; f"
     # "rebase new"; rebase all commits not on the current remote tracking branch
-    rn = "!f() { u=$(git rb); [ -z \"${u}\" ]  && exit 1; \
-                 git rebase -i @~$(git rev-list --count \"${u}\"..HEAD); }; f"
+    rn = rebase -i
     sb = show-branch
     st = status
     su = branch --set-upstream-to  # "set upstream"
