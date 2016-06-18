@@ -14,6 +14,19 @@ alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
 alias ll='ls -l'
 alias la='ls -lA'
 
+# tmux
+ta() {
+    args="${@}"
+    [ -n "${args}" ] && { tmux attach -d -t "${@}"; return; }
+    tmux attach -d
+}
+tn() {
+    args="${@}"
+    [ -n "${args}" ] && { tmux new-session -n '' -s "${args}"; return; }
+    tmux new-session -n ''
+}
+alias tl='tmux list-sessions'
+
 png2jpg() {
     for i in "${@}"; do
         echo "${i}"

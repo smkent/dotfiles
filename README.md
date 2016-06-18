@@ -65,6 +65,18 @@ git repository
 
 ![screenshot of .bashrc in action](/.dotfiles/img/screenshot-bashrc.png)
 
+### .tmux.conf
+
+* Use Ctrl-A as the prefix key (similar to GNU screen)
+* Some vim-style key mappings:
+  * Ctrl+A h/j/k/l for traversing panes
+  * Create window splits with Ctrl+A S (horizontal) or Ctrl+A V (vertical)
+* Move between windows with F7/F8
+* Alt+&lt;arrow keys&gt; for resizing panes
+* Custom status bar configuration
+
+![tmux screenshot](/.dotfiles/img/screenshot-tmux.png)
+
 ### .vimrc
 
 * The usual basic settings (line numbers, syntax highlighting, etc.)
