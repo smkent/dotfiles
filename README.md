@@ -53,7 +53,7 @@ using the [install-fonts](/.dotfiles/bin/install-fonts) script.
 
 ## Features
 
-### .bashrc
+### Bash
 
 * Display exit code of the previous command if nonzero (or "bg" / "C-c" when
 backgrounding a job or typing Ctrl-C, respectively)
@@ -65,7 +65,7 @@ git repository
 
 ![screenshot of .bashrc in action](/.dotfiles/img/screenshot-bashrc.png)
 
-### .tmux.conf
+### Tmux
 
 * Use Ctrl-A as the prefix key (similar to GNU screen)
 * Some vim-style key mappings:
@@ -77,7 +77,7 @@ git repository
 
 ![tmux screenshot](/.dotfiles/img/screenshot-tmux.png)
 
-### .vimrc
+### Vim
 
 * The usual basic settings (line numbers, syntax highlighting, etc.)
 * Save files by pressing F2
