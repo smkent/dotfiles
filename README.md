@@ -63,7 +63,7 @@ backgrounding a job or typing Ctrl-C, respectively)
 git repository
 * Display number of background jobs if any
 
-![screenshot of .bashrc in action](/.dotfiles/img/screenshot-bashrc.png)
+![bash screenshot](/.dotfiles/img/screenshot-bashrc.png)
 
 ### Tmux
 
