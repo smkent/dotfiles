@@ -12,29 +12,29 @@
 [branch]
     autosetuprebase = always
 [color "branch"]
-    remote = 9      # Lighter red
+    remote = 9          # Brighter red
     upstream = blue bold
 [color "decorate"]
     HEAD = red bold
     remoteBranch = blue bold
     tag = yellow bold
 [color "diff"]
-    old = 9
-    new = 70
-    frag = 74 bold
+    old = 9             # Brighter red
+    new = 70            # Brighter green
+    frag = 74 bold      # Brighter blue
     func = magenta bold
 [color "grep"]
-    filename = 147
-    function = 11
-    linenumber = 70
-    match = 202 bold
-    separator = 245
+    filename = 147      # Purple
+    function = 11       # Bright yellow
+    linenumber = 70     # Brighter green
+    match = 202 bold    # Orange
+    separator = 245     # Gray
 [color "status"]
-    added = 70
+    added = 70          # Brighter green
     branch = white bold ul
-    changed = 9     # Bright red
-    unmerged = 11   # Bright yellow
-    untracked = 32  # Brighter blue
+    changed = 9         # Brighter red
+    unmerged = 11       # Bright yellow
+    untracked = 32      # Brighter blue
 [merge]
     conflictstyle = diff3
 [log]

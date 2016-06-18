@@ -99,16 +99,16 @@ git repository
 
 #### Custom colors
 
-* `git branch`: Remote branches in lighter red, upstream branches in blue bold
+* `git branch`: Remote branches in brighter red, upstream branches in blue bold
 * `--decorate` (with `git log`, etc.): HEAD in red bold, remote branches in
 blue bold, tags in yellow bold
-* `git diff`: Hunk header (line numbers changed) in blue bold, hunk function
-header in magenta bold
-* `git grep`: Several customizations, mostly to colorize matching file names
-(in magenta). See the `[color "grep"]` section in [.gitconfig](/.gitconfig) for
-the full details.
-* `git status`: Branch name in bold and underlined, changed files in brighter
-red, files with conflicts in yellow, and untracked files in blue
+* `git diff`: Brighter green and red for added and removed, hunk header (line
+numbers changed) in brighter blue bold, hunk function header in magenta bold
+* `git grep`: Maches in orange, matching filenames in purple, line numbers in
+brighter green, function names in yellow, and separators in gray
+* `git status`: Branch name in bold and underlined, added files in brighter
+green, changed files in brighter red, files with conflicts in yellow, and
+untracked files in blue
 
 #### Aliases
 
