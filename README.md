@@ -114,6 +114,8 @@ brighter green, function names in yellow, and separators in gray
 green, changed files in brighter red, files with conflicts in yellow, and
 untracked files in blue
 
+![git colors screenshot](/.dotfiles/img/screenshot-git-colors.png)
+
 #### Aliases
 
 Some of the useful aliases I have defined are:
