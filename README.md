@@ -120,7 +120,8 @@ untracked files in blue
 
 #### Aliases
 
-Some of the useful aliases I have defined are:
+See my [.gitconfig](/.gitconfig) for the full list of aliases. Some of the
+more useful aliases are:
 
 * `ca`: "commit amend" (`git commit --amend`)
 * `cb`: "create branch" (Creates a new branch at either the specified point or
