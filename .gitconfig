@@ -60,10 +60,13 @@
     ci = commit
     cm = commit -m
     co = checkout
+    cp = cherry-pick
+    cx = cherry-pick -x
     d = diff
     ds = diff --staged
     dw = diff --word-diff=color  # "diff words"
     ec = config --global -e  # "edit config"
+    el = config --local -e  # "edit local"
     # "find alias"; based on "finda" from: http://brettterpstra.com/2014/08/04/
     # shell-tricks-one-git-alias-to-rule-them-all/
     fa = "!f() { git config --global --get-regexp alias | \
@@ -90,6 +93,7 @@
     ra = rebase --abort
     rc = rebase --continue
     rh = reset HEAD
+    rt = reset --hard  # "reset to"
     # "rebase interactive"; $1 is either a ref or a number of commits to rebase
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i \"${r}\"; }; f"
