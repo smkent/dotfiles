@@ -46,8 +46,8 @@
     renames = copies
 [alias]
     a = add
-    au = add -u
     ap = add -u -p
+    au = add -u
     b = branch
     bd = branch -d
     br = branch -vv
@@ -74,12 +74,9 @@
           '{sub(/^alias\\./,\"\")};{printf(\"\\033[1;34m%10s\\033[0;0m\", $1)};\
            {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
            print \"\\033[0;39m\"}'; }; f"
-    # "remote branch"; print remote tracking branch
-    rb = "!f() { h=${1:-$(git symbolic-ref -q HEAD)} && \
-                 git for-each-ref --format='%(upstream:short)' \
-                 \"refs/heads/${h#refs/heads/}\" | grep -ve '^$' || true; }; f"
     # "log"; git log with extra colors, commit date, and relative commit date
     l = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author: %an <%ae>%C(reset)%n%C(auto,blue)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
+    l1 = "!git l -n 1"  # "log 1"; depends on the "l" alias
     # "log compact"; git log with metadata on one line
     lc = log --date=relative --pretty=format:'%C(auto,yellow)%H %C(auto,12)%<(20)%an %C(auto,blue)%cd%C(auto,reset)%n%w(0,2,2)%s%n%+b'
     # "log files"; one line per commit followed by the changed file list
@@ -88,21 +85,24 @@
     lo = log --date=relative --pretty=format:'%C(auto,blue)%>(14)%cd %C(auto,yellow)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,reset)'
     # "log eXtra"; git log with both author and committer information
     lx = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author:    %an <%ae> %C(auto,blue)%ad (%ar)%C(auto,reset)%n%C(auto,12)Committer: %cn <%ce> %C(auto,blue)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
-    l1 = "!git l -n 1" # "log 1"; depends on the "l" alias
     p = pull
     ra = rebase --abort
+    # "remote branch"; print remote tracking branch
+    rb = "!f() { h=${1:-$(git symbolic-ref -q HEAD)} && \
+                 git for-each-ref --format='%(upstream:short)' \
+                 \"refs/heads/${h#refs/heads/}\" | grep -ve '^$' || true; }; f"
     rc = rebase --continue
     rh = reset HEAD
-    rt = reset --hard  # "reset to"
     # "rebase interactive"; $1 is either a ref or a number of commits to rebase
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i \"${r}\"; }; f"
     # "rebase new"; rebase all commits not on the current remote tracking branch
     rn = rebase -i
+    rt = reset --hard  # "reset to"
+    s = status -s
     sb = show-branch
     st = status
     su = branch --set-upstream-to  # "set upstream"
-    s = status -s
     # "upstream branch"; compare local and remote tracking branch histories
     ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)}; u=$(git rb \"${h}\"); \
                  [ -n \"${u}\" ] && git show-branch \"${u}\" \"${h}\"; }; f"
