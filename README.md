@@ -70,7 +70,7 @@ git repository
 * Use Ctrl-A as the prefix key (similar to GNU screen)
 * Some vim-style key mappings:
   * Ctrl+A h/j/k/l for traversing panes
-  * Create window splits with Ctrl+A S (horizontal) or Ctrl+A V (vertical)
+  * Create window splits with Ctrl+A s (horizontal) or Ctrl+A v (vertical)
 * Move between windows with F7/F8
 * Alt+&lt;arrow keys&gt; for resizing panes
 * Custom status bar configuration
