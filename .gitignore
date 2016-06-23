@@ -10,8 +10,8 @@
 !.dotfiles/
 .dotfiles/templates/timestamp
 !.face
+!.gimp-2.8/
 .gimp-2.8/*
-!.gimp-2.8
 !.gimp-2.8/scripts
 !.gitconfig
 !.gitignore
@@ -23,6 +23,6 @@
 .vim/plugged/
 !.vim/
 !.zsnes/
-!.zsnes/zinput.cfg
 .zsnes/*
+!.zsnes/zinput.cfg
 !README.md
