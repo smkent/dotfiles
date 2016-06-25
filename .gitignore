@@ -16,6 +16,11 @@
 !.gitconfig
 !.gitignore
 !.gitignore.global
+!.gnupg/
+.gnupg/*
+!.gnupg/gpg.conf
+!.gnupg/dirmngr.conf
+!.gnupg/sks-keyservers.netCA.pem
 !.screenrc
 !.tmux.conf
 !.vimrc

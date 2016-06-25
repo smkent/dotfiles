@@ -248,6 +248,13 @@ if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
     done
 fi
 
+# GnuPG configuration
+if [ "$(stat -c '%a' ~/.gnupg 2>/dev/null)" != "700" ]; then
+    chmod 0700 ~/.gnupg
+    chmod -R og-rwx ~/.gnupg
+fi
+export GPG_TTY=$(tty)
+
 # Load host-specific bashrc if available
 if [ -f "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}" ]; then
     . "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}"
