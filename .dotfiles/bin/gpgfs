@@ -66,6 +66,7 @@ def mount():
 if args.mount:
     if not os.path.exists(args.mount):
         print('Error: {} does not exist'.format(args.mount), file=sys.stderr)
+        sys.exit(1)
     unmount()
     mount()
 elif args.unmount:
