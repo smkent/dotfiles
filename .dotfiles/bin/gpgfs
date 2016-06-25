@@ -54,11 +54,14 @@ def mount():
     subprocess.check_call(['mount', priv_mapper, priv_mountpoint])
     os.chmod(priv_mountpoint, 0o0700)
     print('Mounted filesystem')
+    # Perform GnuPG-specific actions as the invoking user
+    sudo_uid = os.environ.get('SUDO_UID')
+    if sudo_uid:
+        os.setuid(int(sudo_uid))
     if not os.path.isdir(priv_homedir):
         os.mkdir(priv_homedir)
     subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
     print('GnuPG home directory: {}'.format(priv_homedir))
-    os.setuid(int(os.environ.get('SUDO_UID')))
     subprocess.check_call(['gpg', '--homedir', priv_homedir, '-k'])
     sys.exit(0)
 
