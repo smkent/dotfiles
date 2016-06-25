@@ -20,6 +20,8 @@ ap.add_argument('-m', '--mount', metavar='device/path',
                 help='Mount the specified encrypted filesystem')
 ap.add_argument('-u', '--unmount', action='store_true',
                 help='Unmount an already-mounted filesystem')
+ap.add_argument('-p', '--password', metavar='device/path',
+                help='Change password on the specified encrypted filesystem')
 # Options
 default_mountpoint = os.path.join(os.path.expanduser('~'), '.gnupg', 'enc')
 ap.add_argument('-d', '--mountpoint', metavar='dir',
@@ -145,6 +147,8 @@ elif args.unmount:
         except subprocess.CalledProcessError:
             args.mountpoint = default_mountpoint
     unmount()
+elif args.password:
+    subprocess.call(['cryptsetup', 'luksChangeKey', args.password])
 else:
     print('Error: No action specified. Please provide one of -m/--mount, '
-          '-u/--unmount, or -c/--create.', file=sys.stderr)
+          '-u/--unmount, -c/--create, or -p/--password.', file=sys.stderr)
