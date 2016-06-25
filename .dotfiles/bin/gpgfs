@@ -13,6 +13,9 @@ if os.getuid() != 0:
 description = 'Mount or unmount a filesystem containing private GnuPG key(s)'
 ap = argparse.ArgumentParser(description=description)
 # Actions
+ap.add_argument('-c', '--create', metavar='filename',
+                help=('Create and mount an encrypted filesystem in a loopback '
+                      'file to contain private GnuPG key(s)'))
 ap.add_argument('-m', '--mount', metavar='device/path',
                 help='Mount the specified encrypted filesystem')
 ap.add_argument('-u', '--unmount', action='store_true',
@@ -33,37 +36,26 @@ ap.add_argument('-n', '--no-list-keys', dest='list_keys', action='store_false',
 args = ap.parse_args()
 args.mapper = '/dev/mapper/{}'.format(args.mapper)
 
-if sum(bool(i) for i in [args.mount, args.unmount]) > 1:
+if sum(bool(i) for i in [args.create, args.mount, args.unmount]) > 1:
     print('Error: Multiple actions specified', file=sys.stderr)
     sys.exit(1)
 
 
-def unmount():
-    if os.path.isdir(args.mountpoint):
-        print('Stopping any running agents')
-        subprocess.call(['killall', 'gpg-agent', 'dirmngr'])
-        if os.path.ismount(args.mountpoint):
-            print('Unmounting filesystem from {}'.format(args.mountpoint))
-            subprocess.check_call(['umount', args.mountpoint])
-        print('Removing directory {}'.format(args.mountpoint))
-        subprocess.check_call(['rmdir', args.mountpoint])
-    if os.path.exists(args.mapper):
-        print('Closing LUKS device {}'.format(args.mapper))
-        subprocess.check_call(['cryptsetup', 'luksClose', args.mapper])
-
-
-def mount():
-    if os.path.isdir(args.mountpoint):
-        print('Error: {} already exists'.format(args.mountpoint),
-              file=sys.stderr)
-        sys.exit(1)
-    os.mkdir(args.mountpoint, 0o0700)
-    print('Created directory {}'.format(args.mountpoint))
-    subprocess.check_call(['cryptsetup', 'luksOpen', args.mount,
+# Interally-used functions
+def unlock(unlock_path):
+    subprocess.check_call(['cryptsetup', 'luksOpen', unlock_path,
                            args.mapper.replace('/dev/mapper/', '', 1)])
     print('Created LUKS device {}'.format(args.mapper))
+
+
+def mount_mapper():
+    os.mkdir(args.mountpoint, 0o0700)
+    print('Created directory {}'.format(args.mountpoint))
     subprocess.check_call(['mount', args.mapper, args.mountpoint])
     print('Mounted filesystem on {}'.format(args.mountpoint))
+
+
+def post_mount():
     priv_homedir = os.path.join(args.mountpoint, args.gnupg_subdirectory)
     if not args.list_keys:
         print('Skipping GnuPG home directory list: {}'.format(priv_homedir))
@@ -80,14 +72,65 @@ def mount():
     sys.exit(0)
 
 
-if args.mount:
+# Action functions
+def unmount():
+    if os.path.isdir(args.mountpoint):
+        print('Stopping any running agents')
+        subprocess.call(['killall', 'gpg-agent', 'dirmngr'])
+        if os.path.ismount(args.mountpoint):
+            print('Unmounting filesystem from {}'.format(args.mountpoint))
+            subprocess.check_call(['umount', args.mountpoint])
+        print('Removing directory {}'.format(args.mountpoint))
+        subprocess.check_call(['rmdir', args.mountpoint])
+    if os.path.exists(args.mapper):
+        print('Closing LUKS device {}'.format(args.mapper))
+        subprocess.check_call(['cryptsetup', 'luksClose', args.mapper])
+
+
+def mount(mount_path):
+    if os.path.isdir(args.mountpoint):
+        print('Error: {} already exists'.format(args.mountpoint),
+              file=sys.stderr)
+        sys.exit(1)
+    unlock(mount_path)
+    mount_mapper()
+    post_mount()
+
+
+def create(create_path):
+    if os.path.exists(args.create):
+        print('Error: {} already exists'.format(args.create), file=sys.stderr)
+        sys.exit(1)
+    unmount()
+    subprocess.check_call(['dd', 'if=/dev/zero', 'of={}'.format(create_path),
+                           'bs=1M', 'count=10'])
+    sudo_user = os.environ.get('SUDO_USER')
+    if sudo_user:
+        subprocess.check_call(['chown', '{}:'.format(sudo_user), create_path])
+    cmd = ['cryptsetup', '-y', '--cipher', 'aes-xts-plain64:sha512', '--hash',
+           'sha512', '--key-size', '512', 'luksFormat', create_path]
+    subprocess.check_call(cmd)
+    unlock(create_path)
+    subprocess.check_call(['mkfs.ext4', '-m', '0', args.mapper])
+    mount_mapper()
+    if sudo_user:
+        subprocess.check_call(['chown', '{}:'.format(sudo_user),
+                               args.mountpoint])
+    post_mount()
+
+
+if args.create:
+    if not args.mountpoint:
+        args.mountpoint = default_mountpoint
+    create(args.create)
+elif args.mount:
     if not args.mountpoint:
         args.mountpoint = default_mountpoint
     if not os.path.exists(args.mount):
         print('Error: {} does not exist'.format(args.mount), file=sys.stderr)
         sys.exit(1)
     unmount()
-    mount()
+    mount(args.mount)
 elif args.unmount:
     if not args.mountpoint:
         try:
@@ -101,4 +144,5 @@ elif args.unmount:
             args.mountpoint = default_mountpoint
     unmount()
 else:
-    print('Error: No action specified', file=sys.stderr)
+    print('Error: No action specified. Please provide one of -m/--mount, '
+          '-u/--unmount, or -c/--create.', file=sys.stderr)
