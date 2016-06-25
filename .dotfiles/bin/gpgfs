@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import argparse
+import os
+import subprocess
+import sys
+
+if os.getuid() != 0:
+    sys.exit(subprocess.call(['sudo'] + sys.argv))
+
+description = 'Mount or unmount a filesystem containing private GnuPG key(s)'
+ap = argparse.ArgumentParser(description=description)
+ap.add_argument('-m', '--mount', metavar='device/path',
+                help='Mount the specified encrypted filesystem')
+ap.add_argument('-u', '--unmount', action='store_true',
+                help='Unmount an already-mounted filesystem')
+args = ap.parse_args()
+
+if sum(bool(i) for i in [args.mount, args.unmount]) > 1:
+    print('Error: Multiple actions specified', file=sys.stderr)
+    sys.exit(1)
+
+priv_mountpoint = os.path.join(os.path.expanduser('~'), '.gnupg', 'enc')
+priv_homedir = os.path.join(priv_mountpoint, 'gnupg')
+priv_mapper = '/dev/mapper/enc'
+
+
+def unmount():
+    if os.path.isdir(priv_mountpoint):
+        print('Stopping any running agents')
+        subprocess.call(['killall', 'gpg-agent', 'dirmngr'])
+        if os.path.ismount(priv_mountpoint):
+            print('Unmounting filesystem')
+            subprocess.check_call(['umount', priv_mountpoint])
+        print('Removing directory {}'.format(priv_mountpoint))
+        subprocess.check_call(['rmdir', priv_mountpoint])
+    if os.path.exists(priv_mapper):
+        print('Closing LUKS device {}'.format(priv_mapper))
+        subprocess.check_call(['cryptsetup', 'luksClose', priv_mapper])
+
+
+def mount():
+    if os.path.isdir(priv_mountpoint):
+        print('Error: {} already exists'.format(priv_mountpoint),
+              file=sys.stderr)
+        sys.exit(1)
+    os.mkdir(priv_mountpoint, 0o0700)
+    print('Created directory {}'.format(priv_mountpoint))
+    subprocess.check_call(['cryptsetup', 'luksOpen', args.mount,
+                           priv_mapper.replace('/dev/mapper/', '', 1)])
+    print('Created LUKS device {}'.format(priv_mapper))
+    subprocess.check_call(['mount', priv_mapper, priv_mountpoint])
+    os.chmod(priv_mountpoint, 0o0700)
+    print('Mounted filesystem')
+    if not os.path.isdir(priv_homedir):
+        os.mkdir(priv_homedir)
+    subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
+    print('GnuPG home directory: {}'.format(priv_homedir))
+    os.setuid(int(os.environ.get('SUDO_UID')))
+    subprocess.check_call(['gpg', '--homedir', priv_homedir, '-k'])
+    sys.exit(0)
+
+
+if args.mount:
+    if not os.path.exists(args.mount):
+        print('Error: {} does not exist'.format(args.mount), file=sys.stderr)
+    unmount()
+    mount()
+elif args.unmount:
+    unmount()
+else:
+    print('Error: No action specified', file=sys.stderr)
