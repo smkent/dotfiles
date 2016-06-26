@@ -87,6 +87,8 @@ thread](http://crunchbang.org/forums/viewtopic.php?id=20504)
 
 * The usual basic settings (line numbers, syntax highlighting, etc.)
 * Save files by pressing F2
+* Confirm changes and quit vim using `q` in normal mode, or Ctrl+X in normal or
+insert modes
 * Highlight 81st column (requires Vim 7.3+)
 * Custom [vim-airline](https://github.com/vim-airline/vim-airline) color scheme
 

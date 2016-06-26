@@ -76,6 +76,11 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
+" Confirm and quit using q in normal mode, or Ctrl+X in normal or insert modes
+nnoremap q :conf q<cr>
+inoremap <C-x> <esc>:conf q<cr>
+nnoremap <C-x> :conf q<cr>
+
 " Disable Ex Mode
 nnoremap Q <nop>
 
