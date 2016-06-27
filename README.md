@@ -47,9 +47,10 @@ your name and email address and remove `.face`.
 
 ### External components
 
-My [vim-airline](https://github.com/vim-airline/vim-airline) configuration
-requires the [Powerline Fonts](https://github.com/powerline/fonts), which can
-be installed using the [install-fonts](/.dotfiles/bin/install-fonts) script.
+My [vim-airline](https://github.com/vim-airline/vim-airline) and tmux
+configurations require the [Powerline
+Fonts](https://github.com/powerline/fonts), which can be installed using the
+[install-fonts](/.dotfiles/bin/install-fonts) script.
 
 ## Features
 
