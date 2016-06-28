@@ -59,6 +59,8 @@ set timeout timeoutlen=1000 ttimeoutlen=50
 
 " Custom Keyboard mappings
 
+let mapleader=","
+
 " http://superuser.com/a/402084
 if &term =~ '^screen'
     " tmux will send xterm-style keys when its xterm-keys option is on
@@ -101,6 +103,44 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
+
+" Surround shortcuts
+map <Leader>' ysiw'
+vmap <Leader>' c'<C-R>"'<ESC>
+map <Leader>" ysiw"
+vmap <Leader>" c"<C-R>""<ESC>
+
+" ,) or ,( Surround a word with (parens)
+" The difference is in whether a space is put in
+map <Leader>( ysiw(
+map <Leader>) ysiw)
+vmap <Leader>( c( <C-R>" )<ESC>
+vmap <Leader>) c(<C-R>")<ESC>
+
+" ,[ Surround a word with [brackets]
+map <Leader>] ysiw]
+map <Leader>[ ysiw[
+vmap <Leader>[ c[ <C-R>" ]<ESC>
+vmap <Leader>] c[<C-R>"]<ESC>
+
+" ,{ Surround a word with {braces}
+map <Leader>} ysiw}
+map <Leader>{ ysiw{
+vmap <Leader>} c{ <C-R>" }<ESC>
+vmap <Leader>{ c{<C-R>"}<ESC>
+
+" ,` Surround a word with `backticks`
+map <Leader>` ysiw`
+
+" Surround contents replacement shortcuts
+nnoremap <Leader>r' f'ci'
+nnoremap <Leader>r" f"ci"
+nnoremap <Leader>r( f(ci(
+nnoremap <Leader>r) f)ci)
+nnoremap <Leader>r[ f[ci[
+nnoremap <Leader>r] f]ci]
+nnoremap <Leader>r{ f{ci{
+nnoremap <Leader>r} f}ci}
 
 " Confirm and quit using q in normal mode, or Ctrl+X in normal or insert modes
 nnoremap q :conf q<cr>
