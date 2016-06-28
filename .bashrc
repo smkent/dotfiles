@@ -21,6 +21,11 @@ HISTSIZE=10000          # Increase session history size from the default 500
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# Disable terminal output pause/unpause
+# This allows terminal applications to receive Ctrl+S
+# http://unix.stackexchange.com/q/12107
+stty -ixon
+
 # Make less more friendly for non-text input files, see lesspipe(1)
 if [ -x /usr/bin/lesspipe ]; then
     if grep -qe '^\s\+echo\ "export' "$(which lesspipe)"; then

@@ -59,10 +59,13 @@ set timeout timeoutlen=1000 ttimeoutlen=50
 
 " Custom Keyboard mappings
 
-" F2: In normal mode, save the file
-"     In insert mode, exit insert mode, save the file, and enter insert mode
+" F2 and Ctrl+S:
+" In normal mode, save the file
+" In insert mode, exit insert mode, save the file, and enter insert mode
 nmap <F2> :w<CR>
+nmap <C-s> :w<CR>
 imap <F2> <ESC>:w<CR>i
+imap <C-s> <ESC>:w<CR>i
 
 " F3: Clear last search highlighting
 nnoremap <F3> :noh<return><esc>
@@ -81,8 +84,11 @@ nnoremap q :conf q<cr>
 inoremap <C-x> <esc>:conf q<cr>
 nnoremap <C-x> :conf q<cr>
 
-" Disable Ex Mode
-nnoremap Q <nop>
+" Remap Q to save and quit. This also disables EX mode.
+nnoremap Q :wq<cr>
+
+" Use :W to save the current file with sudo
+cnoremap W w !sudo tee > /dev/null %
 
 " 80-character column highlight
 " http://stackoverflow.com/a/3765575
