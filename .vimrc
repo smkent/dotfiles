@@ -59,6 +59,29 @@ set timeout timeoutlen=1000 ttimeoutlen=50
 
 " Custom Keyboard mappings
 
+" http://superuser.com/a/402084
+if &term =~ '^screen'
+    " tmux will send xterm-style keys when its xterm-keys option is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
+
+" Resize windows with arrow keys
+" Up and down are reversed compared to YADR's example
+nnoremap <C-Up> <C-w>-
+nnoremap <C-Down> <C-w>+
+nnoremap <C-Left> <C-w><
+nnoremap <C-Right>  <C-w>>
+
+" Make 0 go to the first character rather than the beginning
+" of the line. When we're programming, we're almost always
+" interested in working with text rather than empty space. If
+" you want the traditional beginning of line, use ^
+nnoremap 0 ^
+nnoremap ^ 0
+
 " F2 and Ctrl+S:
 " In normal mode, save the file
 " In insert mode, exit insert mode, save the file, and enter insert mode
