@@ -18,6 +18,10 @@ set expandtab       " Insert spaces instead of tabs
 autocmd filetype make set noexpandtab
 filetype indent plugin on
 
+" Always start the cursor on the first line when editing a git commit message
+" http://vim.wikia.com/wiki/VimTip1636
+autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
+
 set hlsearch        " Highlight search results
 set incsearch       " Show search matches as you type
 
