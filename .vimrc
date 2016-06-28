@@ -142,6 +142,7 @@ map <Leader>` ysiw`
 " Surround contents replacement shortcuts
 nnoremap <Leader>r' f'ci'
 nnoremap <Leader>r" f"ci"
+nnoremap <Leader>r` f`ci`
 nnoremap <Leader>r( f(ci(
 nnoremap <Leader>r) f)ci)
 nnoremap <Leader>r[ f[ci[
