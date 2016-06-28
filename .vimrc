@@ -104,6 +104,9 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
+" Remap record (q) to ,q so q can be used to quit vim
+nnoremap <Leader>q q
+
 " Surround shortcuts
 map <Leader>' ysiw'
 vmap <Leader>' c'<C-R>"'<ESC>
