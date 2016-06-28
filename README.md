@@ -92,6 +92,8 @@ thread](http://crunchbang.org/forums/viewtopic.php?id=20504)
 insert modes
 * Highlight 81st column (requires Vim 7.3+)
 * Custom [vim-airline](https://github.com/vim-airline/vim-airline) color scheme
+* Some basic and [vim-surround](https://github.com/tpope/vim-surround) keymaps
+from [YADR (Yet Another Dotfile Repo)](https://github.com/skwp/dotfiles/)
 
 ![vim screenshot](/.dotfiles/img/screenshot-vim.png)
 
