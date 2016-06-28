@@ -16,7 +16,7 @@ ap.add_argument('-n', '--no-overwrite', action='store_true',
 ap.add_argument('host', help='Host to copy dotfiles to')
 args = ap.parse_args()
 
-excludes = ['.gitignore', 'README.md', '.dotfiles/img/screenshot-*']
+excludes = ['.git', '.gitignore', 'README.md', '.dotfiles/img/screenshot-*']
 full_dirs = ['.vim']
 
 os.chdir(os.path.dirname(sys.argv[0]))
