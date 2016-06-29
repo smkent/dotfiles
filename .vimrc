@@ -159,7 +159,7 @@ nnoremap <C-x> :conf q<cr>
 nnoremap Q :wq<cr>
 
 " Use :W to save the current file with sudo
-cnoremap W w !sudo tee > /dev/null %
+nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 
 " 80-character column highlight
 " http://stackoverflow.com/a/3765575
