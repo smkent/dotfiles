@@ -28,7 +28,7 @@ set incsearch       " Show search matches as you type
 " Color settings
 set t_Co=256        " Enable 256 colors
 syntax on           " Enable syntax highlighting
-colorscheme smkent256
+colorscheme smkent
 
 set number          " Show line numbers
 set relativenumber  " Show relative line numbers (except for the current line)
@@ -37,7 +37,8 @@ set showmatch       " Show matching braces
 set nowrap          " Don't wrap long lines
 
 " Highlight trailing whitespace in red
-highlight ExtraWhitespace ctermbg=red guibg=red
+" The ExtraWhitespace highlight group is located in my color scheme file
+" See the section "Custom highlight groups" in that file
 au WinEnter * call matchadd('ExtraWhitespace', '\s\+$', 4)
 au BufWinEnter * call matchadd('ExtraWhitespace', '\s\+$', 5)
 if version >= 702
@@ -47,7 +48,6 @@ endif
 " Highlight certain nonprintable characters
 set list
 set listchars=nbsp:¬,tab:»\ ,extends:»,precedes:«
-hi SpecialKey ctermfg=red
 
 set mouse=          " Disable mouse support
 set so=8            " so is "Scrolloff", or the minimum number of context
@@ -165,15 +165,12 @@ nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 " http://stackoverflow.com/a/3765575
 if exists('+colorcolumn')
     set colorcolumn=81
-    highlight ColorColumn ctermbg=236
 else
     au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
 
 " Set current line number highlight color for use with relativenumber
 " To use the same color as the rest of the line numbers, use:
-" highlight CursorLineNr ctermfg=243 ctermbg=232
-highlight CursorLineNr cterm=bold, ctermfg=250 ctermbg=232
 
 " Disable vim requesting the terminal version
 " This prevents extraneous garbage from being printed on startup
@@ -264,17 +261,9 @@ let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = '~!'
 
 " Customize sign column highlight
+" Highlight groups are located in my color scheme file
+" See the section "Plugin highlight groups" in that file
 let g:gitgutter_override_sign_column_highlight = 0
-highlight GitGutterAdd          cterm=bold ctermbg=233  ctermfg=119
-highlight GitGutterDelete       cterm=bold ctermbg=233  ctermfg=167
-highlight GitGutterChange       cterm=bold ctermbg=233  ctermfg=227
-highlight GitGutterChangeDelete cterm=bold ctermbg=233  ctermfg=227
-
-" Highlight lines with signs
-highlight GitGutterAddLine          ctermbg=234
-highlight GitGutterDeleteLine       ctermbg=234
-highlight GitGutterChangeLine       ctermbg=234
-highlight GitGutterChangeDeleteLine ctermbg=234
 
 " ctrlp configuration
 let g:ctrlp_map = '<c-p>'
