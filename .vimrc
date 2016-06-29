@@ -213,7 +213,7 @@ endif
 " vim-airline configuration
 set laststatus=2    " Always show the status bar
 
-" Enable powerline fonts if vim is running locally, or if VIM_AIRLINE is set
+" Enable powerline fonts unless explicitly disabled
 if empty($VIM_AIRLINE) || $VIM_AIRLINE != 0
     let g:airline_powerline_fonts = 1
 else
