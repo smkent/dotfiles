@@ -155,10 +155,10 @@ nnoremap q :conf q<cr>
 inoremap <C-x> <esc>:conf q<cr>
 nnoremap <C-x> :conf q<cr>
 
-" Remap Q to save and quit. This also disables EX mode.
+" Remap Q to save and quit. This also disables Ex mode.
 nnoremap Q :wq<cr>
 
-" Use :W to save the current file with sudo
+" Use ,W to save the current file with sudo
 nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 
 " 80-character column highlight
@@ -192,6 +192,8 @@ Plug('https://github.com/vim-airline/vim-airline')
 if executable('git')
     if has("patch-7.4.427")
         Plug('https://github.com/airblade/vim-gitgutter')
+        " Reduce default refresh time from 4 seconds to 0.25 seconds
+        set updatetime=250
     else
         Plug('https://github.com/mhinz/vim-signify')
     endif
@@ -237,11 +239,6 @@ let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
 " vim-signify configuration
 let g:signify_vcs_list = [ 'git' ]
 
-" Set Sy sign colors
-highlight SignifySignAdd    cterm=bold ctermbg=233  ctermfg=119
-highlight SignifySignDelete cterm=bold ctermbg=233  ctermfg=167
-highlight SignifySignChange cterm=bold ctermbg=233  ctermfg=227
-
 " Map [c and ]c shortcuts to jump between hunks
 let g:signify_mapping_next_hunk = ']c'
 let g:signify_mapping_prev_hunk = '[c'
@@ -251,9 +248,6 @@ let g:signify_mapping_prev_hunk = '[c'
 let g:airline#extensions#hunks#non_zero_only = 1
 
 " vim-gitgutter configuration
-" Reduce default refresh time from 4 seconds to 0.25 seconds
-set updatetime=250
-
 " Customize sign characters
 let g:gitgutter_highlight_lines = 1
 let g:gitgutter_sign_removed = '< '
