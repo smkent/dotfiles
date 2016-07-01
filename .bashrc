@@ -1,4 +1,6 @@
 #!/bin/bash
+# Several of these basic settings are from the Gentoo/Ubuntu default bashrc.
+
 # This file is sourced by all *interactive* bash shells on startup,
 # including some apparently interactive shells such as scp and rcp
 # that can't tolerate any output.  So make sure this doesn't display
@@ -39,6 +41,7 @@ fi
 [ -x /usr/bin/tput ] && __colors_supported=$(tput colors)
 [ -z "${__colors_supported}" ] && __colors_supported=0;
 
+# Terminal detection is from an older version of Ubuntu's default bashrc
 if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
     case "${COLORTERM}" in
         gnome-terminal|mate-terminal)
@@ -97,6 +100,7 @@ __reset="\[$(tput sgr0)\]";
 # Default user prompt colors
 __c_prompt="${__c_green}${__bold}";
 
+# Timer adapted from http://stackoverflow.com/a/1862762
 __timer_start()
 {
     timer=${timer:-$SECONDS}

@@ -1,3 +1,6 @@
+" Several basic settings and some mappings from https://github.com/gergap/vim
+" Additional mappings from YADR: https://github.com/skwp/dotfiles
+
 " Disable vi compatibility (emulation of old bugs)
 set nocompatible
 
@@ -37,6 +40,7 @@ set showmatch       " Show matching braces
 set nowrap          " Don't wrap long lines
 
 " Highlight trailing whitespace in red
+" http://vim.wikia.com/wiki/VimTip396
 " The ExtraWhitespace highlight group is located in my color scheme file
 " See the section "Custom highlight groups" in that file
 au WinEnter * call matchadd('ExtraWhitespace', '\s\+$', 4)
