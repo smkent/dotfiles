@@ -6,6 +6,7 @@
 " https://github.com/w0ng/vim-hybrid/
 " https://github.com/tyrannicaltoucan/vim-deep-space
 
+" Clear all existing highlight groups {{{
 " Color reset is from the "desert" theme (http://hans.fugal.net/vim/colors/)
 set background=dark
 if version > 580
@@ -16,8 +17,40 @@ if version > 580
         syntax reset
     endif
 endif
+" }}}
+
 let g:colors_name="smkent"
 
+" Preferred color palette
+" Each array contains a 16-color fallback code followed by the preferred
+" 256-color code
+let s:foreground      = [ 7, 251 ]
+let s:background      = [ 0, 233 ]
+let s:void_background = [ 0, 234 ]
+let s:color_column    = [ 8, 236 ]
+let s:split_column    = [ 8, 249 ]
+let s:underlined      = [ 6, 87  ]
+let s:todo            = [ 3, 226 ]
+let s:error           = [ 1, 196 ]
+let s:text_hl         = [ 0, 222 ]
+let s:incsearch_hl    = [ 3, 66  ]
+let s:visual_hl       = [ 3, 64  ]
+let s:black           = [ 0, 16  ]
+let s:gray            = [ 7, 244 ]
+let s:white           = [ 7, 231 ]
+let s:red             = [ 1, 167 ]
+let s:orange          = [ 3, 172 ]
+let s:light_orange    = [ 3, 215 ]
+let s:yellow          = [ 3, 221 ]
+let s:light_yellow    = [ 3, 227 ]
+let s:yellow_green    = [ 2, 148 ]
+let s:green           = [ 2, 112 ]
+let s:light_green     = [ 2, 119 ]
+let s:cyan            = [ 6, 159 ]
+let s:blue            = [ 4, 74  ]
+let s:purple          = [ 5, 139 ]
+
+" Terminal to GUI color map {{{
 " Colors from http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 " 0-15: Basic terminal colors (0-7 regular, 8-15 bold)
 " 16-231: Extended color palette
@@ -60,53 +93,42 @@ let s:term_color_to_gui_color = [
  \ '444444', '4e4e4e', '585858', '606060', '666666', '767676', '808080',
  \ '8a8a8a', '949494', '9e9e9e', 'a8a8a8', 'b2b2b2', 'bcbcbc', 'c6c6c6',
  \ 'd0d0d0', 'dadada', 'e4e4e4', 'eeeeee', ]
+" }}}
 
-" Preferred color palette
-" Each array contains a 16-color fallback code followed by the preferred
-" 256-color code
-let s:p = {}
-let s:p.foreground      = [ 7, 251 ]
-let s:p.background      = [ 0, 233 ]
-let s:p.void_background = [ 0, 234 ]
-let s:p.color_column    = [ 8, 236 ]
-let s:p.split_column    = [ 8, 249 ]
-let s:p.comment         = [ 8, 244 ]
-let s:p.underlined      = [ 6, 87  ]
-let s:p.todo            = [ 3, 226 ]
-let s:p.error           = [ 1, 196 ]
-let s:p.incsearch_fg    = [ 0, 222 ]
-let s:p.incsearch_bg    = [ 3, 66  ]
-let s:p.visual_hl       = [ 3, 64  ]
-let s:p.black           = [ 0, 16  ]
-let s:p.gray            = [ 7, 244 ] " @TODO: Same as p.comment
-let s:p.white           = [ 7, 231 ]
-let s:p.red             = [ 1, 167 ]
-let s:p.orange          = [ 3, 172 ]
-let s:p.light_orange    = [ 3, 215 ]
-let s:p.yellow          = [ 3, 221 ]
-let s:p.light_yellow    = [ 3, 227 ]
-let s:p.yellow_green    = [ 2, 148 ]
-let s:p.green           = [ 2, 112 ]
-let s:p.light_green     = [ 2, 119 ]
-let s:p.cyan            = [ 6, 159 ]
-let s:p.blue            = [ 4, 74  ]
-let s:p.purple          = [ 5, 139 ]
-
+" Color support detection {{{
 if has("gui_running") || &t_Co == 256
     let s:color_index = 1
 else
     let s:color_index = 0
 endif
+" }}}
 
 " Color set function {{{
 fun s:C(group, fg, bg, attr)
-    if a:fg != []
-        exec "hi " . a:group . " guifg=#" . s:term_color_to_gui_color[a:fg[1]]
-             \ . " ctermfg=" . a:fg[s:color_index]
+    " Accept a named color variable (List), specific color code, or no color
+    " ("") as foreground/background color inputs
+    if type(a:fg) == type([])
+        let l:fg = a:fg[s:color_index]
+    elseif type(a:fg) == type(0)
+        let l:fg = a:fg
+    else
+        let l:fg = ""
     endif
-    if a:bg != []
-        exec "hi " . a:group . " guibg=#" . s:term_color_to_gui_color[a:bg[1]]
-             \ . " ctermbg=" . a:bg[s:color_index]
+    if type(a:bg) == type([])
+        let l:bg = a:bg[s:color_index]
+    elseif type(a:bg) == type(0)
+        let l:bg = a:bg
+    else
+        let l:bg = ""
+    endif
+    " Set highlight group colors
+    if type(l:fg) == type(0)
+        exec "hi " . a:group . " guifg=#" . s:term_color_to_gui_color[l:fg] .
+             \ " ctermfg=" . l:fg
+    endif
+    if type(l:bg) == type(0)
+        exec "hi " . a:group . " guibg=#" . s:term_color_to_gui_color[l:bg] .
+             \ " ctermbg=" . l:bg
     endif
     if a:attr != ""
         exec "hi " . a:group . " gui=" . a:attr . " cterm=" . a:attr
@@ -116,7 +138,7 @@ endfun
 
 " Default highlight groups
 " run ":help highlight-groups" for documentation
-call s:C("ColorColumn", [], s:p.color_column, "")
+call s:C("ColorColumn",     "",                 s:color_column,     "")
 " Conceal
 " Cursor
 " CursorIM
@@ -126,38 +148,38 @@ call s:C("ColorColumn", [], s:p.color_column, "")
 " DiffDelete
 " DiffText
 " ErrorMsg
-call s:C("VertSplit", s:p.split_column, s:p.split_column, "reverse")
-call s:C("Folded", s:p.blue, s:p.color_column, "bold")
-call s:C("FoldColumn", s:p.blue, s:p.color_column, "bold")
-call s:C("SignColumn", s:p.foreground, s:p.background, "")
-call s:C("IncSearch", s:p.incsearch_fg, s:p.incsearch_bg, "bold")
-call s:C("LineNr", s:p.gray, s:p.black, "")
-call s:C("CursorLineNr", s:p.foreground, [], "bold")
-call s:C("MatchParen", s:p.gray, s:p.green, "bold")
-call s:C("ModeMsg", s:p.white, [], "")
-call s:C("MoreMsg", s:p.yellow_green, [], "")
-call s:C("NonText", s:p.cyan, s:p.void_background, "bold")
-call s:C("Normal", s:p.foreground, s:p.background, "")
-call s:C("Pmenu", s:p.white, s:p.color_column, "")
-call s:C("PmenuSel", s:p.black, s:p.yellow_green, "")
+call s:C("VertSplit",       s:split_column,     s:split_column,     "reverse")
+call s:C("Folded",          s:blue,             s:color_column,     "bold")
+call s:C("FoldColumn",      s:blue,             s:color_column,     "bold")
+call s:C("SignColumn",      s:foreground,       s:background,       "")
+call s:C("IncSearch",       s:text_hl,          s:incsearch_hl,     "bold")
+call s:C("LineNr",          s:gray,             s:black,            "")
+call s:C("CursorLineNr",    s:foreground,       "",                 "bold")
+call s:C("MatchParen",      s:gray,             s:green,            "bold")
+call s:C("ModeMsg",         s:white,            "",                 "")
+call s:C("MoreMsg",         s:yellow_green,     "",                 "")
+call s:C("NonText",         s:cyan,             s:void_background,  "bold")
+call s:C("Normal",          s:foreground,       s:background,       "")
+call s:C("Pmenu",           s:white,            s:color_column,     "")
+call s:C("PmenuSel",        s:black,            s:yellow_green,     "")
 " PMenuSbar
 " PMenuThumb
-call s:C("Question", s:p.yellow_green, [], "bold")
-call s:C("Search", s:p.void_background, s:p.green, "bold")
-call s:C("SpecialKey", s:p.error, [], "")
+call s:C("Question",        s:yellow_green,     "",                 "bold")
+call s:C("Search",          s:void_background,  s:green,            "bold")
+call s:C("SpecialKey",      s:error,            "",                 "")
 " SpellBad
 " SpellCap
 " SpellLocal
 " SpellRare
-call s:C("StatusLine", s:p.black, s:p.blue, "bold")
-call s:C("StatusLineNC", s:p.comment, s:p.color_column, "reverse")
+call s:C("StatusLine",      s:black,            s:blue,             "bold")
+call s:C("StatusLineNC",    s:gray,             s:color_column,     "reverse")
 " TabLine
 " TabLineFill
 " TabLineSel
-call s:C("Title", s:p.yellow_green, [], "")
-call s:C("Visual", s:p.visual_hl, s:p.incsearch_fg, "reverse")
+call s:C("Title",           s:yellow_green,     "",                 "")
+call s:C("Visual",          s:visual_hl,        s:text_hl,          "reverse")
 "VisualNOS
-call s:C("WarningMsg", s:p.orange, [], "")
+call s:C("WarningMsg",      s:orange,           "",                 "")
 "WildMenu
 "Menu
 "Scrollbar
@@ -165,69 +187,70 @@ call s:C("WarningMsg", s:p.orange, [], "")
 
 " Syntax highlight groups
 " run ":help group-name" for documentation and examples
-call s:C("Comment",      s:p.comment, [], "")
-call s:C("Constant",     s:p.light_orange, [], "")
-call s:C("String",       s:p.yellow, [], "")
+call s:C("Comment",         s:gray,             "",                 "")
+call s:C("Constant",        s:light_orange,     "",                 "")
+call s:C("String",          s:yellow,           "",                 "")
 " Character
 " Number
-call s:C("Boolean",      s:p.red, [], "")
+call s:C("Boolean",         s:red,              "",                 "")
 " Float
-call s:C("Identifier",   s:p.cyan, [], "none")
-call s:C("Function",     s:p.green, [], "none")
-call s:C("Statement",    s:p.blue, [], "bold")
+call s:C("Identifier",      s:cyan,             "",                 "none")
+call s:C("Function",        s:green,            "",                 "none")
+call s:C("Statement",       s:blue,             "",                 "bold")
 " Conditional
 " Repeat
 " Label
 " Operator
 " Keyword
 " Exception
-call s:C("PreProc",      s:p.purple, [], "")
-call s:C("Include",      s:p.purple, [], "")
-call s:C("Define",       s:p.blue, [], "")
-call s:C("Macro",        s:p.purple, [], "")
-call s:C("PreCondit",    s:p.purple, [], "")
-call s:C("Type",         s:p.yellow_green, [], "bold")
+call s:C("PreProc",         s:purple,           "",                 "")
+call s:C("Include",         s:purple,           "",                 "")
+call s:C("Define",          s:blue,             "",                 "")
+call s:C("Macro",           s:purple,           "",                 "")
+call s:C("PreCondit",       s:purple,           "",                 "")
+call s:C("Type",            s:yellow_green,     "",                 "bold")
 " StorageClass
 " Structure
-call s:C("Typedef",      s:p.blue, [], "bold")
-call s:C("Special",      s:p.orange, [], "")
-call s:C("SpecialChar",  s:p.red, [], "")
+call s:C("Typedef",         s:blue,             "",                 "bold")
+call s:C("Special",         s:orange,           "",                 "")
+call s:C("SpecialChar",     s:red,              "",                 "")
 " Tag
 " Delimeter
 " SpecialCommand
 " Debug
-call s:C("Underlined",   s:p.underlined, [], "")
-call s:C("Ignore",       s:p.comment, [], "")
-call s:C("Error",        [], s:p.error, "")
-call s:C("Todo",         s:p.todo, s:p.comment, "bold")
+call s:C("Underlined",      s:underlined,       "",                 "")
+call s:C("Ignore",          s:gray,             "",                 "")
+call s:C("Error",           "",                 s:error,            "")
+call s:C("Todo",            s:todo,             s:gray,             "bold")
 
 " Syntax highlight overrides for specific file types
 hi link gitrebaseCommit Type
 hi link gitrebaseHash Type
 
+" Custom highlight groups
+call s:C("ExtraWhitespace", "",                 s:error,            "")
+
 " Plugin highlight groups
 
 " Set Sy sign colors
-call s:C("SignifySignAdd", s:p.light_green, s:p.background, "bold")
-call s:C("SignifySignDelete", s:p.red, s:p.background, "bold")
-call s:C("SignifySignChange", s:p.light_yellow, s:p.background, "bold")
+call s:C("SignifySignAdd",    s:light_green,    s:background,       "bold")
+call s:C("SignifySignDelete", s:red,            s:background,       "bold")
+call s:C("SignifySignChange", s:light_yellow,   s:background,       "bold")
 
 " Customize sign column highlight
-call s:C("GitGutterAdd", s:p.light_green, s:p.background, "bold")
-call s:C("GitGutterDelete", s:p.red, s:p.background, "bold")
-call s:C("GitGutterChange", s:p.light_yellow, s:p.background, "bold")
-call s:C("GitGutterChangeDelete", s:p.light_yellow, s:p.background, "bold")
+call s:C("GitGutterAdd",    s:light_green,      s:background,       "bold")
+call s:C("GitGutterDelete", s:red,              s:background,       "bold")
+call s:C("GitGutterChange", s:light_yellow,     s:background,       "bold")
+hi link GitGutterChangeDelete GitGutterChange
 
 " Highlight lines with signs
-call s:C("GitGutterAddLine", [], s:p.void_background, "")
-call s:C("GitGutterDeleteLine", [], s:p.void_background, "")
-call s:C("GitGutterChangeLine", [], s:p.void_background, "")
-call s:C("GitGutterChangeDeleteLine", [], s:p.void_background, "")
+call s:C("GitGutterAddLine", "",                s:void_background,  "")
+hi link GitGutterDeleteLine GitGutterAddLine
+hi link GitGutterChangeLine GitGutterAddLine
+hi link GitGutterChangeDeleteLine GitGutterAddLine
 
-" Custom highlight groups
-call s:C("ExtraWhitespace", [], s:p.error, "")
-
-" Delete set color function
+" Delete set color function {{{
 delf s:C
+" }}}
 
 " vim: set fdl=0 fdm=marker:
