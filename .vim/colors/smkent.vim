@@ -44,10 +44,12 @@ let s:light_orange    = [ 3, 215 ]
 let s:yellow          = [ 3, 221 ]
 let s:light_yellow    = [ 3, 227 ]
 let s:yellow_green    = [ 2, 148 ]
+let s:lt_yellow_green = [ 2, 192 ]
 let s:green           = [ 2, 112 ]
 let s:light_green     = [ 2, 119 ]
 let s:cyan            = [ 6, 159 ]
 let s:blue            = [ 4, 74  ]
+let s:light_blue      = [ 4, 117 ]
 let s:purple          = [ 5, 139 ]
 
 " Terminal to GUI color map {{{
@@ -149,8 +151,8 @@ call s:C("ColorColumn",     "",                 s:color_column,     "")
 " DiffText
 " ErrorMsg
 call s:C("VertSplit",       s:split_column,     s:split_column,     "reverse")
-call s:C("Folded",          s:blue,             s:color_column,     "bold")
-call s:C("FoldColumn",      s:blue,             s:color_column,     "bold")
+call s:C("Folded",          s:light_blue,       s:color_column,     "bold")
+call s:C("FoldColumn",      s:light_blue,       s:color_column,     "bold")
 call s:C("SignColumn",      s:foreground,       s:background,       "")
 call s:C("IncSearch",       s:text_hl,          s:incsearch_hl,     "bold")
 call s:C("LineNr",          s:gray,             s:black,            "")
@@ -194,8 +196,8 @@ call s:C("String",          s:yellow,           "",                 "")
 " Number
 call s:C("Boolean",         s:red,              "",                 "")
 " Float
-call s:C("Identifier",      s:cyan,             "",                 "none")
-call s:C("Function",        s:green,            "",                 "none")
+call s:C("Identifier",      s:lt_yellow_green,  "",                 "none")
+call s:C("Function",        s:yellow_green,     "",                 "bold")
 call s:C("Statement",       s:blue,             "",                 "bold")
 " Conditional
 " Repeat
@@ -208,7 +210,7 @@ call s:C("Include",         s:purple,           "",                 "")
 call s:C("Define",          s:blue,             "",                 "")
 call s:C("Macro",           s:purple,           "",                 "")
 call s:C("PreCondit",       s:purple,           "",                 "")
-call s:C("Type",            s:yellow_green,     "",                 "bold")
+call s:C("Type",            s:cyan,             "",                 "bold")
 " StorageClass
 " Structure
 call s:C("Typedef",         s:blue,             "",                 "bold")
@@ -224,8 +226,15 @@ call s:C("Error",           "",                 s:error,            "")
 call s:C("Todo",            s:todo,             s:gray,             "bold")
 
 " Syntax highlight overrides for specific file types
-hi link gitrebaseCommit Type
-hi link gitrebaseHash Type
+" git: red/yellow/green for diff, branches in green, refs in yellow-green bold
+call s:C("diffAdded",       s:yellow_green,     "",                 "")
+call s:C("diffChanged",     s:yellow,           "",                 "")
+call s:C("diffRemoved",     s:red,              "",                 "")
+hi link gitcommitType Function
+hi link gitcommitBranch Identifier
+hi link gitrebaseHash Function
+" Python: Separate highlight group for built-ins from function names
+hi link pythonBuiltin Identifier
 
 " Custom highlight groups
 call s:C("ExtraWhitespace", "",                 s:error,            "")
