@@ -22,8 +22,13 @@ autocmd filetype make set noexpandtab
 filetype indent plugin on
 
 " Always start the cursor on the first line when editing a git commit message
+" or editing interactive rebase instructions
 " http://vim.wikia.com/wiki/VimTip1636
+"
+" Replace "pick" with "p" before editing interactive rebase instructions
 autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
+autocmd filetype gitrebase :silent %s/^pick/p/g |
+                         \ call setpos('.', [0, 1, 1, 0])
 
 set hlsearch        " Highlight search results
 set incsearch       " Show search matches as you type
