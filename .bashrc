@@ -12,9 +12,8 @@ shopt -s histappend     # Append to the history file, don't overwrite it
 HISTCONTROL=ignoreboth  # Ignore duplicates and commands beginning with a space
 HISTSIZE=10000          # Increase session history size from the default 500
 
-# Bash won't get SIGWINCH if another process is in the foreground.
-# Enable checkwinsize so that bash will check the terminal size when
-# it regains control.
+# Bash won't get SIGWINCH if another process is in the foreground. Enable
+# checkwinsize so bash will check the terminal size when it regains control.
 # https://bugs.gentoo.org/show_bug.cgi?id=65623
 # http://tiswww.case.edu/php/chet/bash/FAQ (E11)
 shopt -s checkwinsize
@@ -215,26 +214,8 @@ __prompt_generator()
     if [ ${__set_title} -ne 0 ]; then
         echo -ne "\033]0;${__title_prefix}${USER}@${HOSTNAME%%.*} ${PWD/#$HOME/~}\007"
     fi
-
 }
 PROMPT_COMMAND=__prompt_generator
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-[ -f ~/.bash_aliases ] && . ~/.bash_aliases
-
-# Add PATH customizations
-__append_path_if_exists()
-{
-    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return;
-    [ -d "${1}" ] && PATH="${PATH}:${1}";
-    return 0
-}
-__append_path_if_exists "${HOME}/.dotfiles/bin"
-__append_path_if_exists "${HOME}/bin"
-__append_path_if_exists "/opt/smkent/bin"
 
 # Detect SSH_AUTH_SOCK if it is empty
 if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
@@ -259,6 +240,20 @@ if [ "$(stat -c '%a' ~/.gnupg 2>/dev/null)" != "700" ]; then
     chmod -R og-rwx ~/.gnupg
 fi
 export GPG_TTY=$(tty)
+
+# Add PATH customizations
+__append_path_if_exists()
+{
+    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return;
+    [ -d "${1}" ] && PATH="${PATH}:${1}";
+    return 0
+}
+__append_path_if_exists "${HOME}/.dotfiles/bin"
+__append_path_if_exists "${HOME}/bin"
+__append_path_if_exists "/opt/smkent/bin"
+
+# Load aliases and helper functions
+[ -f ~/.bash_aliases ] && . ~/.bash_aliases
 
 # Load host-specific bashrc if available
 if [ -f "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}" ]; then
