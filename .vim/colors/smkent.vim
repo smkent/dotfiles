@@ -178,7 +178,7 @@ call s:C("StatusLineNC",    s:gray,             s:color_column,     "reverse")
 " TabLine
 " TabLineFill
 " TabLineSel
-call s:C("Title",           s:yellow_green,     "",                 "")
+call s:C("Title",           s:yellow_green,     "",                 "bold")
 call s:C("Visual",          s:visual_hl,        s:text_hl,          "reverse")
 "VisualNOS
 call s:C("WarningMsg",      s:orange,           "",                 "")
@@ -235,6 +235,8 @@ hi link gitcommitBranch Identifier
 hi link gitrebaseHash Function
 " Python: Separate highlight group for built-ins from function names
 hi link pythonBuiltin Identifier
+" Markdown: Use blue for heading hashtag delimeters
+hi link markdownHeadingDelimiter Statement
 
 " Custom highlight groups
 call s:C("ExtraWhitespace", "",                 s:error,            "")
