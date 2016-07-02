@@ -16,12 +16,12 @@ alias la='ls -lA'
 
 # tmux
 ta() {
-    args="${@}"
-    [ -n "${args}" ] && { tmux attach -d -t "${@}"; return; }
+    args="${*}"
+    [ -n "${args}" ] && { tmux attach -d -t "${args}"; return; }
     tmux attach -d
 }
 tn() {
-    args="${@}"
+    args="${*}"
     [ -n "${args}" ] && { tmux new-session -n '' -s "${args}"; return; }
     tmux new-session -n ''
 }
