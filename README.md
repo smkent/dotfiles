@@ -42,8 +42,13 @@ install the cloned dotfiles with:
 $ git checkout .
 ```
 
-If you use or fork this repository, you'll want to update `.gitconfig` with
-your name and email address and remove `.face`.
+### Configuration
+
+After installing or forking this repository, you should
+
+* Update [`.gitconfig`](/.gitconfig) with your name and email address
+* Set `prompt_hide_user` to your username in [`.bashrc`](/.bashrc)
+* Remove or replace `.face`
 
 ### External components
 
@@ -56,13 +61,16 @@ Fonts](https://github.com/powerline/fonts), which can be installed using the
 
 ### Bash
 
+* Display username if different from the value of `prompt_hide_user` in
+[.bashrc](/.bashrc)
+* Display current directory name if different from `${HOME}`
 * Display exit code of the previous command if nonzero (or "bg" / "C-c" when
 backgrounding a job or typing Ctrl-C, respectively)
 * Display runtime of the previous command if longer than 10 seconds
 * Display size of the directory stack if not empty
+* Display number of background jobs if any
 * Display git branch (or hash on detached HEAD) if the current directory is a
 git repository
-* Display number of background jobs if any
 
 ![bash screenshot](/.dotfiles/img/screenshot-bashrc.png)
 

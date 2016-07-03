@@ -6,6 +6,9 @@
 [[ $- != *i* ]] && return
 [ -z "${PS1}" ] && return
 
+# User settings
+prompt_hide_user="smkent"
+
 # History control settings
 # append to the history file, don't overwrite it
 shopt -s histappend     # Append to the history file, don't overwrite it
@@ -80,7 +83,7 @@ if [ ${__colors_supported} -ge 256 ]; then
     __c_yellow="\[$(tput setaf 227)\]"
     __c_orange="\[$(tput setaf 202)\]"
     __c_blue="\[$(tput setaf 4)\]"
-    __c_purple="\[$(tput setaf 5)\]"
+    __c_purple="\[$(tput setaf 96)\]"
 else
     __c_red="\[$(tput setaf 1)\]"
     __c_green="\[$(tput setaf 2)\]"
@@ -132,7 +135,7 @@ __prompt_generator()
     # Exit code
     local exit_code=${?}
     local exit_code_disp="${exit_code}"
-    local exit_color="${__c_red}"
+    local exit_color="${__c_red}${__bold}"
     local dir_stack_count=$((${#DIRSTACK[@]}  - 1))
     local git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
     # Stop command timer
@@ -156,15 +159,23 @@ __prompt_generator()
             130)    exit_code_disp="C-c";   exit_color="${__c_yellow}";;
             148)    exit_code_disp="bg";    exit_color="${__c_orange}";;
         esac
-        p_exit="${exit_color}[${__bold}${exit_code_disp}${__reset}${exit_color}] "
+        p_exit="${exit_color}[${exit_code_disp}${__reset}${exit_color}] "
     fi
     # Main section
     if [ ${EUID} -eq 0 ]; then
-        p_main="${p_main}${__c_red}${__bold}\h ${__c_blue}\W${__reset} "
+        p_main="${p_main}${__c_red}${__bold}\h "
         p_lastchar="${__c_red}${__bold}#${__reset}"
     else
-        p_main="${p_main}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} "
+        p_main="${p_main}${__c_prompt}";
+        if [ "${USER}" != "${prompt_hide_user}" ]; then
+            p_main="${p_main}\u@"
+        fi
+        p_main="${p_main}\h${__reset} "
         p_lastchar="${__c_blue}${__bold}\$${__reset}"
+    fi
+    # Current directory
+    if [ "${PWD}" != "${HOME}" ]; then
+        p_main="${p_main}${__bold}${__c_blue}\W${__reset} ";
     fi
     # Directory stack
     if [ ${dir_stack_count} -gt 0 ]; then
@@ -184,10 +195,10 @@ __prompt_generator()
     fi
     # Background jobs
     if [ -n "$(jobs -p)" ]; then
-        p_jobs="${__c_orange}[+\j] "
+        p_jobs="${__c_orange}+\j "
     fi
     # Assemble prompt
-    PS1="${p_timer}${p_exit}${p_main}${p_dirs}${p_git}${p_jobs}${p_lastchar} "
+    PS1="${p_timer}${p_exit}${p_main}${p_dirs}${p_jobs}${p_git}${p_lastchar} "
     if [ ${EUID} -eq 0 ]; then
         PS2="${__bold}${__c_red}> ${__reset}"
     else
