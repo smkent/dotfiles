@@ -10,6 +10,21 @@ if [ ${__colors_supported:-0} -ge 2 ]; then
     alias egrep='egrep --color=auto'
 fi
 
+if [ ${__colors_supported:-0} -ge 256 ]; then
+    # Use colors in man pages:
+    # - Light blue for bold text (e.g. headings, function names, etc.)
+    # - Green for underlined text (e.g. function and option arguments, etc.)
+    # Colors idea from http://unix.stackexchange.com/a/147
+    # TERMCAP variables explanation at http://unix.stackexchange.com/a/108840
+    man() {
+        env \
+        LESS_TERMCAP_md=$(tput bold; tput setaf 153) \
+        LESS_TERMCAP_us=$(tput smul; tput setaf 114) \
+        LESS_TERMCAP_ue=$(tput rmul; tput sgr0) \
+        man "${@}"
+    }
+fi
+
 # The alert alias is from the default Ubuntu bashrc
 if [ -x /usr/bin/notify-send ]; then
     # Add an "alert" alias for long running commands.  Use like so:
