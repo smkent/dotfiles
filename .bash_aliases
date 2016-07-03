@@ -1,6 +1,7 @@
 #!/bin/bash
 # Alias and helper function definitions
 
+# The alert alias is from the default Ubuntu bashrc
 if [ -x /usr/bin/notify-send ]; then
     # Add an "alert" alias for long running commands.  Use like so:
     #   sleep 10; alert
