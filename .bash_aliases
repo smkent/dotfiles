@@ -1,6 +1,15 @@
 #!/bin/bash
 # Alias and helper function definitions
 
+# Color aliases
+if [ ${__colors_supported:-0} -ge 2 ]; then
+    # Color command aliases
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
 # The alert alias is from the default Ubuntu bashrc
 if [ -x /usr/bin/notify-send ]; then
     # Add an "alert" alias for long running commands.  Use like so:
