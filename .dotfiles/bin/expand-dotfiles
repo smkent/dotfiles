@@ -1,7 +1,7 @@
 #!/bin/sh
 cd "$(dirname "${0}")/../templates"
-opt_force=0;
-opt_verbose=0;
+opt_force=0
+opt_verbose=0
 while getopts "fhv" opt; do case ${opt} in
     f)      opt_force=1;;
     h|\?)   echo "Usage: $(basename "${0}") [-f] [-v]" >&2; exit 1;;

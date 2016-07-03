@@ -34,7 +34,7 @@ fi
 
 # Color support
 [ -x /usr/bin/tput ] && __colors_supported=$(tput colors)
-[ -z "${__colors_supported}" ] && __colors_supported=0;
+[ -z "${__colors_supported}" ] && __colors_supported=0
 
 # Terminal detection is from an older version of Ubuntu's default bashrc
 if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
@@ -45,7 +45,7 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
             # Instead you need to compare it and perform some guesses
             # based upon the value. This is, perhaps, too simplistic.
             TERM="xterm-256color"
-            __colors_supported=256;
+            __colors_supported=256
             ;;
         *)
             echo "Warning: Unrecognized COLORTERM: $COLORTERM" >&2
@@ -75,25 +75,25 @@ fi
 
 # Shell prompt generator
 if [ ${__colors_supported} -ge 256 ]; then
-    __c_red="\[$(tput setaf 196)\]";
-    __c_green="\[$(tput setaf 2)\]";
-    __c_yellow="\[$(tput setaf 227)\]";
-    __c_orange="\[$(tput setaf 202)\]";
-    __c_blue="\[$(tput setaf 4)\]";
-    __c_purple="\[$(tput setaf 5)\]";
+    __c_red="\[$(tput setaf 196)\]"
+    __c_green="\[$(tput setaf 2)\]"
+    __c_yellow="\[$(tput setaf 227)\]"
+    __c_orange="\[$(tput setaf 202)\]"
+    __c_blue="\[$(tput setaf 4)\]"
+    __c_purple="\[$(tput setaf 5)\]"
 else
-    __c_red="\[$(tput setaf 1)\]";
-    __c_green="\[$(tput setaf 2)\]";
-    __c_yellow="\[$(tput setaf 3)\]";
-    __c_orange="${__c_yellow}";
-    __c_blue="\[$(tput setaf 4)\]";
-    __c_purple="\[$(tput setaf 5)\]";
+    __c_red="\[$(tput setaf 1)\]"
+    __c_green="\[$(tput setaf 2)\]"
+    __c_yellow="\[$(tput setaf 3)\]"
+    __c_orange="${__c_yellow}"
+    __c_blue="\[$(tput setaf 4)\]"
+    __c_purple="\[$(tput setaf 5)\]"
 fi
-__bold="\[$(tput bold)\]";
-__reset="\[$(tput sgr0)\]";
+__bold="\[$(tput bold)\]"
+__reset="\[$(tput sgr0)\]"
 
 # Default user prompt colors
-__c_prompt="${__c_green}${__bold}";
+__c_prompt="${__c_green}${__bold}"
 
 # Timer adapted from http://stackoverflow.com/a/1862762
 __timer_start()
@@ -104,7 +104,7 @@ __timer_start()
 # Converts number of seconds to human-readable time (ex. "1h 3m 30s")
 __timer_formatter()
 {
-    local str=""
+    local str=
     local mod=0
     local count=${1}
     for i in s m h d; do
@@ -112,12 +112,12 @@ __timer_formatter()
         case ${i} in
             d)  str="${count}${i} ${str}";;
             h)
-                mod=$((count % 24));
-                count=$((count / 24));
+                mod=$((count % 24))
+                count=$((count / 24))
                 str="${mod}${i} ${str}";;
             m|s)
-                mod=$((count % 60));
-                count=$((count / 60));
+                mod=$((count % 60))
+                count=$((count / 60))
                 str="${mod}${i} ${str}";;
         esac
     done
@@ -131,21 +131,21 @@ __prompt_generator()
 {
     # Exit code
     local exit_code=${?}
-    local exit_code_disp="${exit_code}";
-    local exit_color="${__c_red}";
+    local exit_code_disp="${exit_code}"
+    local exit_color="${__c_red}"
     local dir_stack_count=$((${#DIRSTACK[@]}  - 1))
     local git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
     # Stop command timer
     local last_command_time=$((SECONDS - timer))
     unset timer
     # Prompt sections
-    local p_timer="";
-    local p_exit="";
-    local p_main="";
-    local p_dirs="";
-    local p_git="";
-    local p_jobs="";
-    local p_lastchar="";
+    local p_timer=
+    local p_exit=
+    local p_main=
+    local p_dirs=
+    local p_git=
+    local p_jobs=
+    local p_lastchar=
     # Last command run timer
     if [ ${last_command_time} -ge 10 ]; then
         p_timer="${__c_yellow}[$(__timer_formatter ${last_command_time})] "
@@ -156,19 +156,19 @@ __prompt_generator()
             130)    exit_code_disp="C-c";   exit_color="${__c_yellow}";;
             148)    exit_code_disp="bg";    exit_color="${__c_orange}";;
         esac
-        p_exit="${exit_color}[${__bold}${exit_code_disp}${__reset}${exit_color}] ";
+        p_exit="${exit_color}[${__bold}${exit_code_disp}${__reset}${exit_color}] "
     fi
     # Main section
     if [ ${EUID} -eq 0 ]; then
         p_main="${p_main}${__c_red}${__bold}\h ${__c_blue}\W${__reset} "
-        p_lastchar="${__c_red}${__bold}#${__reset}";
+        p_lastchar="${__c_red}${__bold}#${__reset}"
     else
-        p_main="${p_main}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} ";
-        p_lastchar="${__c_blue}${__bold}\$${__reset}";
+        p_main="${p_main}${__c_prompt}\u@\h ${__bold}${__c_blue}\W${__reset} "
+        p_lastchar="${__c_blue}${__bold}\$${__reset}"
     fi
     # Directory stack
     if [ ${dir_stack_count} -gt 0 ]; then
-        p_dirs="${__c_blue}+${dir_stack_count} ";
+        p_dirs="${__c_blue}+${dir_stack_count} "
     fi
     # Git branch
     if [ -n "${git_toplevel}" -a "${git_toplevel}" != "${HOME}" ]; then
@@ -178,36 +178,36 @@ __prompt_generator()
                 git_branch=$(git rev-parse --short HEAD 2>/dev/null)
             fi
             if [ -n "${git_branch}" ]; then
-                p_git="${__c_purple}[${git_branch}] ";
+                p_git="${__c_purple}[${git_branch}] "
             fi
         fi
     fi
     # Background jobs
     if [ -n "$(jobs -p)" ]; then
-        p_jobs="${__c_orange}[+\j] ";
+        p_jobs="${__c_orange}[+\j] "
     fi
     # Assemble prompt
     PS1="${p_timer}${p_exit}${p_main}${p_dirs}${p_git}${p_jobs}${p_lastchar} "
     if [ ${EUID} -eq 0 ]; then
-        PS2="${__bold}${__c_red}> ${__reset}";
+        PS2="${__bold}${__c_red}> ${__reset}"
     else
-        PS2="${__bold}${__c_blue}> ${__reset}";
+        PS2="${__bold}${__c_blue}> ${__reset}"
     fi
 
     # Set window title
-    local set_title=0;
-    local title_prefix="";
+    local set_title=0
+    local title_prefix=
     case ${TERM} in
         xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|mate*|interix)
-            set_title=1;
+            set_title=1
             ;;
         screen*)
-            set_title=1;
+            set_title=1
             if [ -n "${TMUX}" ]; then
-                title_prefix="$(tmux display-message -p "tmux:#S #I:#W") ";
+                title_prefix="$(tmux display-message -p "tmux:#S #I:#W") "
             elif [ -n "${STY}" ]; then
                 title_prefix="screen:$(echo "${STY}" | sed -e 's/^[0-9]\+\.//g' \
-                                -e "s/\.${HOSTNAME}$//g") ${WINDOW} ";
+                                -e "s/\.${HOSTNAME}$//g") ${WINDOW} "
             fi
             ;;
     esac
@@ -226,14 +226,14 @@ if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
             \( -iname 'keyring-*' -or -iname 'ssh-*' \) \
             -printf '%A@ %p\n' 2>/dev/null | sort -r | while read d d; do
         if [ -S "${d}/ssh" ]; then
-            export SSH_AUTH_SOCK="${d}/ssh";
-            break;
+            export SSH_AUTH_SOCK="${d}/ssh"
+            break
         fi
         __agent_fn=$(find "${d}" -mindepth 1 -maxdepth 1 -printf '%f\0' | \
                              grep -z '^agent\.[0-9]\+$' | tail -n1)
         if [ -S "${d}/${__agent_fn}" ]; then
-            export SSH_AUTH_SOCK="${d}/${__agent_fn}";
-            break;
+            export SSH_AUTH_SOCK="${d}/${__agent_fn}"
+            break
         fi
     done
 fi
@@ -248,8 +248,8 @@ export GPG_TTY=$(tty)
 # Add PATH customizations
 __append_path_if_exists()
 {
-    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return;
-    [ -d "${1}" ] && PATH="${PATH}:${1}";
+    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return
+    [ -d "${1}" ] && PATH="${PATH}:${1}"
     return 0
 }
 __append_path_if_exists "${HOME}/.dotfiles/bin"
@@ -263,3 +263,4 @@ __append_path_if_exists "/opt/smkent/bin"
 if [ -f "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}" ]; then
     . "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}"
 fi
+
