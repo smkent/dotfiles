@@ -154,7 +154,7 @@ __prompt_generator()
             130)    exit_code_disp="C-c";   exit_color="${__c_yellow}";;
             148)    exit_code_disp="bg";    exit_color="${__c_orange}";;
         esac
-        p_exit="${exit_color}[${exit_code_disp}${__reset}${exit_color}] "
+        p_exit="${exit_color}[${exit_code_disp}]${__reset} "
     fi
     # Main section
     if [ ${EUID} -eq 0 ]; then
