@@ -220,6 +220,7 @@ endif
 
 " vim-airline configuration
 set laststatus=2    " Always show the status bar
+set noshowmode      " vim-airline already shows the current mode
 
 " Enable powerline fonts unless explicitly disabled
 if empty($VIM_AIRLINE) || $VIM_AIRLINE != 0
