@@ -120,6 +120,10 @@ nnoremap <c-l> <c-w>l
 " Remap record (q) to ,q so q can be used to quit vim
 nnoremap <Leader>q q
 
+" Remap Ctrl+e and Ctrl+y so they can be used elsewhere
+nnoremap <Leader>e <C-e>
+nnoremap <Leader>y <C-y>
+
 " Surround shortcuts
 map <Leader>' ysiw'
 vmap <Leader>' c'<C-R>"'<ESC>
@@ -271,7 +275,7 @@ let g:gitgutter_override_sign_column_highlight = 0
 
 " ctrlp configuration
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_max_depth = 5
 let g:ctrlp_max_files = 30000
 let g:ctrlp_show_hidden = 1
@@ -283,3 +287,4 @@ let g:ctrlp_user_command = {
         \ },
     \ 'fallback': 'find %s -type f'
     \ }
+nnoremap <C-e> :CtrlPBuffer<CR>
