@@ -243,6 +243,10 @@ call s:C("ExtraWhitespace", "",                 s:error,            "")
 
 " Plugin highlight groups
 
+" CtrlP colors
+" Show buffer file names in Normal white instead of Comment gray
+hi link CtrlPBufferHid Normal
+
 " Set Sy sign colors
 call s:C("SignifySignAdd",    s:light_green,    s:background,       "bold")
 call s:C("SignifySignDelete", s:red,            s:background,       "bold")
