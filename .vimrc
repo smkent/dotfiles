@@ -102,8 +102,11 @@ nnoremap ^ 0
 " In insert mode, exit insert mode, save the file, and enter insert mode
 nmap <F2> :w<CR>
 nmap <C-s> :w<CR>
-imap <F2> <ESC>:w<CR>i
-imap <C-s> <ESC>:w<CR>i
+" `^ prevents the cursor from backing up one character when exiting and
+" re-entering insert mode
+" http://stackoverflow.com/a/2296229
+imap <F2> <ESC>:w<CR>`^i
+imap <C-s> <ESC>:w<CR>`^i
 
 " F3: Clear last search highlighting
 nnoremap <F3> :noh<return><esc>
