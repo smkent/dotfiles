@@ -227,9 +227,9 @@ if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
     # find prints the mod time and file name for each result, one per line.
     # Results are sorted by mod time. Reading "d" twice discards the date
     # after sort without assigning it to a different variable.
-    find /tmp "/run/user/$(id -u)" -maxdepth 1 \
-            \( -iname 'keyring-*' -or -iname 'ssh-*' \) \
-            -printf '%A@ %p\n' 2>/dev/null | sort -r | while read d d; do
+    # Use process substitution to allow setting SSH_AUTH_SOCK within the loop.
+    # http://stackoverflow.com/a/13727116
+    while read d d; do
         if [ -S "${d}/ssh" ]; then
             export SSH_AUTH_SOCK="${d}/ssh"
             break
@@ -240,7 +240,9 @@ if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
             export SSH_AUTH_SOCK="${d}/${__agent_fn}"
             break
         fi
-    done
+    done < <(find /tmp "/run/user/$(id -u)" -maxdepth 1 \
+                  \( -iname 'keyring-*' -or -iname 'ssh-*' \) \
+                  -printf '%A@ %p\n' 2>/dev/null | sort -r)
 fi
 
 # GnuPG configuration
