@@ -114,12 +114,6 @@ nnoremap <F3> :noh<return><esc>
 " F4: Toggle paste mode
 set pastetoggle=<F4>
 
-" Ctrl+[H|J|K|L]: Move between vim splits
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
-
 " Remap record (q) to ,q so q can be used to quit vim
 nnoremap <Leader>q q
 
@@ -201,6 +195,7 @@ Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/tpope/vim-surround')
 Plug('https://github.com/vim-airline/vim-airline')
+Plug('https://github.com/christoomey/vim-tmux-navigator')
 " vim-gitgutter with real-time sign updates enabled occasionally produced
 " rendering errors prior to Vim 7.4.427. For more information, see:
 " - https://github.com/airblade/vim-gitgutter/issues/171
