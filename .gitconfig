@@ -93,11 +93,9 @@
                  \"refs/heads/${h#refs/heads/}\" | grep -ve '^$' || true; }; f"
     rc = rebase --continue
     rh = reset HEAD
-    # "rebase interactive"; $1 is either a ref or a number of commits to rebase
+    # "rebase interactive"; $1 is a ref, commit count, or empty for new commits
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
-                 fi >/dev/null 2>&1; git rebase -i \"${r}\"; }; f"
-    # "rebase new"; rebase all commits not on the current remote tracking branch
-    rn = rebase -i
+                 fi >/dev/null 2>&1; git rebase -i ${r}; }; f"
     rt = reset --hard  # "reset to"
     s = status -s
     sb = show-branch

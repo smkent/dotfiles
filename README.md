@@ -158,9 +158,8 @@ produced by `--numstat`)
 the left)
   * `lx`: "log eXtra" (Similar to the `l` alias, but with both author and
 committer information)
-* `ri`: "rebase interactive" (Specify either a base commit or number of commits
-to rebase, e.g. `git ri @~3` or `git ri 3`)
-* `rn`: "rebase new" (`git rebase -i`; Starts an interactive rebase for all
-commits not on the current branch's remote tracking branch)
+* `ri`: "rebase interactive" (Specify a base commit, number of commits such as
+`git ri 3`, or no argument to rebase all commits on on the current branch's
+remote tracking branch)
 * `ub`: "upstream branch" (Shows the output of `git show-branch` for the
 current branch and its upstream tracking branch)
