@@ -61,6 +61,7 @@
     cm = commit -m
     co = checkout
     cp = cherry-pick
+    cv = commit -v
     cx = cherry-pick -x
     d = diff
     ds = diff --staged
