@@ -77,7 +77,8 @@ git repository
 ### Tmux
 
 * Use Ctrl-A as the prefix key (similar to GNU screen)
-* Some vim-style key mappings:
+* Use vi-style mode keys
+* Additional vim-style key mappings:
   * Ctrl+h/j/k/l for traversing panes (using
 [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator))
   * Create window splits with Ctrl+A s (horizontal) or Ctrl+A v (vertical)
