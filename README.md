@@ -125,7 +125,7 @@ Fonts](https://github.com/powerline/fonts), which can be installed using the
   blue bold, tags in yellow bold
 * `git diff`: Brighter green and red for added and removed, hunk header (line
   numbers changed) in brighter blue bold, hunk function header in magenta bold
-* `git grep`: Maches in orange, matching filenames in purple, line numbers in
+* `git grep`: Matches in orange, matching filenames in purple, line numbers in
   brighter green, function names in yellow, and separators in gray
 * `git status`: Branch name in bold and underlined, added files in brighter
   green, changed files in brighter red, files with conflicts in yellow, and
