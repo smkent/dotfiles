@@ -198,6 +198,7 @@ Plug('https://github.com/christoomey/vim-tmux-navigator')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
 Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
 Plug('https://github.com/scrooloose/syntastic')
+Plug('https://github.com/tomtom/tcomment_vim')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/tpope/vim-surround')
 Plug('https://github.com/vim-airline/vim-airline')
@@ -299,3 +300,20 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 " syntastic file type specific configuration
 let g:syntastic_python_checkers = ['flake8', 'python']
+
+" tcomment configuration
+"
+" By default, tcomment's gcc mapping uses the count to repeat the comment
+" instead of commenting out the specified number of lines. This configuration
+" uses the count with gcc to toggle comments for the specified number of
+" lines instead.
+" https://github.com/tomtom/tcomment_vim/issues/105
+"
+" Override default gc[...] mappings
+let g:tcommentMapLeaderOp1 = ''
+" Default gc mappings that should be kept
+nmap <silent> gc <Plug>TComment_gc
+nmap <silent> gcb <Plug>TComment_gcb
+xmap gc <Plug>TComment_gc
+" Custom gc mappings
+nmap <silent> gcc :TComment<CR>
