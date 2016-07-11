@@ -190,12 +190,12 @@ set t_RV=
 
 " Define list of plugins to be installed
 silent call plug#begin()  " Suppress error message if git is not installed
+Plug('https://github.com/christoomey/vim-tmux-navigator')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
 Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/tpope/vim-surround')
 Plug('https://github.com/vim-airline/vim-airline')
-Plug('https://github.com/christoomey/vim-tmux-navigator')
 " vim-gitgutter with real-time sign updates enabled occasionally produced
 " rendering errors prior to Vim 7.4.427. For more information, see:
 " - https://github.com/airblade/vim-gitgutter/issues/171
