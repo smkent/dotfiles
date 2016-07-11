@@ -114,6 +114,10 @@ nnoremap <F3> :noh<return><esc>
 " F4: Toggle paste mode
 set pastetoggle=<F4>
 
+" Navigate the location list using [l and ]l
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprevious<CR>
+
 " Remap record (q) to ,q so q can be used to quit vim
 nnoremap <Leader>q q
 
@@ -193,6 +197,7 @@ silent call plug#begin()  " Suppress error message if git is not installed
 Plug('https://github.com/christoomey/vim-tmux-navigator')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
 Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
+Plug('https://github.com/scrooloose/syntastic')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/tpope/vim-surround')
 Plug('https://github.com/vim-airline/vim-airline')
@@ -286,3 +291,11 @@ let g:ctrlp_user_command = {
     \ 'fallback': 'find %s -type f'
     \ }
 nnoremap <C-e> :CtrlPBuffer<CR>
+
+" syntastic configuration
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+" syntastic file type specific configuration
+let g:syntastic_python_checkers = ['flake8', 'python']
