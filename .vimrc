@@ -107,7 +107,7 @@ imap <F2> <ESC>:w<CR>`^i
 imap <C-s> <ESC>:w<CR>`^i
 
 " F3: Clear last search highlighting
-nnoremap <F3> :noh<return><esc>
+nnoremap <silent> <F3> :noh<return><esc>
 
 " F4: Toggle paste mode
 set pastetoggle=<F4>
@@ -168,10 +168,10 @@ nnoremap <Leader>r{ f{ci{
 nnoremap <Leader>r} f}ci}
 
 " Confirm and quit using q in normal mode
-nnoremap q :conf q<cr>
+nnoremap <silent> q :conf q<cr>
 
 " Remap Q to save and quit. This also disables Ex mode.
-nnoremap Q :wq<cr>
+nnoremap <silent> Q :wq<cr>
 
 " Use ,W to save the current file with sudo
 nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
