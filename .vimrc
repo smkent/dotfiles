@@ -167,10 +167,8 @@ nnoremap <Leader>r] f]ci]
 nnoremap <Leader>r{ f{ci{
 nnoremap <Leader>r} f}ci}
 
-" Confirm and quit using q in normal mode, or Ctrl+X in normal or insert modes
+" Confirm and quit using q in normal mode
 nnoremap q :conf q<cr>
-inoremap <C-x> <esc>:conf q<cr>
-nnoremap <C-x> :conf q<cr>
 
 " Remap Q to save and quit. This also disables Ex mode.
 nnoremap Q :wq<cr>
