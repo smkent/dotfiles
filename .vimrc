@@ -46,10 +46,8 @@ set nowrap          " Don't wrap long lines
 
 " Highlight trailing whitespace in red
 " http://vim.wikia.com/wiki/VimTip396
-" The ExtraWhitespace highlight group is located in my color scheme file
-" See the section "Custom highlight groups" in that file
-au WinEnter * call matchadd('ExtraWhitespace', '\s\+$', 4)
-au BufWinEnter * call matchadd('ExtraWhitespace', '\s\+$', 5)
+au WinEnter * call matchadd('Error', '\s\+$', 4)
+au BufWinEnter * call matchadd('Error', '\s\+$', 5)
 if version >= 702
     au BufWinLeave * call clearmatches()
 endif

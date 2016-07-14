@@ -238,9 +238,6 @@ hi link pythonBuiltin Identifier
 " Markdown: Use blue for heading hashtag delimeters
 hi link markdownHeadingDelimiter Statement
 
-" Custom highlight groups
-call s:C("ExtraWhitespace", "",                 s:error,            "")
-
 " Plugin highlight groups
 
 " CtrlP colors
