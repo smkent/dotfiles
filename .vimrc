@@ -123,6 +123,10 @@ nnoremap <Leader>q q
 nnoremap <Leader>e <C-e>
 nnoremap <Leader>y <C-y>
 
+" Paste from the system clipboard with ,p and ,P
+nnoremap <Leader>p "+p
+nnoremap <Leader>P "+Pl
+
 " Surround shortcuts
 map <Leader>' ysiw'
 vmap <Leader>' c'<C-R>"'<ESC>
