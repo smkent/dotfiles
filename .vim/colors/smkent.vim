@@ -40,6 +40,7 @@ let s:gray            = [ 7, 244 ]
 let s:white           = [ 7, 231 ]
 let s:red             = [ 1, 167 ]
 let s:orange          = [ 3, 172 ]
+let s:medium_orange   = [ 3, 209 ]
 let s:light_orange    = [ 3, 215 ]
 let s:yellow          = [ 3, 221 ]
 let s:light_yellow    = [ 3, 227 ]
@@ -260,6 +261,16 @@ call s:C("GitGutterAddLine", "",                s:void_background,  "")
 hi link GitGutterDeleteLine GitGutterAddLine
 hi link GitGutterChangeLine GitGutterAddLine
 hi link GitGutterChangeDeleteLine GitGutterAddLine
+
+" Syntastic highlight groups
+call s:C("SyntasticError",        s:white,         s:error,         "")
+call s:C("SyntasticWarning",      s:medium_orange, "",              "reverse")
+call s:C("SyntasticStyleError",   s:yellow,        "",              "reverse")
+call s:C("SyntasticStyleWarning", s:light_green,   "",              "reverse")
+hi link SyntasticErrorSign SyntasticError
+hi link SyntasticWarningSign SyntasticWarning
+hi link SyntasticStyleErrorSign SyntasticStyleError
+hi link SyntasticStyleWarningSign SyntasticStyleWarning
 
 " Delete set color function {{{
 delf s:C

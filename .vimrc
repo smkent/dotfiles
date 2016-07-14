@@ -113,9 +113,36 @@ nnoremap <silent> <F3> :noh<return><esc>
 set pastetoggle=<F4>
 nnoremap <silent> <F4> :set paste!<CR>
 
-" Navigate the location list using [l and ]l
-nnoremap ]l :lnext<CR>
-nnoremap [l :lprevious<CR>
+" Location list custom navigation function
+function! NavigateAutoOpenLocationList(next)
+    " a:next is 1 for next location, 0 for previous location
+    " BufferCount is from https://github.com/Valloric/ListToggle
+    function! BufferCount()
+        return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+    endfunction
+    let l:buffer_count_before = BufferCount()
+    " lopen needs to be called before lnext or lprev, otherwise the location
+    " list will become focused
+    lopen
+    try
+        if a:next | lnext | else | lprev | endif
+    catch /E42/     " No errors
+        lclose | lclose
+        return
+    catch /E553/    " No more items
+    endtry
+    try
+        if BufferCount() != l:buffer_count_before
+            if a:next | lprev | else | lnext | endif
+        endif
+    catch /E553/    " No more items
+    endtry
+endfunction
+
+" Navigate the location list using [l and ]l, automatically opening the
+" location list window if any items are populated
+nmap <silent> ]l :call NavigateAutoOpenLocationList(1)<CR>
+nmap <silent> [l :call NavigateAutoOpenLocationList(0)<CR>
 
 " Remap record (q) to ,q so q can be used to quit vim
 nnoremap <Leader>q q
@@ -180,6 +207,7 @@ nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 " http://stackoverflow.com/a/3765575
 if exists('+colorcolumn')
     set colorcolumn=81
+    au filetype qf set colorcolumn=
 else
     au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
@@ -295,12 +323,78 @@ let g:ctrlp_user_command = {
 nnoremap <C-e> :CtrlPBuffer<CR>
 
 " syntastic configuration
+" Basic settings
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-" syntastic file type specific configuration
+
+" Sign column symbols
+let g:syntastic_error_symbol = "\u2716"             " Block X
+let g:syntastic_warning_symbol = "\u26A0"           " Warning sign symbol
+let g:syntastic_style_error_symbol = "\u21E2"       " Dotted right arrow
+let g:syntastic_style_warning_symbol = "\u21E2"     " Dotted right arrow
+
+" Open the error list automatically except when the file is first opened
+let g:syntastic_auto_loc_list = 2
+autocmd BufWritePre * if !exists('b:syntastic_auto_loc_list')
+    \ | let b:syntastic_auto_loc_list = 1 | endif
+
+" File type specific configuration
 let g:syntastic_python_checkers = ['flake8', 'python']
+
+" Functions to control Syntastic on a per-buffer basis
+function! SyntasticToggleEnabled()
+    " Idea from http://stackoverflow.com/a/36683733
+    if &filetype == 'qf'
+        " The location window is focused. Close it so this action will apply
+        " to the corresponding buffer.
+        lclose | lclose
+    endif
+    let b:syntastic_skip_checks = 1 - get(b:, 'syntastic_skip_checks', 0)
+    SyntasticReset
+    if b:syntastic_skip_checks == 0
+        SyntasticCheck
+    endif
+    echo 'Syntastic ' .
+        \ (b:syntastic_skip_checks == 0 ? 'enabled' : 'disabled') .
+        \ ' for "' . @% . '"'
+endfunction
+
+function! SyntasticToggleVerbosity()
+    if &filetype == 'qf'
+        " The location window is focused. Close it so this action will apply
+        " to the corresponding buffer.
+        lclose | lclose
+    endif
+    let b:syntastic_skip_checks = 0
+    if empty(get (b:, 'syntastic_quiet_messages', {}))
+        let b:syntastic_quiet_messages = {
+            \ "!level": "errors",
+            \ "type":   "style" }
+    else
+        let b:syntastic_quiet_messages = {}
+    endif
+    SyntasticCheck
+    echo 'Syntastic verbosity ' .
+        \ (b:syntastic_quiet_messages == {} ? 'increased' : 'reduced') .
+        \ ' for "' . @% . '"'
+endfunction
+
+function! ToggleLocationList()
+    let l:old_last_winnr = winnr('$')
+    lclose | lclose
+    let b:syntastic_auto_loc_list = 2
+    if l:old_last_winnr == winnr('$')
+        " Nothing was closed, open syntastic error location panel
+        Errors
+        let b:syntastic_auto_loc_list = 1
+    endif
+endfunction
+
+" Syntastic control mappings
+nmap <silent> <Leader>l :call ToggleLocationList()<CR>
+nmap <silent> <Leader>d :call SyntasticToggleEnabled()<CR>
+nmap <silent> <C-y> :call SyntasticToggleVerbosity()<CR>
 
 " tcomment configuration
 "
