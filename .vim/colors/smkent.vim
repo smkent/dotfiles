@@ -244,18 +244,18 @@ hi link markdownHeadingDelimiter Statement
 " Show buffer file names in Normal white instead of Comment gray
 hi link CtrlPBufferHid Normal
 
-" Set Sy sign colors
+" vim-signify sign highlight groups
 call s:C("SignifySignAdd",    s:light_green,    s:background,       "bold")
 call s:C("SignifySignDelete", s:red,            s:background,       "bold")
 call s:C("SignifySignChange", s:light_yellow,   s:background,       "bold")
 
-" Customize sign column highlight
+" vim-gitgutter sign highlight groups
 call s:C("GitGutterAdd",    s:light_green,      s:background,       "bold")
 call s:C("GitGutterDelete", s:red,              s:background,       "bold")
 call s:C("GitGutterChange", s:light_yellow,     s:background,       "bold")
 hi link GitGutterChangeDelete GitGutterChange
 
-" Highlight lines with signs
+" vim-gitgutter line highlight groups
 call s:C("GitGutterAddLine", "",                s:void_background,  "")
 hi link GitGutterDeleteLine GitGutterAddLine
 hi link GitGutterChangeLine GitGutterAddLine
