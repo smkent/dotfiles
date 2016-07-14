@@ -111,6 +111,7 @@ nnoremap <F3> :noh<return><esc>
 
 " F4: Toggle paste mode
 set pastetoggle=<F4>
+nnoremap <silent> <F4> :set paste!<CR>
 
 " Navigate the location list using [l and ]l
 nnoremap ]l :lnext<CR>
