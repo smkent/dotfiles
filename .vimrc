@@ -197,6 +197,13 @@ nnoremap <Leader>r} f}ci}
 " Break current line at cursor, removing any trailing whitespace
 nmap <Leader>s i<CR><Esc>k:silent! s/\s\+$//<CR>$
 
+" Insert blank lines above or below with [<Space> or ]<Space>
+" http://superuser.com/a/607168
+nnoremap <silent> ]<Space>
+    \ :put =repeat(nr2char(10),v:count)<Bar>execute "'[-1"<CR>
+nnoremap <silent> [<Space>
+    \ :put!=repeat(nr2char(10),v:count)<Bar>execute "']+1"<CR>
+
 " Confirm and quit using q in normal mode
 nnoremap <silent> q :conf q<cr>
 
