@@ -1,5 +1,5 @@
 ### DOTFILES AUTO CONFIG
-# Everything below the above line may be deleted and replaced without warning!
+# This section may be deleted and replaced without warning!
 # Make changes in ~/.dotfiles/templates/ssh/config_append
 
 Host github.com
@@ -10,3 +10,5 @@ RekeyLimit 128m 5m
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-512
+
+### END DOTFILES AUTO CONFIG
