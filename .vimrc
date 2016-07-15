@@ -194,6 +194,9 @@ nnoremap <Leader>r] f]ci]
 nnoremap <Leader>r{ f{ci{
 nnoremap <Leader>r} f}ci}
 
+" Break current line at cursor, removing any trailing whitespace
+nmap <Leader>s i<CR><Esc>k:silent! s/\s\+$//<CR>$
+
 " Confirm and quit using q in normal mode
 nnoremap <silent> q :conf q<cr>
 
