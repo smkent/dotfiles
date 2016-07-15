@@ -355,6 +355,15 @@ autocmd BufWritePre * if !exists('b:syntastic_auto_loc_list')
 
 " File type specific configuration
 let g:syntastic_python_checkers = ['flake8', 'python']
+function SyntasticPythonVersionDetect()
+    let l:shebang_exe = syntastic#util#parseShebang()['exe']
+    if l:shebang_exe =~# '\m\<python[0-9]'
+        let b:syntastic_checkers =
+            \ filter(g:syntastic_python_checkers, 'v:val != "python"')
+        let b:syntastic_python_flake8_exe = l:shebang_exe . ' /usr/bin/flake8'
+    endif
+endfunction
+autocmd filetype python call SyntasticPythonVersionDetect()
 
 " Functions to control Syntastic on a per-buffer basis
 function! SyntasticToggleEnabled()
