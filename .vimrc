@@ -123,7 +123,11 @@ function! NavigateAutoOpenLocationList(next)
     let l:buffer_count_before = BufferCount()
     " lopen needs to be called before lnext or lprev, otherwise the location
     " list will become focused
-    lopen
+    try
+        lopen
+    catch /E776/    " No location list
+        return
+    endtry
     try
         if a:next | lnext | else | lprev | endif
     catch /E42/     " No errors
