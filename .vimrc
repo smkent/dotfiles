@@ -57,7 +57,7 @@ set list
 set listchars=nbsp:¬,tab:»\ ,extends:»,precedes:«
 
 set mouse=          " Disable mouse support
-set so=8            " so is "Scrolloff", or the minimum number of context
+set so=2            " so is "Scrolloff", or the minimum number of context
                     " lines that are displayed above/below the cursor.
 
 " Enable command line completion
