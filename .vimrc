@@ -1,5 +1,6 @@
+" Basic settings {{{
+
 " Several basic settings and some mappings from https://github.com/gergap/vim
-" Additional mappings from YADR: https://github.com/skwp/dotfiles
 
 " Disable vi compatibility (emulation of old bugs)
 set nocompatible
@@ -18,18 +19,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab       " Insert spaces instead of tabs
-" Don't insert spaces instead of tabs in Makefiles
-autocmd filetype make set noexpandtab
 filetype indent plugin on
-
-" Always start the cursor on the first line when editing a git commit message
-" or editing interactive rebase instructions
-" http://vim.wikia.com/wiki/VimTip1636
-"
-" Replace "pick" with "p" before editing interactive rebase instructions
-autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
-autocmd filetype gitrebase :silent! %s/^pick/p/g |
-                         \ call setpos('.', [0, 1, 1, 0])
 
 set hlsearch        " Highlight search results
 set incsearch       " Show search matches as you type
@@ -44,14 +34,6 @@ set relativenumber  " Show relative line numbers (except for the current line)
 set showmatch       " Show matching braces
 
 set nowrap          " Don't wrap long lines
-
-" Highlight trailing whitespace in red
-" http://vim.wikia.com/wiki/VimTip396
-au WinEnter * call matchadd('Error', '\s\+$', 4)
-au BufWinEnter * call matchadd('Error', '\s\+$', 5)
-if version >= 702
-    au BufWinLeave * call clearmatches()
-endif
 
 " Highlight certain nonprintable characters
 set list
@@ -69,7 +51,67 @@ set wildmode=longest:full,full
 " The default timeout is much higher, resulting in a delay exiting insert mode
 set timeout timeoutlen=1000 ttimeoutlen=50
 
-" Custom Keyboard mappings
+" Disable vim requesting the terminal version
+" This prevents extraneous garbage from being printed on startup
+set t_RV=
+
+" }}}
+
+" Basic autocommands {{{
+
+augroup basic_autocommands
+    autocmd!
+
+    " 80-character column highlight
+    " http://stackoverflow.com/a/3765575
+    if exists('+colorcolumn')
+        set colorcolumn=81
+    else
+        autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+    endif
+
+    " Highlight trailing whitespace in red
+    " http://vim.wikia.com/wiki/VimTip396
+    autocmd WinEnter * call matchadd('Error', '\s\+$', 4)
+    autocmd BufWinEnter * call matchadd('Error', '\s\+$', 5)
+    if version >= 702
+        autocmd BufWinLeave * call clearmatches()
+    endif
+augroup END
+
+" }}}
+
+" File-type specific settings {{{
+
+augroup file_type_autocommands
+    autocmd!
+
+    " Don't set colorcolumn in the quickfix or location list windows
+    if exists('+colorcolumn')
+        autocmd filetype qf setlocal colorcolumn=
+    endif
+
+    " Don't insert spaces instead of tabs in Makefiles
+    autocmd filetype make setlocal noexpandtab
+
+    " Always start the cursor on the first line when editing a git commit message
+    " or editing interactive rebase instructions
+    " http://vim.wikia.com/wiki/VimTip1636
+    "
+    " Replace "pick" with "p" before editing interactive rebase instructions
+    autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
+    autocmd filetype gitrebase :silent! %s/^pick/p/g |
+                             \ call setpos('.', [0, 1, 1, 0])
+
+    " Enable spell checking by default in git commit messages
+    autocmd filetype gitcommit setlocal spell
+augroup END
+
+" }}}
+
+" Keyboard mappings {{{
+
+" Several mappings are from YADR: https://github.com/skwp/dotfiles
 
 let mapleader=","
 
@@ -117,14 +159,13 @@ nnoremap <silent> <F4> :set paste!<CR>
 " F9: Toggle spell checking
 nnoremap <silent> <F9> :setlocal spell!<CR>
 inoremap <F9> <ESC>:setlocal spell!<CR>`^i
-autocmd filetype gitcommit setlocal spell
 
 " Navigate the location list using [l and ]l.
 " If the location list is empty, take no action.
 " If the location list is populated, open it if it was closed or navigate to
 " the previous/next item otherwise. Wrap the selection when moving past the
 " beginning or end of the location list.
-function! NavigateAutoOpenLocationList(next)
+function! NavigateAutoOpenLocationList(next)  " {{{
     " a:next is 1 for next location, 0 for previous location
     " BufferCount is from https://github.com/Valloric/ListToggle
     function! BufferCount()
@@ -157,7 +198,7 @@ function! NavigateAutoOpenLocationList(next)
     endtry
     " Select the current item and return focus to the parent buffer window
     ll
-endfunction
+endfunction  " }}}
 nmap <silent> ]l :call NavigateAutoOpenLocationList(1)<CR>
 nmap <silent> [l :call NavigateAutoOpenLocationList(0)<CR>
 
@@ -230,23 +271,9 @@ nnoremap <silent> Q :wq<cr>
 " Use ,W to save the current file with sudo
 nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 
-" 80-character column highlight
-" http://stackoverflow.com/a/3765575
-if exists('+colorcolumn')
-    set colorcolumn=81
-    au filetype qf set colorcolumn=
-else
-    au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-endif
+" }}}
 
-" Set current line number highlight color for use with relativenumber
-" To use the same color as the rest of the line numbers, use:
-
-" Disable vim requesting the terminal version
-" This prevents extraneous garbage from being printed on startup
-set t_RV=
-
-" Plugin configuration
+" Plugin installation {{{
 
 " Define list of plugins to be installed
 silent call plug#begin()  " Suppress error message if git is not installed
@@ -263,7 +290,7 @@ Plug('https://github.com/vim-airline/vim-airline')
 " - https://github.com/airblade/vim-gitgutter/issues/171
 " - http://ftp.vim.org/vim/patches/7.4/7.4.427
 if executable('git')
-    if has("patch-7.4.427")
+    if has('patch-7.4.427')
         Plug('https://github.com/airblade/vim-gitgutter')
         " Reduce default refresh time from 4 seconds to 0.25 seconds
         set updatetime=250
@@ -282,7 +309,10 @@ if empty($VIM_SKIP_PLUGINS) || $VIM_SKIP_PLUGINS == 0
     endif
 endif
 
-" vim-airline configuration
+" }}}
+
+" vim-airline configuration {{{
+
 set laststatus=2    " Always show the status bar
 set noshowmode      " vim-airline already shows the current mode
 
@@ -310,7 +340,10 @@ let g:airline_section_x = airline#section#create_right(
 let g:airline_section_y = airline#section#create(['%3p%%'])
 let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
 
-" vim-signify configuration
+" }}}
+
+" vim-signify configuration {{{
+
 let g:signify_vcs_list = [ 'git' ]
 
 " Map [c and ]c shortcuts to jump between hunks
@@ -321,7 +354,10 @@ let g:signify_mapping_prev_hunk = '[c'
 " Only show modified counts in the status bar if they're non zero
 let g:airline#extensions#hunks#non_zero_only = 1
 
-" vim-gitgutter configuration
+" }}}
+
+" vim-gitgutter configuration {{{
+
 " Customize sign characters
 let g:gitgutter_highlight_lines = 1
 let g:gitgutter_sign_removed = '< '
@@ -333,7 +369,10 @@ let g:gitgutter_sign_modified_removed = '~!'
 " See the section "Plugin highlight groups" in that file
 let g:gitgutter_override_sign_column_highlight = 0
 
-" ctrlp configuration
+" }}}
+
+" CtrlP configuration {{{
+
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_max_depth = 5
@@ -349,7 +388,10 @@ let g:ctrlp_user_command = {
     \ }
 nnoremap <C-e> :CtrlPBuffer<CR>
 
-" syntastic configuration
+" }}}
+
+" Syntastic configuration {{{
+
 " Basic settings
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -363,22 +405,29 @@ let g:syntastic_style_warning_symbol = "\u21E2"     " Dotted right arrow
 
 " Open the error list automatically except when the file is first opened
 let g:syntastic_auto_loc_list = 2
-autocmd BufWritePre * if !exists('b:syntastic_auto_loc_list')
-    \ | let b:syntastic_auto_loc_list = 1 | endif
+augroup syntastic_loc_list_save
+    autocmd!
+    autocmd BufWritePre * if !exists('b:syntastic_auto_loc_list')
+        \ | let b:syntastic_auto_loc_list = 1 | endif
+augroup END
 
 " File type specific configuration
 let g:syntastic_python_checkers = ['flake8', 'python']
-function SyntasticPythonVersionDetect()
+function! SyntasticPythonVersionDetect()  " {{{
     let l:shebang_exe = syntastic#util#parseShebang()['exe']
     if l:shebang_exe =~# '\m\<python[0-9]'
         let b:syntastic_checkers =
             \ filter(g:syntastic_python_checkers, 'v:val != "python"')
         let b:syntastic_python_flake8_exe = l:shebang_exe . ' /usr/bin/flake8'
     endif
-endfunction
-autocmd filetype python call SyntasticPythonVersionDetect()
+endfunction  " }}}
+augroup syntastic_python_detect
+    autocmd!
+    autocmd filetype python call SyntasticPythonVersionDetect()
+augroup END
 
-" Functions to control Syntastic on a per-buffer basis
+" Syntastic control mappings
+" Functions to control Syntastic on a per-buffer basis {{{
 function! SyntasticToggleEnabled()
     " Idea from http://stackoverflow.com/a/36683733
     if &filetype == 'qf'
@@ -426,14 +475,15 @@ function! ToggleLocationList()
         let b:syntastic_auto_loc_list = 1
     endif
 endfunction
-
-" Syntastic control mappings
+" }}}
 nmap <silent> <Leader>l :call ToggleLocationList()<CR>
 nmap <silent> <Leader>d :call SyntasticToggleEnabled()<CR>
 nmap <silent> <C-y> :call SyntasticToggleVerbosity()<CR>
 
-" tcomment configuration
-"
+" }}}
+
+" tcomment configuration {{{
+
 " By default, tcomment's gcc mapping uses the count to repeat the comment
 " instead of commenting out the specified number of lines. This configuration
 " uses the count with gcc to toggle comments for the specified number of
@@ -448,3 +498,7 @@ nmap <silent> gcb <Plug>TComment_gcb
 xmap gc <Plug>TComment_gc
 " Custom gc mappings
 nmap <silent> gcc :TComment<CR>
+
+" }}}
+
+" vim: set fdl=0 fdm=marker:
