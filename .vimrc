@@ -202,6 +202,48 @@ endfunction  " }}}
 nmap <silent> ]l :call NavigateAutoOpenLocationList(1)<CR>
 nmap <silent> [l :call NavigateAutoOpenLocationList(0)<CR>
 
+" Navigate SCM conflict markers with [n and ]n.
+" From vim-unimpaired: https://github.com/tpope/vim-unimpaired
+" Context and ContextMotion helper functions {{{
+function! Context(reverse)
+    call search('^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)', a:reverse ? 'bW' : 'W')
+endfunction
+
+function! ContextMotion(reverse)
+    if a:reverse
+        -
+    endif
+    call search('^@@ .* @@\|^diff \|^[<=>|]\{7}[<=>|]\@!', 'bWc')
+    if getline('.') =~# '^diff '
+        let end = search('^diff ', 'Wn') - 1
+        if end < 0
+            let end = line('$')
+        endif
+    elseif getline('.') =~# '^@@ '
+        let end = search('^@@ .* @@\|^diff ', 'Wn') - 1
+        if end < 0
+            let end = line('$')
+        endif
+    elseif getline('.') =~# '^=\{7\}'
+        +
+        let end = search('^>\{7}>\@!', 'Wnc')
+    elseif getline('.') =~# '^[<=>|]\{7\}'
+        let end = search('^[<=>|]\{7}[<=>|]\@!', 'Wn') - 1
+    else
+        return
+    endif
+    if end > line('.')
+        execute 'normal! V'.(end - line('.')).'j'
+    elseif end == line('.')
+        normal! V
+    endif
+endfunction
+" }}}
+nmap <silent> [n :<C-U>call Context(1)<CR>
+nmap <silent> ]n :<C-U>call Context(0)<CR>
+omap <silent> [n :<C-U>call ContextMotion(1)<CR>
+omap <silent> ]n :<C-U>call ContextMotion(0)<CR>
+
 " Remap record (q) to ,q so q can be used to quit vim
 nnoremap <Leader>q q
 
