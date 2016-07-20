@@ -116,6 +116,7 @@ nnoremap <silent> <F4> :set paste!<CR>
 " F9: Toggle spell checking
 nnoremap <silent> <F9> :setlocal spell!<CR>
 inoremap <F9> <ESC>:setlocal spell!<CR>`^i
+autocmd filetype gitcommit setlocal spell
 
 " Navigate the location list using [l and ]l.
 " If the location list is empty, take no action.
