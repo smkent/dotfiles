@@ -287,6 +287,13 @@ fi
 export GPG_TTY=$(tty)
 # }}}
 
+# ShellCheck configuration {{{
+# Disable SC1090 (Can't follow non-constant source. Use a directive to specify
+# location.) This silences warnings about source lines with non-absolute paths.
+# Files should be checked individually.
+export SHELLCHECK_OPTS="--exclude SC1090"
+# }}}
+
 # }}}
 
 # Load additional configuration {{{
