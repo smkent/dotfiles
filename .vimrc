@@ -113,6 +113,10 @@ nnoremap <silent> <F3> :noh<return><esc>
 set pastetoggle=<F4>
 nnoremap <silent> <F4> :set paste!<CR>
 
+" F9: Toggle spell checking
+nnoremap <silent> <F9> :setlocal spell!<CR>
+inoremap <F9> <ESC>:setlocal spell!<CR>`^i
+
 " Navigate the location list using [l and ]l.
 " If the location list is empty, take no action.
 " If the location list is populated, open it if it was closed or navigate to

@@ -35,6 +35,8 @@ let s:error           = [ 1, 196 ]
 let s:text_hl         = [ 0, 222 ]
 let s:incsearch_hl    = [ 3, 66  ]
 let s:visual_hl       = [ 3, 64  ]
+let s:spell_green_hl  = [ 4, 22  ]
+let s:spell_blue_hl   = [ 4, 24  ]
 let s:black           = [ 0, 16  ]
 let s:gray            = [ 7, 244 ]
 let s:white           = [ 7, 231 ]
@@ -170,10 +172,10 @@ call s:C("PmenuSel",        s:black,            s:yellow_green,     "")
 call s:C("Question",        s:yellow_green,     "",                 "bold")
 call s:C("Search",          s:void_background,  s:green,            "bold")
 call s:C("SpecialKey",      s:error,            "",                 "")
-" SpellBad
-" SpellCap
-" SpellLocal
-" SpellRare
+call s:C("SpellBad",        "",                 s:error,            "")
+call s:C("SpellCap",        "",                 s:spell_blue_hl,    "")
+call s:C("SpellLocal",      "",                 s:gray,             "")
+call s:C("SpellRare",       "",                 s:spell_green_hl,   "")
 call s:C("StatusLine",      s:black,            s:blue,             "bold")
 call s:C("StatusLineNC",    s:gray,             s:color_column,     "reverse")
 " TabLine
