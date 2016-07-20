@@ -113,7 +113,11 @@ nnoremap <silent> <F3> :noh<return><esc>
 set pastetoggle=<F4>
 nnoremap <silent> <F4> :set paste!<CR>
 
-" Location list custom navigation function
+" Navigate the location list using [l and ]l.
+" If the location list is empty, take no action.
+" If the location list is populated, open it if it was closed or navigate to
+" the previous/next item otherwise. Wrap the selection when moving past the
+" beginning or end of the location list.
 function! NavigateAutoOpenLocationList(next)
     " a:next is 1 for next location, 0 for previous location
     " BufferCount is from https://github.com/Valloric/ListToggle
@@ -134,17 +138,20 @@ function! NavigateAutoOpenLocationList(next)
         lclose | lclose
         return
     catch /E553/    " No more items
+        " Wrap list
+        if a:next | lfirst | else | llast | endif
     endtry
     try
         if BufferCount() != l:buffer_count_before
             if a:next | lprev | else | lnext | endif
         endif
     catch /E553/    " No more items
+        " Wrap list
+        if a:next | llast | else | lfirst | endif
     endtry
+    " Select the current item and return focus to the parent buffer window
+    ll
 endfunction
-
-" Navigate the location list using [l and ]l, automatically opening the
-" location list window if any items are populated
 nmap <silent> ]l :call NavigateAutoOpenLocationList(1)<CR>
 nmap <silent> [l :call NavigateAutoOpenLocationList(0)<CR>
 
