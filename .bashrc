@@ -1,5 +1,8 @@
 #!/bin/bash
-# Several of these basic settings are from the Gentoo/Ubuntu default bashrc.
+
+# Basic settings {{{
+
+# Several of these are from the Gentoo/Ubuntu default bashrc.
 
 # If either of these are true, the shell is non-interactive.
 # Exit without changing any settings or printing any output.
@@ -25,16 +28,10 @@ shopt -s checkwinsize
 # http://unix.stackexchange.com/q/12107
 stty -ixon
 
-# Make less more friendly for non-text input files, see lesspipe(1)
-if [ -x /usr/bin/lesspipe ]; then
-    if grep -qe '^\s\+echo\ "export' "$(which lesspipe)"; then
-        eval "$(lesspipe)"
-    else
-        export LESSOPEN="|lesspipe %s"
-    fi
-fi
+# }}}
 
-# Color support
+# Terminal detection and color support {{{
+
 [ -x /usr/bin/tput ] && __colors_supported=$(tput colors)
 [ -z "${__colors_supported}" ] && __colors_supported=0
 
@@ -55,22 +52,10 @@ if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
     esac
 fi
 
-if [ ${__colors_supported} -ge 2 ]; then
-    if [ ${__colors_supported} -ge 256 -a -r ~/.dircolors ]; then
-        eval "$(dircolors -b ~/.dircolors)"
-    else
-        eval "$(dircolors -b)"
-    fi
-fi
+# }}}
 
-# grep highlight color (bold orange)
-if [ ${__colors_supported} -ge 256 ]; then
-    export GREP_COLORS="mt=1;38;5;202:cs=02;38:se=34:fn=35:ln=32:bn=32"
-else
-    export GREP_COLORS="mt=01;31:cs=02;38:se=34:fn=35:ln=32:bn=32"
-fi
+# Shell prompt generator {{{
 
-# Shell prompt generator
 if [ ${__colors_supported} -ge 256 ]; then
     __c_red="\[$(tput setaf 196)\]"
     __c_green="\[$(tput setaf 2)\]"
@@ -222,7 +207,55 @@ __prompt_generator()
 }
 PROMPT_COMMAND=__prompt_generator
 
-# Detect SSH_AUTH_SOCK if it is empty
+# }}}
+
+# PATH configuration {{{
+
+__append_path_if_exists()
+{
+    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return
+    [ -d "${1}" ] && PATH="${PATH}:${1}"
+    return 0
+}
+__append_path_if_exists "${HOME}/.dotfiles/bin"
+__append_path_if_exists "${HOME}/bin"
+__append_path_if_exists "/opt/smkent/bin"
+
+# }}}
+
+# Application settings {{{
+
+# ls colors {{{
+if [ ${__colors_supported} -ge 2 ]; then
+    if [ ${__colors_supported} -ge 256 -a -r ~/.dircolors ]; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+fi
+# }}}
+
+# grep colors {{{
+if [ ${__colors_supported} -ge 256 ]; then
+    # Set highlight color to bold orange
+    export GREP_COLORS="mt=1;38;5;202:cs=02;38:se=34:fn=35:ln=32:bn=32"
+else
+    export GREP_COLORS="mt=01;31:cs=02;38:se=34:fn=35:ln=32:bn=32"
+fi
+# }}}
+
+# Enable lesspipe {{{
+# Make less more friendly for non-text input files, see lesspipe(1)
+if [ -x /usr/bin/lesspipe ]; then
+    if grep -qe '^\s\+echo\ "export' "$(which lesspipe)"; then
+        eval "$(lesspipe)"
+    else
+        export LESSOPEN="|lesspipe %s"
+    fi
+fi
+# }}}
+
+# SSH_AUTH_SOCK detection {{{
 if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
     # find prints the mod time and file name for each result, one per line.
     # Results are sorted by mod time. Reading "d" twice discards the date
@@ -244,30 +277,28 @@ if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
                   \( -iname 'keyring-*' -or -iname 'ssh-*' \) \
                   -printf '%A@ %p\n' 2>/dev/null | sort -r)
 fi
+# }}}
 
-# GnuPG configuration
+# GnuPG configuration {{{
 if [ "$(stat -c '%a' ~/.gnupg 2>/dev/null)" != "700" ]; then
     chmod 0700 ~/.gnupg
     chmod -R og-rwx ~/.gnupg
 fi
 export GPG_TTY=$(tty)
+# }}}
 
-# Add PATH customizations
-__append_path_if_exists()
-{
-    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return
-    [ -d "${1}" ] && PATH="${PATH}:${1}"
-    return 0
-}
-__append_path_if_exists "${HOME}/.dotfiles/bin"
-__append_path_if_exists "${HOME}/bin"
-__append_path_if_exists "/opt/smkent/bin"
+# }}}
 
-# Load aliases and helper functions
+# Load additional configuration {{{
+
+# Aliases and helper functions
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 
-# Load host-specific bashrc if available
+# Host-specific bashrc if available
 if [ -f "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}" ]; then
     . "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}"
 fi
 
+# }}}
+
+# vim: set fdl=0 fdm=marker:
