@@ -238,7 +238,7 @@ hi link gitcommitBranch Identifier
 hi link gitrebaseHash Function
 " Python: Separate highlight group for built-ins from function names
 hi link pythonBuiltin Identifier
-" Markdown: Use blue for heading hashtag delimeters
+" Markdown: Use blue for heading hashtag delimiters
 hi link markdownHeadingDelimiter Statement
 
 " Plugin highlight groups
