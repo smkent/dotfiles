@@ -27,7 +27,7 @@ filetype indent plugin on
 "
 " Replace "pick" with "p" before editing interactive rebase instructions
 autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
-autocmd filetype gitrebase :silent %s/^pick/p/g |
+autocmd filetype gitrebase :silent! %s/^pick/p/g |
                          \ call setpos('.', [0, 1, 1, 0])
 
 set hlsearch        " Highlight search results
