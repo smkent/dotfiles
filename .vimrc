@@ -15,6 +15,7 @@ set smartindent     " Use intelligent indentation for code
 
 " Set tab width to 4
 set tabstop=4
+set softtabstop=4
 set shiftwidth=4
 set expandtab       " Insert spaces instead of tabs
 " Don't insert spaces instead of tabs in Makefiles
