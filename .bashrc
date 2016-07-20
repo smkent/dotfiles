@@ -36,7 +36,7 @@ stty -ixon
 [ -z "${__colors_supported}" ] && __colors_supported=0
 
 # Terminal detection is from an older version of Ubuntu's default bashrc
-if [ "${TERM}" = "xterm" -a ! -z "${COLORTERM}" ]; then
+if [ "${TERM}" = "xterm" ] && [ ! -z "${COLORTERM}" ]; then
     case "${COLORTERM}" in
         gnome-terminal|mate-terminal)
             # Those crafty Gnome folks require you to check COLORTERM,
@@ -116,7 +116,8 @@ __prompt_generator()
     local exit_code_disp="${exit_code}"
     local exit_color="${__c_red}${__bold}"
     local dir_stack_count=$((${#DIRSTACK[@]}  - 1))
-    local git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+    local git_toplevel
+    git_toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
     # Stop command timer
     local last_command_time=$((SECONDS - timer))
     unset timer
@@ -161,9 +162,10 @@ __prompt_generator()
         p_dirs="${__c_blue}+${dir_stack_count} "
     fi
     # Git branch
-    if [ -n "${git_toplevel}" -a "${git_toplevel}" != "${HOME}" ]; then
-        local git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-        if [ -n "${git_branch}" -a "${git_branch}" != "master" ]; then
+    if [ -n "${git_toplevel}" ] && [ "${git_toplevel}" != "${HOME}" ]; then
+        local git_branch
+        git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+        if [ -n "${git_branch}" ] && [ "${git_branch}" != "master" ]; then
             if [ "${git_branch}" = "HEAD" ]; then
                 git_branch=$(git rev-parse --short HEAD 2>/dev/null)
             fi
@@ -227,7 +229,7 @@ __append_path_if_exists "/opt/smkent/bin"
 
 # ls colors {{{
 if [ ${__colors_supported} -ge 2 ]; then
-    if [ ${__colors_supported} -ge 256 -a -r ~/.dircolors ]; then
+    if [ ${__colors_supported} -ge 256 ] && [ -r ~/.dircolors ]; then
         eval "$(dircolors -b ~/.dircolors)"
     else
         eval "$(dircolors -b)"
@@ -256,13 +258,13 @@ fi
 # }}}
 
 # SSH_AUTH_SOCK detection {{{
-if [ -z "${SSH_AUTH_SOCK}" -a "$(id -u)" -ne 0 ]; then
+if [ -z "${SSH_AUTH_SOCK}" ] && [ "$(id -u)" -ne 0 ]; then
     # find prints the mod time and file name for each result, one per line.
     # Results are sorted by mod time. Reading "d" twice discards the date
     # after sort without assigning it to a different variable.
     # Use process substitution to allow setting SSH_AUTH_SOCK within the loop.
     # http://stackoverflow.com/a/13727116
-    while read d d; do
+    while read -r d d; do
         if [ -S "${d}/ssh" ]; then
             export SSH_AUTH_SOCK="${d}/ssh"
             break
@@ -284,7 +286,8 @@ if [ "$(stat -c '%a' ~/.gnupg 2>/dev/null)" != "700" ]; then
     chmod 0700 ~/.gnupg
     chmod -R og-rwx ~/.gnupg
 fi
-export GPG_TTY=$(tty)
+GPG_TTY=$(tty)
+export GPG_TTY
 # }}}
 
 # ShellCheck configuration {{{

@@ -1,5 +1,5 @@
 #!/bin/sh
-[ -z "${DEST}" -o ! -d "${DEST}" ] && exit 1
+[ -z "${DEST}" ] || [ ! -d "${DEST}" ] && exit 1
 if [ ! -d "${DEST}/.ssh" ]; then
     mkdir -p "${DEST}/.ssh"
     chmod 700 "${DEST}/.ssh"
