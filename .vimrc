@@ -446,7 +446,7 @@ let g:ctrlp_user_command = {
         \ },
     \ 'fallback': 'find %s -type f'
     \ }
-nnoremap <C-e> :CtrlPBuffer<CR>
+nnoremap <silent> <C-e> :CtrlPBuffer<CR>
 
 " }}}
 
