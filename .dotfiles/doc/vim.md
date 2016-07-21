@@ -44,6 +44,8 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) (if [vim patch
   7.4.427](http://ftp.vim.org/vim/patches/7.4/7.4.427) is installed)
+* [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) (using [my
+  fork](https://github.com/smkent/vim-gutentags/tree/filelist))
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
 * [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
 * [vim-signify](https://github.com/mhinz/vim-signify) (if vim patch 7.4.427 is
@@ -116,6 +118,10 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `]l` | Move to next location and open location list if populated |
 | `[n` | Move to previous SCM conflict marker (normal and operator modes) |
 | `]n` | Move to next SCM conflict marker (normal and operator modes) |
+| `[t` | Move to previous matching tag (`:tprevious`) |
+| `]t` | Move to next matching tag (`:tnext`) |
+| `[T` | Move to first matching tag (`:tfirst`) |
+| `]T` | Move to last matching tag (`:tlast`) |
 
 ### CtrlP plugin mappings
 
@@ -123,6 +129,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | :-- | :-- |
 | `Ctrl+p` | Open CtrlP in mixed mode (`:CtrlPMixed`) |
 | `Ctrl+e` | Open CtrlP in find buffer mode (`:CtrlPBuffer`) |
+| `Ctrl+2` | Open CtrlP in tag mode (`:CtrlPTag`) |
 
 ### Syntastic plugin mappings
 

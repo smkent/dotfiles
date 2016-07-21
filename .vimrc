@@ -267,6 +267,12 @@ nmap <silent> ]n :<C-U>call Context(0)<CR>
 omap <silent> [n :<C-U>call ContextMotion(1)<CR>
 omap <silent> ]n :<C-U>call ContextMotion(0)<CR>
 
+" Navigate tags with ]t and [t
+nnoremap <silent> [t :<C-U>tprev<CR>
+nnoremap <silent> ]t :<C-U>tnext<CR>
+nnoremap <silent> [T :<C-U>tfirst<CR>
+nnoremap <silent> ]T :<C-U>tlast<CR>
+
 " Remap record (q) to ,q so q can be used to quit vim
 nnoremap <Leader>q q
 
@@ -355,6 +361,9 @@ Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
 Plug 'https://github.com/scrooloose/syntastic'
+if v:version >= 704
+    Plug 'https://github.com/smkent/vim-gutentags', {'branch': 'filelist'}
+endif
 Plug 'https://github.com/smkent/vim-pipe-preview'
 Plug 'https://github.com/tomtom/tcomment_vim'
 Plug 'https://github.com/tpope/vim-fugitive'
@@ -463,6 +472,7 @@ let g:ctrlp_user_command = {
     \ 'fallback': 'find %s -type f'
     \ }
 nnoremap <silent> <C-e> :CtrlPBuffer<CR>
+nnoremap <silent> <C-@> :CtrlPTag<CR>
 
 " }}}
 
@@ -583,6 +593,20 @@ nmap <silent> gcc :TComment<CR>
 let g:pipe_preview_markdown_command = 'mdv -t "960.847" -'
 nnoremap <silent> <Leader>mn :<C-U>PipePreview<CR>
 nnoremap <silent> <Leader>mu :<C-U>PipePreviewUpdate<CR>
+
+" }}}
+
+" vim-gutentags configuration {{{
+
+let g:gutentags_generate_on_new = 0
+let g:gutentags_tagfile = '.tags'
+let g:gutentags_project_root = ['.tags', 'tags']
+let g:gutentags_file_list_command = {
+    \ 'markers': {
+        \ '.git': 'git ls-files -co --exclude-standard',
+        \ '.hg': 'hg locate',
+        \ },
+    \ }
 
 " }}}
 
