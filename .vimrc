@@ -561,4 +561,4 @@ nmap <silent> gcc :TComment<CR>
 
 " }}}
 
-" vim: set fdl=0 fdm=marker:
+" vim: set fdls=0 fdm=marker:

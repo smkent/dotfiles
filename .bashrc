@@ -311,4 +311,4 @@ fi
 
 # }}}
 
-# vim: set fdl=0 fdm=marker:
+# vim: set fdls=0 fdm=marker:
