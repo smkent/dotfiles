@@ -131,6 +131,15 @@ nnoremap <C-Down> <C-w>+
 nnoremap <C-Left> <C-w><
 nnoremap <C-Right>  <C-w>>
 
+" Mappings for creating splits that span an entire edge of the editor
+" Idea from:
+" https://technotales.wordpress.com/2010/04/29/
+" vim-splits-a-guide-to-doing-exactly-what-you-want/
+nnoremap <silent> <C-w>l :botright vsplit<CR>
+nnoremap <silent> <C-w>j :botright split<CR>
+nnoremap <silent> <C-w>h :topleft vsplit<CR>
+nnoremap <silent> <C-w>k :topleft split<CR>
+
 " Make 0 go to the first character rather than the beginning
 " of the line. When we're programming, we're almost always
 " interested in working with text rather than empty space. If
