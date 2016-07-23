@@ -77,6 +77,11 @@ augroup basic_autocommands
     if version >= 702
         autocmd BufWinLeave * call clearmatches()
     endif
+
+    " Open help windows vertically if space permits
+    " Based on http://vi.stackexchange.com/a/4464
+    autocmd BufWinEnter *.txt if &buftype == 'help' |
+        \ if &columns >= 160 | wincmd H | else | wincmd K | endif | endif
 augroup END
 
 " }}}
