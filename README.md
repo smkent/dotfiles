@@ -4,22 +4,17 @@ My Linux environment configuration
 
 ## Design
 
-My dotfiles are designed to be:
-* Portable with minimal dependencies (git, bash, and Python).
-* Easy to set up and use. This repository can simply be cloned to `$HOME`. [See
-  below for installation](#installation).
-
-Most of my dotfiles are in the top level of the repository, but a few others
-are located in [`.dotfiles/templates/`](/.dotfiles/templates/). These templates
-are typically files that are modified on a machine during normal use (e.g.
+Most of this repository contains flat files meant to be used in place within
+`${HOME}`. A few others are organized under
+[`.dotfiles/templates/`](/.dotfiles/templates/), which are typically files that
+are modified during normal use (e.g.
 [`.ssh/config`](/.dotfiles/templates/ssh/config_append)). Templates are
-organized into subdirectories, each with its own `install` script that may
-perform arbitrary installation actions.
+installed when a new login shell is started and any of the template files are
+newer than the previous template installation timestamp, or when
+[`expand-dotfiles -f`](/.dotfiles/bin/expand-dotfiles) is run manually.
 
-Template installation happens when a new login shell is started and any of the
-template files are newer than the previous template installation timestamp.
-Template installation may also happen manually by running [`expand-dotfiles
--f`](/.dotfiles/bin/expand-dotfiles).
+My dotfiles are designed be portable with minimal dependencies (git, bash,
+Python, and the [Powerline fonts](https://github.com/powerline/fonts)).
 
 ## Installation
 
@@ -35,8 +30,8 @@ $ mv dotfiles/.git .
 $ rm -rf dotfiles/
 ```
 
-Next, run `git status` and review any differences you may want to keep. Then,
-install the cloned dotfiles with:
+Next, review changes to any existing dotfiles using `git status` and `git diff`.
+When satisfied, complete installation with:
 
 ```shell
 $ git checkout .
@@ -44,18 +39,18 @@ $ git checkout .
 
 ### Configuration
 
-After installing or forking this repository, you should
+When installing or forking this repository, you should:
 
 * Update [`.gitconfig`](/.gitconfig) with your name and email address
 * Set `prompt_hide_user` to your username in [`.bashrc`](/.bashrc)
 * Remove or replace `.face`
 
-### External components
+### Dependency installation
 
-My [vim-airline](https://github.com/vim-airline/vim-airline) and tmux
-configurations require the [Powerline
-Fonts](https://github.com/powerline/fonts), which can be installed using the
-[install-fonts](/.dotfiles/bin/install-fonts) script.
+My [vim-airline](https://github.com/vim-airline/vim-airline) and
+[tmux](https://github.com/tmux/tmux) configurations require the [Powerline
+fonts](https://github.com/powerline/fonts), which can be installed using
+[install-fonts](/.dotfiles/bin/install-fonts) after installing this repository.
 
 ## Features
 
