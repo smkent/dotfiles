@@ -1,16 +1,23 @@
 #!/bin/bash
 
-# Basic settings {{{
-
-# Several of these are from the Gentoo/Ubuntu default bashrc.
+# Interactive shell detection {{{
 
 # If either of these are true, the shell is non-interactive.
 # Exit without changing any settings or printing any output.
 [[ $- != *i* ]] && return
 [ -z "${PS1}" ] && return
 
-# User settings
+# }}}
+
+# Configuration options {{{
+
 prompt_hide_user="smkent"
+
+# }}}
+
+# Basic settings {{{
+
+# Several of these are from the Gentoo/Ubuntu default bashrc.
 
 # History control settings
 shopt -s histappend     # Append to the history file, don't overwrite it
