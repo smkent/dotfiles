@@ -176,12 +176,16 @@ inoremap <F9> <ESC>:setlocal spell!<CR>`^i
 
 " Navigate the location list using [l and ]l.
 " If the location list is empty, take no action.
-" If the location list is populated, open it if it was closed or navigate to
-" the previous/next item otherwise. Wrap the selection when moving past the
-" beginning or end of the location list.
+" If the location list is populated, open it if it was closed.
+" If the cursor is not positioned on the line for the currently selected item
+" in the location list, move the cursor to the currently selected item.
+" Otherwise, navigate to the previous/next location list item.
+" Wrap the selection when moving past the beginning/end of the location list.
 function! NavigateAutoOpenLocationList(next)  " {{{
     " a:next is 1 for next location, 0 for previous location
     " BufferCount is from https://github.com/Valloric/ListToggle
+    let l:cur_line = line('.')
+    let l:filetype = &filetype
     function! BufferCount()
         return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
     endfunction
@@ -203,6 +207,13 @@ function! NavigateAutoOpenLocationList(next)  " {{{
         return
     endtry
     try
+        " Don't check the cursor position if the location list is focused
+        if l:filetype != 'qf'
+            ll
+            if l:cur_line != line('.')
+                return
+            endif
+        endif
         if a:next | lnext | else | lprev | endif
     catch /E553/    " No more items
         " Wrap list
