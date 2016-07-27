@@ -270,9 +270,9 @@ nnoremap <Leader>p "+p
 nnoremap <Leader>P "+Pl
 
 " Surround shortcuts
-map <Leader>' ysiw'
+map <Leader>' ysiW'
 vmap <Leader>' c'<C-R>"'<ESC>
-map <Leader>" ysiw"
+map <Leader>" ysiW"
 vmap <Leader>" c"<C-R>""<ESC>
 
 " ,) or ,( Surround a word with (parens)
