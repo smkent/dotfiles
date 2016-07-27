@@ -194,21 +194,19 @@ function! NavigateAutoOpenLocationList(next)  " {{{
         return
     endtry
     try
-        if a:next | lnext | else | lprev | endif
+        if BufferCount() != l:buffer_count_before
+            ll
+            return
+        endif
     catch /E42/     " No errors
         lclose | lclose
         return
+    endtry
+    try
+        if a:next | lnext | else | lprev | endif
     catch /E553/    " No more items
         " Wrap list
         if a:next | lfirst | else | llast | endif
-    endtry
-    try
-        if BufferCount() != l:buffer_count_before
-            if a:next | lprev | else | lnext | endif
-        endif
-    catch /E553/    " No more items
-        " Wrap list
-        if a:next | llast | else | lfirst | endif
     endtry
     " Select the current item and return focus to the parent buffer window
     ll
