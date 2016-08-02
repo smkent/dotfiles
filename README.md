@@ -96,11 +96,14 @@ For a more detailed tmux configuration summary, see
 
 ### Vim
 
+For more detailed vim configuration summary, see
+[`.dotfiles/doc/vim.md`](/.dotfiles/doc/vim.md)
+
 * The usual basic settings (line numbers, syntax highlighting, etc.)
+* Quit vim using `q` in normal mode
 * Save files by pressing F2 or Ctrl+S, or save and quit with `Q` in normal mode
-* Confirm changes and quit vim using `q` in normal mode, or Ctrl+X in normal or
-  insert modes
-* Highlight 81st column (requires Vim 7.3+)
+* Highlight 81st column (via Vim 7.3+'s `colorcolumn` feature)
+* Plugins managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * Custom [vim-airline](https://github.com/vim-airline/vim-airline) color scheme
 * Some basic and [vim-surround](https://github.com/tpope/vim-surround) keymaps
   from [YADR (Yet Another Dotfile Repo)](https://github.com/skwp/dotfiles/)
