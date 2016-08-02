@@ -165,8 +165,8 @@ useful aliases are:
 Parts of this repository contain third-party code, which is copyright their
 respective owners and bound by the license terms specified by each original
 source. Every effort has been made to identify third-party code within this
-repository; sources are cited within the codebase and/or in the commit(s) in
-which pieces of third-party code was added to the repository.
+repository; sources are cited within the code base and/or in the commit(s) in
+which pieces of third-party code were added to the repository.
 
 Original code in this repository is published under the MIT license. See
 [`.dotfiles/doc/LICENSE`](/.dotfiles/doc/LICENSE) for licensing information.
