@@ -62,7 +62,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `q` | Confirm and quit (`:conf q`) |
 | `Q` | Save and quit (`:wq`) |
 | `Ctrl+e` | Open CtrlP in find buffer mode (`:CtrlPBuffer`) |
-| `Ctrl+y` | Increase/decrease Syntastic verbosity |
+| `Ctrl+y` | Toggle Syntastic verbosity |
 
 ## Additional mappings
 
@@ -124,7 +124,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | Mapping | Meaning |
 | :-- | :-- |
 | `<Leader>l` | Toggle location list |
-| `Ctrl+y` | Increase/decrease Syntastic verbosity (default mapping override) |
+| `Ctrl+y` | Toggle Syntastic verbosity (default mapping override) |
 | `<Leader>d` | Toggle Syntastic |
 
 ### tcomment plugin mappings
