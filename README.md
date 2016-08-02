@@ -73,9 +73,12 @@ Prompt features:
 
 ### Tmux
 
+For a more detailed tmux configuration summary, see
+[`.dotfiles/doc/tmux.md`](/.dotfiles/doc/tmux.md)
+
 * Use Ctrl+a as the prefix key (similar to GNU screen)
 * Use vi-style mode keys
-* Additional vim-style key mappings:
+* Additional vim-style key bindings:
   * Ctrl+h/j/k/l for traversing panes (using
     [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator))
   * Create window splits with Ctrl+a s (horizontal) or Ctrl+a v (vertical)
