@@ -56,6 +56,8 @@ fonts](https://github.com/powerline/fonts), which can be installed using
 
 ### Bash
 
+Prompt features:
+
 * Display username if different from the value of `prompt_hide_user` in
   [.bashrc](/.bashrc)
 * Display current directory name if different from `${HOME}`
