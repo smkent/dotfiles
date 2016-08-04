@@ -355,10 +355,12 @@ Plug('https://github.com/christoomey/vim-tmux-navigator')
 Plug('https://github.com/ctrlpvim/ctrlp.vim')
 Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
 Plug('https://github.com/scrooloose/syntastic')
+Plug('https://github.com/smkent/vim-pipe-preview')
 Plug('https://github.com/tomtom/tcomment_vim')
 Plug('https://github.com/tpope/vim-fugitive')
 Plug('https://github.com/tpope/vim-surround')
 Plug('https://github.com/vim-airline/vim-airline')
+Plug('https://github.com/vim-scripts/AnsiEsc.vim')
 " vim-gitgutter with real-time sign updates enabled occasionally produced
 " rendering errors prior to Vim 7.4.427. For more information, see:
 " - https://github.com/airblade/vim-gitgutter/issues/171
@@ -572,6 +574,15 @@ nmap <silent> gcb <Plug>TComment_gcb
 xmap gc <Plug>TComment_gc
 " Custom gc mappings
 nmap <silent> gcc :TComment<CR>
+
+" }}}
+
+" vim-pipe-preview configuration {{{
+
+" Preview markdown files using mdv with the "Marieke" color theme
+let g:pipe_preview_markdown_command = 'mdv -t "960.847" -'
+nnoremap <silent> <Leader>mn :<C-U>PipePreview<CR>
+nnoremap <silent> <Leader>mu :<C-U>PipePreviewUpdate<CR>
 
 " }}}
 

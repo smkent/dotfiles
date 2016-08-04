@@ -33,6 +33,7 @@ This is a summary of the configuration in [`.vimrc`](/.vimrc).
 
 Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 
+* [AnsiEsc](https://github.com/vim-scripts/AnsiEsc.vim)
 * [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
 * [syntastic](https://github.com/scrooloose/syntastic)
 * [tcomment_vim](https://github.com/tomtom/tcomment_vim)
@@ -41,6 +42,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) (if [vim patch
   7.4.427](http://ftp.vim.org/vim/patches/7.4/7.4.427) is installed)
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
+* [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
 * [vim-signify](https://github.com/mhinz/vim-signify) (if vim patch 7.4.427 is
   not installed)
 * [vim-surround](https://github.com/tpope/vim-surround)
@@ -161,6 +163,13 @@ Repo)](https://github.com/skwp/dotfiles/)
 | `<Leader>r]` | Delete `[]` contents under cursor and enter insert mode |
 | `<Leader>r{` | Delete next `{}` contents and enter insert mode |
 | `<Leader>r}` | Delete `{}` contents under cursor and enter insert mode |
+
+### vim-pipe-preview plugin mappings
+
+| Mapping | Meaning |
+| :-- | :-- |
+| `<Leader>mn` | Open preview window for the current buffer |
+| `<Leader>mu` | Update preview window for the current buffer |
 
 ### Miscellaneous mappings
 
