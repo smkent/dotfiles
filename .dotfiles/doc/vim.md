@@ -26,6 +26,9 @@ This is a summary of the configuration in [`.vimrc`](/.vimrc).
 ## File type specific settings
 
 * `make`: Insert tabs (`noexpandtabs`)
+* `markdown`: Enable
+  [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview) using
+  [terminal_markdown_viewer](https://github.com/axiros/terminal_markdown_viewer)
 * `gitcommit`: Enable spell checking
 * `gitrebase`: Abbreviate instances of `pick` to `p` on startup
 
