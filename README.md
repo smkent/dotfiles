@@ -52,6 +52,16 @@ My [vim-airline](https://github.com/vim-airline/vim-airline) and
 fonts](https://github.com/powerline/fonts), which can be installed using
 [install-fonts](/.dotfiles/bin/install-fonts) after installing this repository.
 
+More features become available when optional dependencies are installed:
+
+* [shellcheck](https://github.com/koalaman/shellcheck) and
+  [flake8](https://pypi.python.org/pypi/flake8) (for
+  [Syntastic](https://github.com/scrooloose/syntastic))
+* `xclip` (for copying to the system clipboard in tmux)
+* [terminal_markdown_viewer](https://github.com/axiros/terminal_markdown_viewer)
+  (for previewing Markdown files with
+  [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview))
+
 ## Features
 
 ### Bash
