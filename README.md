@@ -133,7 +133,8 @@ For more detailed vim configuration summary, see
 
 #### Custom colors
 
-* `git branch`: Remote branches in brighter red, upstream branches in blue bold
+* `git branch`: Current branch in brighter green, remote branches in brighter
+  red, upstream branches in blue bold
 * `--decorate` (with `git log`, etc.): HEAD in red bold, remote branches in
   blue bold, tags in yellow bold
 * `git diff`: Brighter green and red for added and removed, hunk header (line

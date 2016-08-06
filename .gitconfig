@@ -12,6 +12,7 @@
 [branch]
     autosetuprebase = always
 [color "branch"]
+    current = 112       # Brighter green
     remote = 9          # Brighter red
     upstream = blue bold
 [color "decorate"]
