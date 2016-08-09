@@ -360,6 +360,7 @@ silent call plug#begin()  " Suppress error message if git is not installed
 Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
+Plug 'https://github.com/hynek/vim-python-pep8-indent'
 Plug 'https://github.com/scrooloose/syntastic'
 if v:version >= 704
     Plug 'https://github.com/smkent/vim-gutentags', {'branch': 'filelist'}
