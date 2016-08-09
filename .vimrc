@@ -598,6 +598,9 @@ nnoremap <silent> <Leader>mu :<C-U>PipePreviewUpdate<CR>
 
 " vim-gutentags configuration {{{
 
+if !executable('ctags')
+    let g:gutentags_enabled = 0
+endif
 let g:gutentags_generate_on_new = 0
 let g:gutentags_tagfile = '.tags'
 let g:gutentags_project_root = ['.tags', 'tags']
