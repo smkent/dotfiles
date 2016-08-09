@@ -587,6 +587,18 @@ nmap <silent> gcc :TComment<CR>
 
 " }}}
 
+" AnsiEsc configuration {{{
+
+" Remove unwanted mappings
+augroup AnsiEsc_unmap_autocommands
+    autocmd!
+    autocmd VimEnter *
+        \ execute 'nunmap <Leader>swp' |
+        \ execute 'nunmap <Leader>rwp'
+augroup END
+
+" }}}
+
 " vim-pipe-preview configuration {{{
 
 " Preview markdown files using mdv with the "Marieke" color theme
