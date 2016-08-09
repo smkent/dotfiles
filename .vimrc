@@ -351,27 +351,27 @@ nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 
 " Define list of plugins to be installed
 silent call plug#begin()  " Suppress error message if git is not installed
-Plug('https://github.com/christoomey/vim-tmux-navigator')
-Plug('https://github.com/ctrlpvim/ctrlp.vim')
-Plug('https://github.com/jeffkreeftmeijer/vim-numbertoggle')
-Plug('https://github.com/scrooloose/syntastic')
-Plug('https://github.com/smkent/vim-pipe-preview')
-Plug('https://github.com/tomtom/tcomment_vim')
-Plug('https://github.com/tpope/vim-fugitive')
-Plug('https://github.com/tpope/vim-surround')
-Plug('https://github.com/vim-airline/vim-airline')
-Plug('https://github.com/vim-scripts/AnsiEsc.vim')
+Plug 'https://github.com/christoomey/vim-tmux-navigator'
+Plug 'https://github.com/ctrlpvim/ctrlp.vim'
+Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
+Plug 'https://github.com/scrooloose/syntastic'
+Plug 'https://github.com/smkent/vim-pipe-preview'
+Plug 'https://github.com/tomtom/tcomment_vim'
+Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'https://github.com/tpope/vim-surround'
+Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'https://github.com/vim-scripts/AnsiEsc.vim'
 " vim-gitgutter with real-time sign updates enabled occasionally produced
 " rendering errors prior to Vim 7.4.427. For more information, see:
 " - https://github.com/airblade/vim-gitgutter/issues/171
 " - http://ftp.vim.org/vim/patches/7.4/7.4.427
 if executable('git')
     if has('patch-7.4.427')
-        Plug('https://github.com/airblade/vim-gitgutter')
+        Plug 'https://github.com/airblade/vim-gitgutter'
         " Reduce default refresh time from 4 seconds to 0.25 seconds
         set updatetime=250
     else
-        Plug('https://github.com/mhinz/vim-signify')
+        Plug 'https://github.com/mhinz/vim-signify'
     endif
 endif
 call plug#end()
