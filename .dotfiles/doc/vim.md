@@ -48,6 +48,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
   fork](https://github.com/smkent/vim-gutentags/tree/filelist))
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
 * [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
+* [vim-python-pep8-indent](https://github.com/hynek/vim-python-pep8-indent)
 * [vim-signify](https://github.com/mhinz/vim-signify) (if vim patch 7.4.427 is
   not installed)
 * [vim-surround](https://github.com/tpope/vim-surround)
