@@ -43,7 +43,7 @@ if sum(bool(i) for i in [args.create, args.mount, args.unmount]) > 1:
     sys.exit(1)
 
 
-# Interally-used functions
+# Internally-used functions
 def unlock(unlock_path):
     subprocess.check_call(['cryptsetup', 'luksOpen', unlock_path,
                            args.mapper.replace('/dev/mapper/', '', 1)])
