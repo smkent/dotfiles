@@ -58,7 +58,7 @@ More features become available when optional dependencies are installed:
   [flake8](https://pypi.python.org/pypi/flake8) (for
   [Syntastic](https://github.com/scrooloose/syntastic))
 * `ctags` (for
-  [vim-gutentags](https://github.com/smkent/vim-gutentags/tree/filelist),
+  [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
   typically available as the `exuberant-ctags` package)
 * `xclip` (for copying to the system clipboard in tmux)
 * [terminal_markdown_viewer](https://github.com/axiros/terminal_markdown_viewer)

@@ -44,8 +44,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) (if [vim patch
   7.4.427](http://ftp.vim.org/vim/patches/7.4/7.4.427) is installed)
-* [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) (using [my
-  fork](https://github.com/smkent/vim-gutentags/tree/filelist))
+* [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags)
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
 * [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
 * [vim-python-pep8-indent](https://github.com/hynek/vim-python-pep8-indent)

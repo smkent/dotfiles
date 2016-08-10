@@ -363,7 +363,7 @@ Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
 Plug 'https://github.com/scrooloose/syntastic'
 if v:version >= 704
-    Plug 'https://github.com/smkent/vim-gutentags', {'branch': 'filelist'}
+    Plug 'https://github.com/ludovicchabant/vim-gutentags'
 endif
 Plug 'https://github.com/smkent/vim-pipe-preview'
 Plug 'https://github.com/tomtom/tcomment_vim'
