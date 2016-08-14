@@ -445,7 +445,7 @@ let g:airline#extensions#hunks#non_zero_only = 1
 " vim-gitgutter configuration {{{
 
 " Customize sign characters
-let g:gitgutter_highlight_lines = 1
+let g:gitgutter_highlight_lines = 0
 let g:gitgutter_sign_removed = '< '
 let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = '~!'
