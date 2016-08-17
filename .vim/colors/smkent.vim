@@ -267,8 +267,8 @@ hi link GitGutterChangeDeleteLine GitGutterAddLine
 " Syntastic highlight groups
 call s:C("SyntasticError",        s:white,         s:error,         "")
 call s:C("SyntasticWarning",      s:medium_orange, "",              "reverse")
-call s:C("SyntasticStyleError",   s:yellow,        "",              "reverse")
-call s:C("SyntasticStyleWarning", s:light_green,   "",              "reverse")
+call s:C("SyntasticStyleError",   s:cyan,          "",              "reverse")
+call s:C("SyntasticStyleWarning", s:light_blue,    "",              "reverse")
 hi link SyntasticErrorSign SyntasticError
 hi link SyntasticWarningSign SyntasticWarning
 hi link SyntasticStyleErrorSign SyntasticStyleError

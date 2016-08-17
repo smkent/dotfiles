@@ -440,15 +440,24 @@ let g:signify_mapping_prev_hunk = '[c'
 " Only show modified counts in the status bar if they're non zero
 let g:airline#extensions#hunks#non_zero_only = 1
 
+let g:signify_sign_add = '+'
+let g:signify_sign_delete = '<'
+let g:signify_sign_change = '|'
+let g:signify_sign_delete_first_line = '^^'
+let g:signify_sign_changedelete = g:signify_sign_change . g:signify_sign_delete
+
 " }}}
 
 " vim-gitgutter configuration {{{
 
 " Customize sign characters
 let g:gitgutter_highlight_lines = 0
-let g:gitgutter_sign_removed = '< '
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_removed = '<'
+let g:gitgutter_sign_modified = '|'
 let g:gitgutter_sign_removed_first_line = '^^'
-let g:gitgutter_sign_modified_removed = '~!'
+let g:gitgutter_sign_modified_removed =
+    \ g:gitgutter_sign_modified . g:gitgutter_sign_removed
 
 " Customize sign column highlight
 " Highlight groups are located in my color scheme file
