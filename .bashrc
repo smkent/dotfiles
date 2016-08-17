@@ -150,7 +150,7 @@ __prompt_generator()
     fi
     # Main section
     if [ ${EUID} -eq 0 ]; then
-        p_main="${p_main}${__c_red}${__bold}\h "
+        p_main="${p_main}${__c_red}${__bold}\h${__reset} "
         p_lastchar="${__c_red}${__bold}#${__reset}"
     else
         p_main="${p_main}${__c_prompt}";
