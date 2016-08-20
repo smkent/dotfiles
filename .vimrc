@@ -35,6 +35,9 @@ set showmatch       " Show matching braces
 
 set nowrap          " Don't wrap long lines
 
+" Use one space instead of two after periods when formatting paragraphs
+set nojoinspaces
+
 " Highlight certain nonprintable characters
 set list
 set listchars=nbsp:¬,tab:»\ ,extends:»,precedes:«
