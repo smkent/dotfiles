@@ -45,7 +45,7 @@
 " Normal mode
 let s:N1 = [ '#005f00', '#afd700', 22,  148 ]
 let s:N2 = [ '#9e9e9e', '#303030', 247, 236 ]
-let s:N3 = [ '#ffffff', '#121212', 231, 233 ]
+let s:N3 = [ '#ffffff', '#121212', 231, 234 ]
 let s:NB = [ '#9e9e9e', '#303030', 247, 236 ]
 
 " Insert mode
