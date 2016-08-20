@@ -266,27 +266,33 @@ fi
 # }}}
 
 # SSH_AUTH_SOCK detection {{{
-if [ -z "${SSH_AUTH_SOCK}" ] && [ "$(id -u)" -ne 0 ]; then
-    # find prints the mod time and file name for each result, one per line.
-    # Results are sorted by mod time. Reading "d" twice discards the date
-    # after sort without assigning it to a different variable.
-    # Use process substitution to allow setting SSH_AUTH_SOCK within the loop.
-    # http://stackoverflow.com/a/13727116
-    while read -r d d; do
-        if [ -S "${d}/ssh" ]; then
-            export SSH_AUTH_SOCK="${d}/ssh"
-            break
-        fi
-        __agent_fn=$(find "${d}" -mindepth 1 -maxdepth 1 -printf '%f\0' | \
-                             grep -z '^agent\.[0-9]\+$' | tail -n1)
-        if [ -S "${d}/${__agent_fn}" ]; then
-            export SSH_AUTH_SOCK="${d}/${__agent_fn}"
-            break
-        fi
-    done < <(find /tmp "/run/user/$(id -u)" -maxdepth 1 \
-                  \( -iname 'keyring-*' -or -iname 'ssh-*' \) \
-                  -printf '%A@ %p\n' 2>/dev/null | sort -r)
-fi
+__detect_ssh_auth_sock()
+{
+    local agent_fn uid
+    uid=$(id -u)
+    if [ -z "${SSH_AUTH_SOCK}" ] && [ "${uid}" -ne 0 ]; then
+        # find prints the mod time and file name for each result, one per line.
+        # Results are sorted by mod time. Reading "d" twice discards the date
+        # after sort without assigning it to a different variable.
+        # Use process substitution to allow setting SSH_AUTH_SOCK within the
+        # loop. http://stackoverflow.com/a/13727116
+        while read -r d d; do
+            if [ -S "${d}/ssh" ]; then
+                export SSH_AUTH_SOCK="${d}/ssh"
+                break
+            fi
+            agent_fn=$(find "${d}" -mindepth 1 -maxdepth 1 -printf '%f\0' | \
+                                 grep -z '^agent\.[0-9]\+$' | tail -n1)
+            if [ -S "${d}/${agent_fn}" ]; then
+                export SSH_AUTH_SOCK="${d}/${agent_fn}"
+                break
+            fi
+        done < <(find /tmp "/run/user/${uid}" -maxdepth 1 -uid "${uid}" \
+                      \( -iname 'keyring-*' -or -iname 'ssh-*' \) \
+                      -printf '%A@ %p\n' 2>/dev/null | sort -r)
+    fi
+}
+__detect_ssh_auth_sock
 # }}}
 
 # GnuPG configuration {{{
