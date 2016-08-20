@@ -86,34 +86,6 @@ augroup END
 
 " }}}
 
-" File-type specific settings {{{
-
-augroup file_type_autocommands
-    autocmd!
-
-    " Don't set colorcolumn in the quickfix or location list windows
-    if exists('+colorcolumn')
-        autocmd filetype qf setlocal colorcolumn=
-    endif
-
-    " Don't insert spaces instead of tabs in Makefiles
-    autocmd filetype make setlocal noexpandtab
-
-    " Always start the cursor on the first line when editing a git commit message
-    " or editing interactive rebase instructions
-    " http://vim.wikia.com/wiki/VimTip1636
-    "
-    " Replace "pick" with "p" before editing interactive rebase instructions
-    autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
-    autocmd filetype gitrebase :silent! %s/^pick/p/g |
-                             \ call setpos('.', [0, 1, 1, 0])
-
-    " Enable spell checking by default in git commit messages
-    autocmd filetype gitcommit setlocal spell
-augroup END
-
-" }}}
-
 " Keyboard mappings {{{
 
 " Several mappings are from YADR: https://github.com/skwp/dotfiles
