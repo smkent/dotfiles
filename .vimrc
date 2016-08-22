@@ -299,7 +299,7 @@ nnoremap <Leader>r{ f{ci{
 nnoremap <Leader>r} f}ci}
 
 " Break current line at cursor, removing any trailing whitespace
-nmap <Leader>s i<CR><Esc>k:silent! s/\s\+$//<CR>$
+nmap <Leader>s i<CR><Esc>k:silent! s/\s\+$//<CR>:noh<CR>$
 
 " Insert blank lines above or below with [<Space> or ]<Space>
 " From vim-unimpaired: https://github.com/tpope/vim-unimpaired
