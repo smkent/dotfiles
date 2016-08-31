@@ -199,6 +199,8 @@ function! NavigateAutoOpenLocationList(next)  " {{{
 endfunction  " }}}
 nmap <silent> ]l :call NavigateAutoOpenLocationList(1)<CR>
 nmap <silent> [l :call NavigateAutoOpenLocationList(0)<CR>
+nmap <silent> [L :lfirst<CR>
+nmap <silent> ]L :llast<CR>
 
 " Navigate SCM conflict markers with [n and ]n.
 " From vim-unimpaired: https://github.com/tpope/vim-unimpaired

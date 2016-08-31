@@ -116,6 +116,8 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `]c` | Move to next git hunk (change) |
 | `[l` | Move to previous location and open location list if populated |
 | `]l` | Move to next location and open location list if populated |
+| `[L` | Move to first location (`:lfirst`) |
+| `]L` | Move to last location (`:llast`) |
 | `[n` | Move to previous SCM conflict marker (normal and operator modes) |
 | `]n` | Move to next SCM conflict marker (normal and operator modes) |
 | `[t` | Move to previous matching tag (`:tprevious`) |
