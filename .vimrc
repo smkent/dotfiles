@@ -343,6 +343,7 @@ if v:version >= 704
     Plug 'https://github.com/ludovicchabant/vim-gutentags'
 endif
 Plug 'https://github.com/smkent/vim-pipe-preview'
+Plug 'https://github.com/stephpy/vim-yaml'
 Plug 'https://github.com/tomtom/tcomment_vim'
 Plug 'https://github.com/tpope/vim-fugitive'
 Plug 'https://github.com/tpope/vim-surround'

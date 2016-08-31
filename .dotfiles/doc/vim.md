@@ -52,6 +52,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
   not installed)
 * [vim-surround](https://github.com/tpope/vim-surround)
 * [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
+* [vim-yaml](https://github.com/stephpy/vim-yaml)
 
 # Mappings
 
