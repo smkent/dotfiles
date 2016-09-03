@@ -38,6 +38,23 @@ if !search('Received:', 'nw')
     if getline(line('.')) =~ '^On '
         normal! gqG
     endif
+
+    " Generate and insert a Message-ID header if none present
+    " This prevents information leaks:
+    " http://www.mutt.org/doc/manual/#security-leaks-mid
+    if !search('Message-ID', 'nw') && exists('*strftime')
+        " Move to the end of the headers list
+        normal! gg}
+        " Generate a Message-ID value
+        let s:hash = sha256(localtime() . system('head -c 64 /dev/urandom'))
+        let s:message_id =
+            \ strftime('%Y%m') .
+            \ substitute(system('date +%N'), '\n', '', '') . '.' .
+            \ strpart(s:hash, 35) .
+            \ '@localhost'
+        " Insert the Message-ID header
+        execute 'normal! O' . 'Message-ID: <' . s:message_id . '>'
+    endif
 endif
 
 " Move the cursor past the headers
