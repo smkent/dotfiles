@@ -1,0 +1,30 @@
+# Mutt colors configuration
+# Based on the default Mutt colors configuration shipped with Ubuntu
+
+# Basic colors
+color normal        white black
+color attachment    brightyellow black
+color hdrdefault    cyan black
+color indicator     black cyan
+color markers       brightred black
+color quoted        green black
+color signature     cyan black
+color status        brightgreen blue
+color tilde         blue black
+color tree          red black
+
+color index brightwhite black ~N
+
+color header brightgreen  default "^(From|Subject):"
+
+# URLs
+color body green black "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+color body green black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+mono body none "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+mono body none "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+
+# Email addresses
+color body green black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+mono body none "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+
+# vim: ft=muttrc

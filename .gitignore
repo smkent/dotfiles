@@ -23,6 +23,10 @@
 !.gnupg/gpg-agent.conf
 !.gnupg/dirmngr.conf
 !.gnupg/sks-keyservers.netCA.pem
+!.mailcap
+!.mutt/
+.mutt/cache
+!.muttrc
 !.screenrc
 !.tmux.conf
 !.vimrc

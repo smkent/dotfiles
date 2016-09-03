@@ -240,6 +240,19 @@ hi link gitrebaseHash Function
 hi link pythonBuiltin Identifier
 " Markdown: Use blue for heading hashtag delimiters
 hi link markdownHeadingDelimiter Statement
+" E-mail
+hi link mailHeaderKey Define
+hi link mailHeader Comment
+hi link mailSubject Function
+hi link mailURL Identifier
+hi link mailEmail Constant
+hi link mailHeaderEmail Special
+call s:C("mailQuoted1",     s:yellow_green,     "",                 "")
+call s:C("mailQuoted2",     s:yellow,           "",                 "")
+call s:C("mailQuoted3",     s:orange,           "",                 "")
+call s:C("mailQuoted4",     s:red,              "",                 "")
+call s:C("mailQuoted5",     s:purple,           "",                 "")
+call s:C("mailQuoted6",     s:gray,             "",                 "")
 
 " Plugin highlight groups
 

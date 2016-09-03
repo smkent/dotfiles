@@ -1,0 +1,184 @@
+# Basic settings {{{
+
+# Prompt before exiting mutt
+set quit = ask-yes
+
+# Use "localhost" as the hostname
+# This prevents using the current machine hostname in Message-ID headers
+set hostname = 'localhost'
+
+# Don't move read messages to another mailbox
+set move = no
+
+# Don't mark unopened messages as read when exiting a mailbox
+set mark_old = no
+
+# Sidebar settings
+set sidebar_visible = yes
+set sidebar_width = 20
+bind index,pager \CP sidebar-prev
+bind index,pager \CN sidebar-next
+bind index,pager \CO sidebar-open
+macro index b '<enter-command>toggle sidebar_visible<enter>'
+macro pager b '<enter-command>toggle sidebar_visible<enter>'
+
+# Set the format to be used for dates and times
+set date_format = "%a, %b %d, %Y at %H:%M"
+
+# Don't prompt for a key press after certain interactive actions
+set wait_key = no
+
+# }}}
+
+# Message index settings {{{
+
+# Display messages in threads sorted by date, newest first
+set sort = threads
+set sort_browser = reverse-date
+set sort_aux = reverse-last-date-received
+
+# Scroll the menu one line at a time instead of by full pages
+set menu_scroll
+
+# Set the menu context to keep when scrolling
+set menu_context = 3
+
+# Don't collapse threads with unread messages
+unset collapse_unread
+
+# Custom index format
+set index_format = "%4C %Z %?E?%E&%E? %[%m/%d] %-20.20L (%?M?<%2M>&%4c?) %s"
+
+# }}}
+
+# Pager settings {{{
+
+# Show a limited part of the message list above the current message text
+set pager_index_lines = 8
+
+# Only show a specific set of headers in messages
+ignore *
+unignore From Date Subject To Cc
+
+# Set header display order
+hdr_order From To Cc Date Subject
+
+# Don't move to the next message when paging past the end of the current message
+set pager_stop = yes
+
+# Wrap messages at one column less than the terminal width
+set wrap = -1
+
+# Wrap format=flowed messages at one character less than the terminal width,
+# taking the sidebar (and separator) width into account
+set reflow_text = yes
+set reflow_wrap = -22
+
+# Show tilde characters in empty space past the end of messages (like in Vim)
+set tilde
+
+# }}}
+
+# Compose settings {{{
+
+# Don't prompt to edit drafts when composing a new message
+set recall = no
+
+# Create messages with format=flowed
+set text_flowed = yes
+
+# Don't prompt for recipients and subject when replying to a message
+set fast_reply = yes
+
+# Include messages in replies (only the first section in a multipart message)
+set include = yes
+set include_onlyfirst = yes
+
+# Don't include user agent information in outgoing mail
+set user_agent = no
+
+# Use the Reply-To address without prompting
+set reply_to = yes
+
+# Set the text to use before a quoted reply
+set attribution = '\nOn %d, %n wrote:'
+
+# Set the forwarded message subject line format
+set forward_format = 'Fwd: %s'
+
+# Allow empty subject lines in new messages
+set abort_nosubject = no
+
+# }}}
+
+# Editor settings {{{
+
+# Set editor to vim and specify that we are composing mail
+set editor="vim"
+
+# Allow editing the headers of outgoing messages
+set edit_headers = yes
+
+# }}}
+
+# PGP settings {{{
+
+# Use GPG agent
+set pgp_use_gpg_agent = yes
+
+# Automatically sign outgoing messages
+set crypt_autosign = yes
+
+# Decrypt messages and filter headers before piping messages
+set pipe_decode = yes
+
+# Automatically attempt to verify/decrypt inline PGP messages
+# https://dev.mutt.org/trac/wiki/ConfigTricks#GoodHandleForPGP-Inline
+message-hook '!~g !~G ~b "^-----BEGIN PGP (SIGNED )?MESSAGE"' \
+    'exec check-traditional-pgp'
+
+# }}}
+
+# Keybindings {{{
+
+bind attach i exit
+bind index F imap-fetch-mail
+
+# vim-style navigation bindings
+bind index gg first-entry
+bind index G last-entry
+bind index,pager \Cb previous-page
+bind index,pager \Cf next-page
+
+bind index h previous-thread
+bind index l next-thread
+
+# }}}
+
+# Macros {{{
+
+# urlscan macros
+# https://github.com/firecat53/urlscan
+macro index,pager <esc>b "<pipe-message> urlscan<Enter>" \
+    "Call urlscan to extract URLs out of a message"
+macro attach,compose <esc>b "<pipe-entry> urlscan<Enter>" \
+    "Call urlscan to extract URLs out of a message"
+
+# }}}
+
+# Local storage settings {{{
+
+set header_cache=~/.mutt/cache/headers
+set message_cachedir=~/.mutt/cache/bodies
+set certificate_file=~/.mutt/certificates
+
+# }}}
+
+# Load additional configuration {{{
+
+source ~/.mutt/colors.rc
+source ~/.mutt/gpg.rc
+
+# }}}
+
+# vim: set fdls=0 fdm=marker:

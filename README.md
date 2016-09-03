@@ -182,6 +182,15 @@ useful aliases are:
 * `ub`: "upstream branch" (Shows the output of `git show-branch` for the
   current branch and its upstream tracking branch)
 
+### Mutt
+
+* Display the sidebar (requires Mutt 1.7.0+ or the sidebar patch)
+* Sort and display messages by thread
+* Compose mail using vim
+* Vim-style navigation keybindings (`gg`, `G`, `Ctrl+b`, `Ctrl+f`)
+* `format=flowed` support when composing and reading mail
+* PGP support with outgoing message signing enabled by default
+
 ## Licensing and attribution
 
 Parts of this repository contain third-party code, which is copyright their

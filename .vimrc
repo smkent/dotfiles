@@ -73,10 +73,12 @@ augroup basic_autocommands
         autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
     endif
 
-    " Highlight trailing whitespace in red
+    " Highlight trailing whitespace in red (allow per-buffer override)
     " http://vim.wikia.com/wiki/VimTip396
-    autocmd WinEnter * call matchadd('Error', '\s\+$', 4)
-    autocmd BufWinEnter * call matchadd('Error', '\s\+$', 5)
+    autocmd BufWinEnter *
+        \ if get(b:, 'highlight_trailing_whitespace', 1) |
+        \     call matchadd('Error', '\s\+$', 5) |
+        \ endif
     if version >= 702
         autocmd BufWinLeave * call clearmatches()
     endif
