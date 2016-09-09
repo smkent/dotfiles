@@ -36,6 +36,25 @@ if !search('Received:', 'nw')
     normal! gg}
     silent! %g/^On .* wrote:$/ | nohlsearch
     if getline(line('.')) =~ '^On '
+        " Locate quoted lines where words from the following line would be
+        " collapsed into the current line during automatic paragraph formatting,
+        " and remove the trailing space to preserve the proper formatting.
+        let s:quote_start_line = line('.')
+        let s:lnum = s:quote_start_line
+        while s:lnum < line('$') - 1
+            let s:lnum = s:lnum + 1
+            execute 'normal! ' . s:lnum . 'G'
+            let s:ltext = getline(s:lnum)
+            let s:nextltext = getline(s:lnum + 1)
+            if s:ltext !~ ' $'
+                continue
+            endif
+            if len(s:ltext) + len(matchstr(s:nextltext, "[^> ][^ ]*")) <= &tw
+                silent! s/ \+$//
+            endif
+        endwhile
+        execute 'normal! ' . s:quote_start_line . 'G'
+        " Reformat the quoted message
         normal! gqG
     endif
 
