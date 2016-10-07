@@ -153,7 +153,7 @@ try:
     elif args.password:
         if not args.device:
             raise ArgsError('No device or path specified')
-        subprocess.call(['cryptsetup', 'luksChangeKey', args.device])
+        subprocess.call(['cryptsetup', 'luksChangeKey', '-y', args.device])
     else:
         raise ArgsError('No action specified. Please provide one of '
                         '-m/--mount, -u/--unmount, -c/--create, or '
