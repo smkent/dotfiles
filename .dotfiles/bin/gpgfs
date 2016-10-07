@@ -6,6 +6,7 @@ import argparse
 import os
 import subprocess
 import sys
+import traceback
 
 if os.getuid() != 0:
     sys.exit(subprocess.call(['sudo'] + sys.argv))
@@ -37,6 +38,12 @@ ap.add_argument('device', metavar='device/path', nargs='?',
                 help='Device/path to operate on')
 args = ap.parse_args()
 args.mapper = '/dev/mapper/{}'.format(args.mapper)
+
+
+# Distinguish user input errors from regular Exceptions to avoid printing stack
+# traces for user input errors
+class ArgsError(Exception):
+    pass
 
 
 # Internally-used functions
@@ -83,7 +90,7 @@ def unmount():
 
 def mount(mount_path):
     if os.path.isdir(args.mountpoint):
-        raise Exception('{} already exists'.format(args.mountpoint))
+        raise ArgsError('{} already exists'.format(args.mountpoint))
     unlock(mount_path)
     mount_mapper()
     post_mount()
@@ -91,7 +98,7 @@ def mount(mount_path):
 
 def create(create_path):
     if os.path.exists(create_path):
-        raise Exception('{} already exists'.format(create_path))
+        raise ArgsError('{} already exists'.format(create_path))
     unmount()
     subprocess.check_call(['dd', 'if=/dev/zero', 'of={}'.format(create_path),
                            'bs=1M', 'count=10'])
@@ -112,20 +119,20 @@ def create(create_path):
 
 try:
     if [args.create, args.mount, args.unmount, args.password].count(True) > 1:
-        raise Exception('Multiple actions specified')
+        raise ArgsError('Multiple actions specified')
         sys.exit(1)
 
     if args.create:
         if not args.device:
-            raise Exception('No device or path specified')
+            raise ArgsError('No device or path specified')
         if not args.mountpoint:
             args.mountpoint = default_mountpoint
         create(args.device)
     elif args.mount:
         if not args.device:
-            raise Exception('No device or path specified')
+            raise ArgsError('No device or path specified')
         if not os.path.exists(args.device):
-            raise Exception('{} does not exist'.format(args.device))
+            raise ArgsError('{} does not exist'.format(args.device))
             sys.exit(1)
         if not args.mountpoint:
             args.mountpoint = default_mountpoint
@@ -145,11 +152,13 @@ try:
         unmount()
     elif args.password:
         if not args.device:
-            raise Exception('No device or path specified')
+            raise ArgsError('No device or path specified')
         subprocess.call(['cryptsetup', 'luksChangeKey', args.device])
     else:
-        raise Exception('No action specified. Please provide one of '
+        raise ArgsError('No action specified. Please provide one of '
                         '-m/--mount, -u/--unmount, -c/--create, or '
                         '-p/--password.')
-except Exception as e:
+except ArgsError as e:
     print('Error: {}'.format(str(e)), file=sys.stderr)
+    if not isinstance(e, ArgsError):
+        traceback.print_exc()
