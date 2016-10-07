@@ -39,7 +39,8 @@ def download_fonts(dir_name, url):
         temp_dir = tempfile.mkdtemp(prefix=os.path.basename(sys.argv[0]) + '.')
         subprocess.check_call(['git', 'clone', url, '--depth', '1', temp_dir])
         font_files = subprocess.check_output(['find', temp_dir, '-iname',
-                                              '*.ttf']).splitlines()
+                                              '*.[o,t]tf', '-or', '-name',
+                                              '*.pcf.gz']).splitlines()
         dest_dir = os.path.join(args.directory, dir_name)
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir, 0o755)
