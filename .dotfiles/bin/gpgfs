@@ -32,9 +32,6 @@ ap.add_argument('-g', '--gnupg-subdirectory', metavar='dir', default='gnupg',
                       'filesystem (default: gnupg)'))
 ap.add_argument('-M', '--mapper', metavar='name', default='gpgfs',
                 help='cryptsetup mapper name (default: gpgfs)')
-ap.add_argument('-n', '--no-list-keys', dest='list_keys', action='store_false',
-                help=('Don\'t create GnuPG subdirectory or list GnuPG keyring '
-                      'contents after mount'))
 # Device/path
 ap.add_argument('device', metavar='device/path', nargs='?',
                 help='Device/path to operate on')
@@ -56,11 +53,8 @@ def mount_mapper():
     print('Mounted filesystem on {}'.format(args.mountpoint))
 
 
-def post_mount(init_only=False):
+def post_mount():
     priv_homedir = os.path.join(args.mountpoint, args.gnupg_subdirectory)
-    if not args.list_keys:
-        print('Skipping GnuPG home directory list: {}'.format(priv_homedir))
-        sys.exit(0)
     # Perform GnuPG-specific actions as the invoking user
     sudo_uid = os.environ.get('SUDO_UID')
     if sudo_uid:
@@ -69,8 +63,6 @@ def post_mount(init_only=False):
         os.mkdir(priv_homedir)
     subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
     print('GnuPG home directory: {}'.format(priv_homedir))
-    if not init_only:
-        subprocess.check_call(['gpg', '--homedir', priv_homedir, '-k'])
     sys.exit(0)
 
 
@@ -116,7 +108,7 @@ def create(create_path):
     if sudo_user:
         subprocess.check_call(['chown', '{}:'.format(sudo_user),
                                args.mountpoint])
-    post_mount(init_only=True)
+    post_mount()
 
 try:
     if [args.create, args.mount, args.unmount, args.password].count(True) > 1:
