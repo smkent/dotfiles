@@ -30,8 +30,8 @@ ap.add_argument('-d', '--mountpoint', metavar='dir',
 ap.add_argument('-g', '--gnupg-subdirectory', metavar='dir', default='gnupg',
                 help=('GnuPG subdirectory path within the encrypted '
                       'filesystem (default: gnupg)'))
-ap.add_argument('-M', '--mapper', metavar='name', default='enc',
-                help='cryptsetup mapper name (default: enc)')
+ap.add_argument('-M', '--mapper', metavar='name', default='gpgfs',
+                help='cryptsetup mapper name (default: gpgfs)')
 ap.add_argument('-n', '--no-list-keys', dest='list_keys', action='store_false',
                 help=('Don\'t create GnuPG subdirectory or list GnuPG keyring '
                       'contents after mount'))
