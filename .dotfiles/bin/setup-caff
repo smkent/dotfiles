@@ -1,0 +1,52 @@
+#!/bin/sh
+
+if [ -d "${HOME}/.caff" ] || [ -f "${HOME}/.caffrc" ]; then
+    echo "Configuration for caff is already present" >&1
+    exit 1
+fi
+
+# Prefer GnuPG 2.x over 1.x
+gpg="gpg"
+if which gpg2 >/dev/null 2>&1; then
+    gpg="gpg2"
+fi
+
+# Determine the private key fingerprint to use
+# This will use the first listed fingerprint if there are multiple private keys
+key_fingerprint=$("${gpg}" --with-colons --with-fingerprint -K | \
+                  grep ^sec -A1 | grep ^fpr | cut -d: -f10)
+if [ -z "${key_fingerprint}" ]; then
+    echo "Unable to determine your key fingerprint" >&1
+    exit 1
+fi
+
+# Configure caff
+printf "Enter your name: "
+read -r input_name
+printf "Enter your e-mail address: "
+read -r input_email
+printf "Enter your key fingerprint [%s]: " "${key_fingerprint}"
+read -r input_fingerprint
+if [ -n "${input_fingerprint}" ]; then
+    key_fingerprint=${input_fingerprint}
+fi
+caff_home="${HOME}/.caff"
+cat >"${HOME}/.caffrc" <<EOF
+\$CONFIG{'owner'} = '${input_name}';
+\$CONFIG{'email'} = '${input_email}';
+\$CONFIG{'keyid'} = [ qw{${key_fingerprint}} ];
+\$CONFIG{'gpg'} = '${gpg}';
+\$CONFIG{'mail'} = 'no';
+\$CONFIG{'no-download'} = 1;
+EOF
+
+# Create caff's GnuPG home directory
+caff_gpg_dir="${caff_home}/gnupghome"
+mkdir -v -p "${caff_gpg_dir}"
+chmod -c 0700 "${caff_gpg_dir}"
+ln -snvf ../../.gnupg/gpg.conf "${caff_gpg_dir}/gpg.conf"
+
+# Copy keyring to caff's GnuPG home directory
+"${gpg}" -a --export | "${gpg}" --homedir "${caff_gpg_dir}" --import
+# Stop any agent(s) started to copy the keyring
+killall gpg-agent
