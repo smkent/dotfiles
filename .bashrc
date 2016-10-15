@@ -270,7 +270,7 @@ __detect_ssh_auth_sock()
 {
     local agent_fn uid
     uid=$(id -u)
-    if { [ -z "${SSH_AUTH_SOCK}" ] || [ ! -S "${SSH_AUTH_SOCK}" ]; } &&\
+    if { [ -z "${SSH_AUTH_SOCK}" ] || [ ! -S "${SSH_AUTH_SOCK}" ]; } && \
             [ "${uid}" -ne 0 ]; then
         # find prints the mod time and file name for each result, one per line.
         # Results are sorted by mod time. Reading "d" twice discards the date
