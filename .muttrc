@@ -61,7 +61,7 @@ ignore *
 unignore From Date Subject To Cc
 
 # Set header display order
-hdr_order From To Cc Date Subject
+hdr_order Date From To Cc Subject
 
 # Don't move to the next message when paging past the end of the current message
 set pager_stop = yes
