@@ -47,7 +47,11 @@ set menu_context = 3
 unset collapse_unread
 
 # Custom index format
-set index_format = "%4C %Z %?E?%E&%E? %[%m/%d] %-20.20L (%?M?<%2M>&%4c?) %s"
+set index_format = "%4C [%Z] %2E %[%m/%d] %-20.20L (%?M?<%2M>&%4c?) %s"
+
+# Custom status format
+set status_chars = "-+!A"
+set status_format = "───[ %r%f %?n?(%n)? ]─%?d?[ %d deleted ]─?─%?t?[ %t tagged ]─?%>─[ %P of %m ]───"
 
 # }}}
 
@@ -80,6 +84,9 @@ set tilde
 # Disable line continuation markers ("+" at the beginning of continued lines)
 set markers = no
 
+# Custom pager status format
+set pager_format = "[%Z] %C/%m: %-20.20n   %s %*─[%P]"
+
 # }}}
 
 # Compose settings {{{
@@ -111,6 +118,9 @@ set forward_format = 'Fwd: %s'
 
 # Allow empty subject lines in new messages
 set abort_nosubject = no
+
+# Custom compose status format
+set compose_format = "─── Compose (%l in %a attachments) ─%>────"
 
 # }}}
 

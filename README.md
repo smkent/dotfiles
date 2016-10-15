@@ -186,10 +186,13 @@ useful aliases are:
 
 * Display the sidebar (requires Mutt 1.7.0+ or the sidebar patch)
 * Sort and display messages by thread
+* Message index color highlights, including highlighting messages sent only to
+  me and PGP-encrypted messages
 * Compose mail using vim
 * Vim-style navigation keybindings (`gg`, `G`, `Ctrl+b`, `Ctrl+f`)
 * `format=flowed` support when composing and reading mail
 * PGP support with outgoing message signing enabled by default
+* Custom status bar formats
 
 ## Licensing and attribution
 
