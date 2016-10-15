@@ -31,7 +31,7 @@ color quoted9 color221 color234
 
 # Message index colors
 color index brightcolor255 color234 ~N  # New messages
-color index color88        color234 ~D  # Messages marked for deletion
+color index color124       color234 ~D  # Messages marked for deletion
 
 # Highlight message Subject header
 color header brightcolor215 color234 "^(Subject):"
