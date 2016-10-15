@@ -194,6 +194,8 @@ useful aliases are:
 * PGP support with outgoing message signing enabled by default
 * Custom status bar formats
 
+![mutt screenshot](/.dotfiles/img/screenshot-mutt.png)
+
 ## Licensing and attribution
 
 Parts of this repository contain third-party code, which is copyright their
