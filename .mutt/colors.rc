@@ -1,30 +1,62 @@
 # Mutt colors configuration
-# Based on the default Mutt colors configuration shipped with Ubuntu
+#
+# Partially inspired by Steve Losh's mutt screenshots:
+# http://stevelosh.com/blog/2012/10/the-homely-mutt/
+# Steve Losh's mutt settings are in: https://bitbucket.org/sjl/dotfiles/
+#
+# Many of these colors are from smkent.vim's preferred color palette
 
 # Basic colors
-color normal        white black
-color attachment    brightyellow black
-color hdrdefault    cyan black
-color indicator     black cyan
-color markers       brightred black
-color quoted        green black
-color signature     cyan black
-color status        brightgreen blue
-color tilde         blue black
-color tree          red black
+color attachment color111 color234  # Attachment indicators
+color hdrdefault color247 color234  # Default color for headers
+color indicator  color0   color159  # Selected message or menu item
+color markers    color167 color234  # Line continuation markers ("+")
+color normal     color252 color234  # Normal text not matching any other pattern
+color signature  color247 color234  # Text beneath the signature line
+color status     color117 color236  # Mode lines and sidebar separator
+color tilde      color243 color234  # Tilde lines used to show pager blank lines
+color tree       color243 color234  # Thread tree indicator
 
-color index brightwhite black ~N
+# Quoted message levels
+color quoted  color112 color234
+color quoted1 color221 color234
+color quoted2 color112 color234
+color quoted3 color221 color234
+color quoted4 color112 color234
+color quoted5 color221 color234
+color quoted6 color112 color234
+color quoted7 color221 color234
+color quoted8 color112 color234
+color quoted9 color221 color234
 
-color header brightgreen  default "^(From|Subject):"
+# Message index colors
+color index brightcolor255 color234 ~N  # New messages
+color index color88        color234 ~D  # Messages marked for deletion
+
+# Highlight message Subject header
+color header brightcolor215 color234 "^(Subject):"
 
 # URLs
-color body green black "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
-color body green black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+color body color192 color234 "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+color body color192 color234 "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
 mono body none "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
 mono body none "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
 
 # Email addresses
-color body green black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+color body color192 color234 "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
 mono body none "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+
+# PGP information
+# Patterns from:
+# http://cinderwick.ca/files/linux/configs/myDeskSnapshots/200912-molokai/mutt/colors.molokai
+color body color112 color234     "^gpg: Good signature from"
+color body brightred color234    "^gpg: Bad signature from"
+color body brightred color234    "^gpg: BAD signature from"
+color body brightred color234    "^gpg: Note: This key has expired!"
+color body brightyellow color234 "^gpg: WARNING: This key is not certified with a trusted signature!"
+color body brightyellow color234 "^gpg: *There is no indication that the signature belongs to the owner."
+color body brightyellow color234 "^gpg: can't handle these multiple signatures"
+color body brightyellow color234 "^gpg: signature verification suppressed"
+color body brightyellow color234 "^gpg: invalid node with packet of type"
 
 # vim: ft=muttrc
