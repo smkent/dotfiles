@@ -77,6 +77,9 @@ set reflow_wrap = -22
 # Show tilde characters in empty space past the end of messages (like in Vim)
 set tilde
 
+# Disable line continuation markers ("+" at the beginning of continued lines)
+set markers = no
+
 # }}}
 
 # Compose settings {{{
