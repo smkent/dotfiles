@@ -46,6 +46,8 @@ color index color74        color234 "~G !~N"
 color index brightcolor159 color234 "~G ~N"
 # Messages marked for deletion
 color index color124       color234 ~D
+# Tagged messages
+color index brightcolor192 color234 ~T
 
 # Highlight message Subject header
 color header brightcolor215 color234 "^(Subject):"
