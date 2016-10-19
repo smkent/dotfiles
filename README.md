@@ -184,7 +184,8 @@ useful aliases are:
 
 ### Mutt
 
-* Display the sidebar (requires Mutt 1.7.0+ or the sidebar patch)
+* Configure the sidebar but hide it by default (requires Mutt 1.7.0+ or the
+  sidebar patch)
 * Sort and display messages by thread
 * Message index color highlights, including highlighting messages sent only to
   me and PGP-encrypted messages
