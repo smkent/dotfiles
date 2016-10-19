@@ -47,7 +47,7 @@ set menu_context = 3
 unset collapse_unread
 
 # Custom index format
-set index_format = "%4C [%Z] %2E %[%m/%d] %-20.20L (%?M?<%2M>&%4c?) %s"
+set index_format = "%4C [%Z] %[%m/%d] %-20.20L %?M?(%M) ?%s %*  %4c "
 
 # Custom status format
 set status_chars = "-+!A"
