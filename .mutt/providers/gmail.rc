@@ -1,0 +1,35 @@
+# Much of this configuration is from:
+# https://dev.mutt.org/trac/wiki/UseCases/Gmail
+#
+# Before sourcing this file, set the following mutt configuration values:
+# $from, $realname, $imap_pass, and $smtp_pass
+
+set imap_user = $from
+set smtp_url = "smtp://$from@smtp.gmail.com:587/"
+
+set folder = "imaps://imap.gmail.com:993"
+set spoolfile = "+INBOX"
+set postponed = "+[Gmail]/Drafts"
+set record = ""
+
+# Check for new mail in subscribed IMAP folders on initial connection
+set imap_check_subscribed
+
+# Use goobook for address book queries
+set query_command = "goobook query %s"
+bind editor <Tab> complete-query
+bind editor ^T complete
+
+set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
+
+# Accept IMAP folder names containing spaces in the line editor
+bind editor <space> noop
+macro index,pager y "<save-message>=[Gmail]/All Mail<enter><enter>" "Archive"
+macro index,pager d "<save-message>=[Gmail]/Trash<enter><enter>" "Trash"
+macro index gi "<change-folder>=INBOX<enter>" "Go to inbox"
+macro index ga "<change-folder>=[Gmail]/All Mail<enter>" "Go to all mail"
+macro index gs "<change-folder>=[Gmail]/Sent Mail<enter>" "Go to sent mail"
+macro index gS "<change-folder>=[Gmail]/Starred<enter>" "Go to starred messages"
+macro index gd "<change-folder>=[Gmail]/Drafts<enter>" "Go to drafts"
+
+# vim: set ft=muttrc fdls=0 fdm=marker:

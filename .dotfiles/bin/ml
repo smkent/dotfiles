@@ -1,0 +1,34 @@
+#!/bin/sh
+
+d=~/.mutt/accounts
+config=$(find "${d}" -type f -iname "*${1}*" -printf "%f\n" 2>/dev/null)
+
+if [ "${#}" -lt 1 ] || [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+    bn=$(basename "${0}")
+    {
+        echo "${bn}: Launch mutt with the specified account configuration file"
+        echo "Usage: ${bn} account"
+        if [ -n "${config}" ]; then
+            echo
+            echo "Available accounts:"
+            echo "${config}" | sort
+        else
+            echo "No accounts are available."
+            echo "Place account configuration files in ${d}."
+        fi
+    } >&2
+    exit 1
+fi
+
+if [ "$(echo "${config}" | wc -l)" -gt 1 ]; then
+    {
+        echo "Multiple accounts found for \"${1}\":"
+        echo "${config}" | sort
+    } >&2
+    exit 1
+elif [ -z "${config}" ]; then
+    echo "No accounts found for \"${1}.\"" >&2
+    exit 1
+fi
+
+ACCOUNT="$(basename "${config}" .asc)" mutt

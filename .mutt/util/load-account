@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+a=~/.mutt/accounts/"${ACCOUNT}"
+
+if [ -r "${a}.asc" ]; then
+    gpg -d "${a}.asc"
+elif [ -f "${a}" ] && [ -r "${a}" ]; then
+    cat "${a}"
+fi

@@ -194,4 +194,10 @@ source ~/.mutt/gpg.rc
 
 # }}}
 
+# Account selection {{{
+
+source "~/.mutt/util/load-account |"
+
+# }}}
+
 # vim: set fdls=0 fdm=marker:
