@@ -33,7 +33,7 @@ color quoted9 color221 color234
 # Default message color
 color index color250       color234 ~A
 # Dim messages from me
-color index color242       color234 "!~N ~f $from"
+color index color242       color234 "!~N ~P"
 # New messages
 color index brightcolor221 color234 "~N ^~p !(~c .)"
 color index brightcolor255 color234 "~N !(^~p !(~c .))"
