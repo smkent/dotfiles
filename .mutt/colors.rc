@@ -9,6 +9,7 @@
 # Basic colors
 color attachment color111 color234  # Attachment indicators
 color hdrdefault color247 color234  # Default color for headers
+color error      color224 color124  # Status bar error messages
 color indicator  color0   color159  # Selected message or menu item
 color markers    color167 color234  # Line continuation markers ("+")
 color normal     color255 color234  # Normal text not matching any other pattern
