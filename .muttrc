@@ -51,7 +51,7 @@ set index_format = "%4C [%Z] %2E %[%m/%d] %-20.20L (%?M?<%2M>&%4c?) %s"
 
 # Custom status format
 set status_chars = "-+!A"
-set status_format = "───[ %r%f %?n?(%n)? ]─%?d?[ %d deleted ]─?─%?t?[ %t tagged ]─?%>─[ %P of %m ]───"
+set status_format = "───[ %r%f %?n?(%n)? ]─%?d?[ %d deleted ]─?%?t?[ %t tagged ]─?%>─[ %P of %m ]───"
 
 # }}}
 
