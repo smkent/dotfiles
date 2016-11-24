@@ -191,7 +191,8 @@ useful aliases are:
   me and PGP-encrypted messages
 * Compose mail using vim
 * Vim-style navigation keybindings (`gg`, `G`, `Ctrl+b`, `Ctrl+f`)
-* `format=flowed` support when composing and reading mail
+* [`format=flowed`](http://joeclark.org/ffaq.html) support when composing and
+  reading mail
 * PGP support with outgoing message signing enabled by default
 * Custom status bar formats
 
