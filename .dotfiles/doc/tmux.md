@@ -28,6 +28,10 @@ key bindings.
 | `<Prefix>A` | Rename current window |
 | `<Prefix>s` | Split current pane horizontally |
 | `<Prefix>v` | Split current pane vertically |
+| `<Prefix>h` | Create new full height vertical pane left |
+| `<Prefix>j` | Create new full width horizontal pane below |
+| `<Prefix>k` | Create new full width horizontal pane above |
+| `<Prefix>l` | Create new full height vertical pane right |
 | `Ctrl+h` | Move to pane left |
 | `Ctrl+j` | Move to pane below |
 | `Ctrl+k` | Move to pane above |
