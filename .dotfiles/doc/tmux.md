@@ -32,10 +32,10 @@ key bindings.
 | `Ctrl+j` | Move to pane below |
 | `Ctrl+k` | Move to pane above |
 | `Ctrl+l` | Move to pane right, or clear screen if pane is full width |
-| `<Prefix>h` | Move to pane left |
-| `<Prefix>j` | Move to pane below |
-| `<Prefix>k` | Move to pane above |
-| `<Prefix>l` | Move to pane right |
+| `<Prefix>Ctrl+h` | Move to pane left |
+| `<Prefix>Ctrl+j` | Move to pane below |
+| `<Prefix>Ctrl+k` | Move to pane above |
+| `<Prefix>Ctrl+l` | Move to pane right |
 | `<Prefix>Ctrl+a` | Move to the next pane |
 | `Alt+<Arrow Keys>` | Resize the current pane in the specified direction |
 | `<Prefix>r` | Reload [`.tmux.conf`](/.tmux.conf) |
