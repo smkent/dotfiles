@@ -28,18 +28,18 @@ key bindings.
 | `<Prefix>A` | Rename current window |
 | `<Prefix>s` | Split current pane horizontally |
 | `<Prefix>v` | Split current pane vertically |
-| `<Prefix>h` | Create new full height vertical pane left |
-| `<Prefix>j` | Create new full width horizontal pane below |
-| `<Prefix>k` | Create new full width horizontal pane above |
-| `<Prefix>l` | Create new full height vertical pane right |
+| `<Prefix>H` | Create new full height vertical pane left |
+| `<Prefix>J` | Create new full width horizontal pane below |
+| `<Prefix>K` | Create new full width horizontal pane above |
+| `<Prefix>L` | Create new full height vertical pane right |
 | `Ctrl+h` | Move to pane left |
 | `Ctrl+j` | Move to pane below |
 | `Ctrl+k` | Move to pane above |
 | `Ctrl+l` | Move to pane right, or clear screen if pane is full width |
-| `<Prefix>Ctrl+h` | Move to pane left |
-| `<Prefix>Ctrl+j` | Move to pane below |
-| `<Prefix>Ctrl+k` | Move to pane above |
-| `<Prefix>Ctrl+l` | Move to pane right |
+| `<Prefix>h` | Move to pane left |
+| `<Prefix>j` | Move to pane below |
+| `<Prefix>k` | Move to pane above |
+| `<Prefix>l` | Move to pane right |
 | `<Prefix>Ctrl+a` | Move to the next pane |
 | `Alt+<Arrow Keys>` | Resize the current pane in the specified direction |
 | `<Prefix>r` | Reload [`.tmux.conf`](/.tmux.conf) |
