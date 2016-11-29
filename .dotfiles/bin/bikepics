@@ -25,7 +25,8 @@ action_collect() {
     for i in "${cwd}" ~ ~/Desktop; do
         [ -z "${i}" ] && continue
         find "${i}" -mindepth 1 -maxdepth 1 -type f \
-            -iregex '.*.\(jpg\|png\)' -print0 | xargs -0 cp -nv -t "${pics_dir}"
+            -iregex '.*.\(jpg\|png\)' -print0 | \
+            xargs -0 -r cp -nv -t "${pics_dir}"
     done
     cd "${pics_dir}"
 }
