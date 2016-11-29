@@ -1,0 +1,86 @@
+#!/bin/sh
+
+usage() {
+    echo "Usage: $(basename "${0}") [collect|prepare|all]" >&2
+    exit 0
+}
+
+# Copy all PNG and JPEG files from the current directory, the user's home
+# directory, and the desktop to the new collection directory
+action_collect() {
+    pics_dir="pics-$(date +%Y%m%d)"
+    cwd=$(pwd)
+    case "${cwd}" in
+        */"${pics_dir}")
+            # The current directory is already the desired collection directory
+            cwd=
+            pics_dir="."
+            ;;
+        *)
+            if [ ! -d "${pics_dir}" ]; then
+                mkdir -m 0700 -v "${pics_dir}"
+            fi
+            ;;
+    esac
+    for i in "${cwd}" ~ ~/Desktop; do
+        [ -z "${i}" ] && continue
+        find "${i}" -mindepth 1 -maxdepth 1 -type f \
+            -iregex '.*.\(jpg\|png\)' -print0 | xargs -0 cp -nv -t "${pics_dir}"
+    done
+    cd "${pics_dir}"
+}
+
+# Convert all PNG images to JPEG, remove all EXIF data, and create a lower
+# resolution image for files larger than 1 megabyte
+action_prepare() {
+    find . -mindepth 1 -maxdepth 1 -type f -iname '*.png' | while read -r fn; do
+        fn_jpg="${fn%.*}.jpg"
+        if [ -f "${fn_jpg}" ]; then
+            echo "${fn_jpg} already exists, ignoring" >&2
+        else
+            convert "${fn}" "${fn_jpg}"
+        fi
+        rm -v "${fn}"
+    done
+    find . -mindepth 1 -maxdepth 1 -type f -iname '*.jpg' | while read -r fn; do
+        # Remove EXIF data
+        exiv2 -v rm "${fn}"
+        if [ "$(stat -c '%s' "${fn}")" -gt 1048576 ]; then
+            # Create lower resolution image
+            fn_smaller="${fn%.*}-smaller.jpg"
+            if [ -f "${fn_smaller}" ]; then
+                echo "${fn_smaller} already exists, skipping" >&2
+            else
+                convert -verbose "${fn}" -resize 1600 "${fn_smaller}"
+            fi
+        fi
+    done
+}
+
+# Check if needed programs are installed
+for i in convert exiv2; do
+    if ! which "${i}" >/dev/null 2>&1; then
+        echo "Error: ${i} was not found in PATH" >&2
+        exit 1
+    fi
+done
+
+case "${1-all}" in
+    help|-h|--help)
+        usage
+        ;;
+    all)
+        action_collect
+        action_prepare
+        ;;
+    collect)
+        action_collect
+        ;;
+    prepare)
+        action_prepare
+        ;;
+    *)
+        echo "Unknown action \"${1}\"" >&2
+        exit 1
+        ;;
+esac
