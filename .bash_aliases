@@ -57,4 +57,4 @@ png2jpg() {
         echo "${i}"
         convert "${i}" "${i%%.png}.jpg"
     done
-};
+}
