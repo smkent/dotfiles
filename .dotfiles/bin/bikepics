@@ -8,13 +8,13 @@ usage() {
 # Copy all PNG and JPEG files from the current directory, the user's home
 # directory, and the desktop to the new collection directory
 action_collect() {
-    pics_dir="pics-$(date +%Y%m%d)"
+    dir="pics-$(date +%Y%m%d)"
     cwd=$(pwd)
     case "${cwd}" in
-        */"${pics_dir}")
+        */"${dir}")
             # The current directory is already the desired collection directory
             cwd=
-            pics_dir="."
+            dir="."
             ;;
     esac
     for i in "${cwd}" ~ ~/Desktop; do
@@ -22,14 +22,14 @@ action_collect() {
         find "${i}" -mindepth 1 -maxdepth 1 -type f \
             -iregex '.*.\(jpg\|png\)' -print0 | \
             xargs -0 -I '%' -r /bin/sh -c \
-            'mkdir -m 0700 -vp '"${pics_dir}"' && cp -nv -t "'"${pics_dir}"'" %'
+            'mkdir -m 0700 -vp '"${dir}"' && cp -nv -t "'"${dir}"'" "%"'
     done
     # If the destination images directory doesn't exist, there are no images
     # and there is nothing to do
-    if [ ! -d "${pics_dir}" ]; then
+    if [ ! -d "${dir}" ]; then
         exit 0
     fi
-    cd "${pics_dir}"
+    cd "${dir}"
 }
 
 # Convert all PNG images to JPEG, remove all EXIF data, and create a lower
