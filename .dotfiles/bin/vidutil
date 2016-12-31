@@ -67,12 +67,35 @@ def main_frames():
     print('Frames saved to: {}'.format(dir_name))
 
 
+def main_twitter():
+    if not args.output:
+        # If no output file name was specified, replace the input file name
+        # extension with .mp4 and write to that file
+        args.output = '{}.mp4'.format(args.input.rsplit('.', 1)[0])
+        if args.output == args.input:
+            raise Exception('Input and output file names are identical')
+    if not args.overwrite and os.path.isfile(args.output):
+        raise Exception('{} already exists'.format(args.output))
+    ffmpeg_exe = find_ffmpeg_exe()
+    cmd = [ffmpeg_exe, '-i', args.input, '-c:v', 'libx264']
+    # avconv's support for aac audio is considered experimental
+    if ffmpeg_exe == 'avconv':
+        cmd += ['-strict', 'experimental']
+    if args.overwrite:
+        cmd += ['-y']
+    cmd += [args.output]
+    print('Executing: {}'.format(' '.join(cmd)), file=sys.stderr)
+    subprocess.call(cmd)
+
+
 description = 'Utility for performing simple actions with ffmpeg/avconv'
 frames_help = 'Extract frames from a video file using ffmpeg/avconv'
 slice_help = 'Extract a slice of video to a separate file using ffmpeg/avconv'
+twitter_help = 'Convert a video to a format compatible with Twitter'
 
 ap = argparse.ArgumentParser(description=description)
-sp = ap.add_subparsers(metavar='action', help='Choices: slice, frames')
+sp = ap.add_subparsers(metavar='action',
+                       help='Choices: slice, frames, twitter')
 
 sp_slice = sp.add_parser('slice', description=slice_help)
 sp_slice.add_argument('input', metavar='input', help='Input video file')
@@ -94,6 +117,15 @@ sp_frames.add_argument('duration', metavar='duration', nargs='?',
                        help='Duration (hh:mm:ss or number of seconds)')
 # sp_frames.add_argument('output', metavar='dir', help='Destination directory')
 sp_frames.set_defaults(func=main_frames)
+
+sp_twitter = sp.add_parser('twitter', description=twitter_help)
+sp_twitter.add_argument('input', metavar='input', help='Input video file')
+sp_twitter.add_argument('output', metavar='output', help='Output video file',
+                        nargs='?')
+sp_twitter.add_argument('-y', '--yes', '--overwrite', dest='overwrite',
+                        action='store_true',
+                        help='Overwrite output video file if it exists')
+sp_twitter.set_defaults(func=main_twitter)
 
 args = ap.parse_args()
 try:
