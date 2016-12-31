@@ -79,8 +79,11 @@ def main_twitter():
     ffmpeg_exe = find_ffmpeg_exe()
     cmd = [ffmpeg_exe, '-i', args.input, '-c:v', 'libx264']
     # avconv's support for aac audio is considered experimental
-    if ffmpeg_exe == 'avconv':
-        cmd += ['-strict', 'experimental']
+    if args.audio:
+        if ffmpeg_exe == 'avconv':
+            cmd += ['-strict', 'experimental']
+    else:
+        cmd += ['-an']
     if args.overwrite:
         cmd += ['-y']
     cmd += [args.output]
@@ -122,6 +125,8 @@ sp_twitter = sp.add_parser('twitter', description=twitter_help)
 sp_twitter.add_argument('input', metavar='input', help='Input video file')
 sp_twitter.add_argument('output', metavar='output', help='Output video file',
                         nargs='?')
+sp_twitter.add_argument('-a', dest='audio', action='store_true',
+                        help='Include audio in output video')
 sp_twitter.add_argument('-y', '--yes', '--overwrite', dest='overwrite',
                         action='store_true',
                         help='Overwrite output video file if it exists')
