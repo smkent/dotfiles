@@ -49,11 +49,12 @@ action_prepare() {
         exiv2 -v rm "${fn}"
         if [ "$(stat -c '%s' "${fn}")" -gt 1048576 ]; then
             # Create lower resolution image
-            fn_smaller="${fn%.*}-smaller.jpg"
-            if [ -f "${fn_smaller}" ]; then
-                echo "${fn_smaller} already exists, skipping" >&2
+            mkdir -vp "thumb"
+            fn_thumb="thumb/${fn%.*}-thumb.jpg"
+            if [ -f "${fn_thumb}" ]; then
+                echo "${fn_thumb} already exists, skipping" >&2
             else
-                convert -verbose "${fn}" -resize 1600 "${fn_smaller}"
+                convert -verbose "${fn}" -resize 1600 "${fn_thumb}"
             fi
         fi
     done
