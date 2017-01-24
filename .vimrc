@@ -330,6 +330,9 @@ nnoremap <silent> Q :wq<cr>
 " Use ,W to save the current file with sudo
 nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 
+" Show the current buffer name in the status bar with <Leader>f
+nnoremap <Leader>f :echo @%<CR>
+
 " }}}
 
 " Plugin installation {{{

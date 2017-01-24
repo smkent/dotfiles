@@ -84,6 +84,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `F3` | Clear last search highlight (`:noh`) |
 | `F4` | Toggle paste mode (`:set paste!`) |
 | `F9` | Toggle spell checking (`:setlocal spell!`) |
+| `<Leader>f` | Show the current buffer name |
 | `<Leader>W` | Save the current buffer with sudo |
 | `<Leader>p` | Paste from the system clipboard after the cursor |
 | `<Leader>P` | Paste from the system clipboard before the cursor |
