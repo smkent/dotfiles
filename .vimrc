@@ -158,49 +158,19 @@ inoremap <F9> <ESC>:setlocal spell!<CR>`^i
 " in the location list, move the cursor to the currently selected item.
 " Otherwise, navigate to the previous/next location list item.
 " Wrap the selection when moving past the beginning/end of the location list.
-function! NavigateAutoOpenLocationList(next)  " {{{
+function! NavigateWrapLocationList(next)  " {{{
     " a:next is 1 for next location, 0 for previous location
-    " BufferCount is from https://github.com/Valloric/ListToggle
-    let l:cur_line = line('.')
-    let l:filetype = &filetype
-    function! BufferCount()
-        return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
-    endfunction
-    let l:buffer_count_before = BufferCount()
-    " lopen needs to be called before lnext or lprev, otherwise the location
-    " list will become focused
     try
-        lopen
-    catch /E776/    " No location list
-        return
-    endtry
-    try
-        if BufferCount() != l:buffer_count_before
-            ll
-            return
-        endif
-    catch /E42/     " No errors
-        lclose | lclose
-        return
-    endtry
-    try
-        " Don't check the cursor position if the location list is focused
-        if l:filetype != 'qf'
-            ll
-            if l:cur_line != line('.')
-                return
-            endif
-        endif
         if a:next | lnext | else | lprev | endif
     catch /E553/    " No more items
         " Wrap list
         if a:next | lfirst | else | llast | endif
     endtry
-    " Select the current item and return focus to the parent buffer window
-    ll
 endfunction  " }}}
-nmap <silent> ]l :call NavigateAutoOpenLocationList(1)<CR>
-nmap <silent> [l :call NavigateAutoOpenLocationList(0)<CR>
+nmap <silent> ]l :call NavigateWrapLocationList(1)<CR>
+nmap <silent> [l :call NavigateWrapLocationList(0)<CR>
+" nmap <silent> ]l :lnext<CR>
+" nmap <silent> [l :lprev<CR>
 nmap <silent> [L :lfirst<CR>
 nmap <silent> ]L :llast<CR>
 
@@ -484,11 +454,6 @@ let g:syntastic_style_warning_symbol = "\u21E2"     " Dotted right arrow
 
 " Open the error list automatically except when the file is first opened
 let g:syntastic_auto_loc_list = 2
-augroup syntastic_loc_list_save
-    autocmd!
-    autocmd BufWritePre * if !exists('b:syntastic_auto_loc_list')
-        \ | let b:syntastic_auto_loc_list = 1 | endif
-augroup END
 
 " File type specific configuration
 let g:syntastic_python_checkers = ['flake8', 'python']
@@ -547,13 +512,12 @@ endfunction
 function! ToggleLocationList()
     let l:old_last_winnr = winnr('$')
     lclose | lclose
-    let b:syntastic_auto_loc_list = 2
     if l:old_last_winnr == winnr('$')
         " Nothing was closed, open syntastic error location panel
         Errors
-        let b:syntastic_auto_loc_list = 1
     endif
 endfunction
+
 " }}}
 nmap <silent> <Leader>l :call ToggleLocationList()<CR>
 nmap <silent> <Leader>d :call SyntasticToggleEnabled()<CR>
