@@ -303,6 +303,9 @@ nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 " Show the current buffer name in the status bar with <Leader>f
 nnoremap <Leader>f :echo @%<CR>
 
+" Redraw the screen with <Leader>.
+nnoremap <silent> <Leader>. :redraw!<CR>
+
 " }}}
 
 " Plugin installation {{{

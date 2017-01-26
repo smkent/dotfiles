@@ -88,6 +88,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `<Leader>W` | Save the current buffer with sudo |
 | `<Leader>p` | Paste from the system clipboard after the cursor |
 | `<Leader>P` | Paste from the system clipboard before the cursor |
+| `<Leader>.` | Redraw the screen |
 
 ### Remapped default mappings
 
