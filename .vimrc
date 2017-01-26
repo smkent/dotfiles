@@ -162,6 +162,7 @@ function! NavigateWrapLocationList(next)  " {{{
     " a:next is 1 for next location, 0 for previous location
     try
         if a:next | lnext | else | lprev | endif
+    catch /E42/     " No errors
     catch /E553/    " No more items
         " Wrap list
         if a:next | lfirst | else | llast | endif
