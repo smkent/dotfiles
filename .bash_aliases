@@ -44,6 +44,9 @@ alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
 alias ll='ls -l'
 alias la='ls -lA'
 
+# Force SSH_AUTH_SOCK detection with ssock
+alias ssock='__detect_ssh_auth_sock'
+
 # tmux
 ta() {
     args="${*}"
