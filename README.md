@@ -65,6 +65,10 @@ More features become available when optional dependencies are installed:
   (for previewing Markdown files with
   [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview))
 
+Run [`dotfiles-deps`](/.dotfiles/bin/dotfiles-deps) to see the executable path
+and version information for programs that this repository configures or depends
+on.
+
 ## Features
 
 ### Bash
