@@ -87,7 +87,7 @@ __c_prompt="${__c_green}${__bold}"
 # Timer adapted from http://stackoverflow.com/a/1862762
 __timer_start()
 {
-    timer=${timer:-$SECONDS}
+    timer=${timer:-${SECONDS}}
 }
 
 # Converts number of seconds to human-readable time (ex. "1h 3m 30s")
