@@ -235,7 +235,9 @@ __append_path_if_exists "/opt/smkent/bin"
 
 # Application settings {{{
 
-# ls colors {{{
+# ls {{{
+
+# Color configuration
 if [ ${__colors_supported} -ge 2 ]; then
     if [ ${__colors_supported} -ge 256 ] && [ -r ~/.dircolors ]; then
         eval "$(dircolors -b ~/.dircolors)"
@@ -243,6 +245,10 @@ if [ ${__colors_supported} -ge 2 ]; then
         eval "$(dircolors -b)"
     fi
 fi
+
+# Use literal quoting style by default
+export QUOTING_STYLE=literal
+
 # }}}
 
 # grep colors {{{
