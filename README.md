@@ -2,6 +2,9 @@
 
 My Linux environment configuration
 
+Quick jump: [bash](#bash), [git](#git), [mutt](#mutt), [tmux](#tmux),
+[vim](#vim)
+
 ## Design
 
 Most of this repository contains flat files meant to be used in place within
