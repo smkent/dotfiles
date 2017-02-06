@@ -2,6 +2,8 @@
 
 This is a summary of the configuration in [`.vimrc`](/.vimrc).
 
+![vim screenshot](/.dotfiles/img/screenshot-vim.png)
+
 # Basic settings
 
 * Disable vi compatibility (`nocompatible`)
