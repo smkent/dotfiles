@@ -13,8 +13,8 @@ installed when a new login shell is started and any of the template files are
 newer than the previous template installation timestamp, or when
 [`expand-dotfiles -f`](/.dotfiles/bin/expand-dotfiles) is run manually.
 
-My dotfiles are designed be portable with minimal dependencies (git, bash,
-Python, and the [Powerline fonts](https://github.com/powerline/fonts)).
+My dotfiles are designed be portable with minimal required dependencies (git,
+bash, Python, and the [Powerline fonts](https://github.com/powerline/fonts)).
 
 ## Installation
 
