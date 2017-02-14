@@ -304,6 +304,9 @@ nnoremap <Leader>W :w !sudo tee > /dev/null %<CR>
 " Show the current buffer name in the status bar with <Leader>f
 nnoremap <Leader>f :echo @%<CR>
 
+" Show the current buffer's absolute path in the status bar with <Leader>F
+nnoremap <Leader>F :echo expand('%:p')<CR>
+
 " Redraw the screen with <Leader>.
 nnoremap <silent> <Leader>. :redraw!<CR>
 

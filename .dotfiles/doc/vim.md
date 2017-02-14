@@ -87,6 +87,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `F4` | Toggle paste mode (`:set paste!`) |
 | `F9` | Toggle spell checking (`:setlocal spell!`) |
 | `<Leader>f` | Show the current buffer name |
+| `<Leader>F` | Show the current buffer's absolute path |
 | `<Leader>W` | Save the current buffer with sudo |
 | `<Leader>p` | Paste from the system clipboard after the cursor |
 | `<Leader>P` | Paste from the system clipboard before the cursor |
