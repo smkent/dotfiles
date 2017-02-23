@@ -254,9 +254,9 @@ export QUOTING_STYLE=literal
 # grep colors {{{
 if [ ${__colors_supported} -ge 256 ]; then
     # Set highlight color to bold orange
-    export GREP_COLORS="mt=1;38;5;202:cs=02;38:se=34:fn=35:ln=32:bn=32"
+    export GREP_COLORS="mt=1;38;5;202:se=0;38;5;245:fn=0;38;5;147:ln=0;38;5;70:bn=32"
 else
-    export GREP_COLORS="mt=01;31:cs=02;38:se=34:fn=35:ln=32:bn=32"
+    export GREP_COLORS="mt=01;31:se=34:fn=35:ln=32:bn=32"
 fi
 # }}}
 
