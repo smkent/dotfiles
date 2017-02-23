@@ -66,3 +66,21 @@ png2jpg() {
         convert "${i}" "${i%%.png}.jpg"
     done
 }
+
+# "find alias", loosely based on the git "fa" alias (see .gitconfig)
+# This lists/searches both alias and shell functions not starting with _
+fa() {
+    {
+        alias | sed -e 's:^alias ::' -e 's:=: :';
+        typeset -F 2>&1 | sed -e 's:^declare[ -f]* ::' | \
+            grep -ve '^_' | sed -e 's:$: (function):';
+    } | sort -u | grep -i "${1}" | \
+    awk -v nr=2 '
+        {printf("\033[1;34m%12s\033[0;0m", $1)};
+        {sep=FS};
+        {for (x=nr; x<=NF; x++) { printf "%s%s", sep, $x; };
+            print "\033[0;39m"}'
+}
+
+# "wh", short for "which", also searches shell aliases/functions/built-ins
+alias wh='type -a'
