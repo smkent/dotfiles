@@ -9,6 +9,7 @@ This is a summary of the configuration in [`.tmux.conf`](/.tmux.conf).
 * Enable 256-color support
 * Set terminal emulator window titles
 * Increase scrollback buffer size to 5000
+* Enable automatic window renumbering
 * Custom colors and status bar configuration
   * Window ID highlight inspired by [the screenshot in this
     thread](http://crunchbang.org/forums/viewtopic.php?id=20504)
@@ -25,11 +26,18 @@ key bindings.
 
 | Binding | Meaning |
 | :-- | :-- |
+| `Ctrl+F7` | Move to the previous session |
+| `Ctrl+F8` | Move to the next session |
 | `F7` | Move to the previous window |
 | `F8` | Move to the next window |
 | `<Prefix>A` | Rename current window |
+| `<Prefix>e` | Select session from a list |
 | `<Prefix>s` | Split current pane horizontally |
 | `<Prefix>v` | Split current pane vertically |
+| `<Prefix><` | Prompt for a window to swap the current window with |
+| `<Prefix>>` | Swap the current and marked panes |
+| `<Prefix>,` | Swap the current pane with the previous pane |
+| `<Prefix>.` | Swap the current pane with the next pane |
 | `<Prefix>H` | Create new full height vertical pane left |
 | `<Prefix>J` | Create new full width horizontal pane below |
 | `<Prefix>K` | Create new full width horizontal pane above |
@@ -53,5 +61,8 @@ Pane traversal with `Ctrl+[hjkl]` is from
 
 | Binding | Meaning |
 | :-- | :-- |
+| `/` | Search backward (up) |
+| `?` | Search forward (down) |
 | `v` | Begin selection |
 | `y` | Copy selection (also to the system clipboard if `xclip` is installed) |
+| `Escape` or `/` | Exit copy mode |
