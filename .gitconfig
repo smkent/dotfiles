@@ -69,6 +69,7 @@
     dw = diff --word-diff=color  # "diff words"
     ec = config --global -e  # "edit config"
     el = config --local -e  # "edit local"
+    f = fetch
     # "find alias"; based on "finda" from: http://brettterpstra.com/2014/08/04/
     # shell-tricks-one-git-alias-to-rule-them-all/
     fa = "!f() { git config --global --get-regexp alias | \
@@ -100,6 +101,9 @@
     # "rebase interactive"; $1 is a ref, commit count, or empty for new commits
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i ${r}; }; f"
+    # "reset to remote"
+    rr = "!f() { r=\"$(git rb)\"; if [ -z \"${r}\" ]; then return 1; fi; \
+                 git reset --hard \"${r}\"; }; f"
     rt = reset --hard  # "reset to"
     s = status -s
     sb = show-branch
