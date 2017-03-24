@@ -83,5 +83,18 @@ fa() {
             print "\033[0;39m"}'
 }
 
+# "find files"
+ff() {
+    local dir
+    if [ -d "${1}" ]; then
+        dir="${1}"
+        shift
+    fi
+    find "${dir:-.}" -iname "*${*}*"
+}
+
+# "git root"
+alias gr='cd $(git rev-parse --show-toplevel)'
+
 # "wh", short for "which", also searches shell aliases/functions/built-ins
 alias wh='type -a'
