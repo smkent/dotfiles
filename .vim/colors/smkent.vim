@@ -277,15 +277,15 @@ hi link GitGutterDeleteLine GitGutterAddLine
 hi link GitGutterChangeLine GitGutterAddLine
 hi link GitGutterChangeDeleteLine GitGutterAddLine
 
-" Syntastic highlight groups
-call s:C("SyntasticError",        s:white,         s:error,         "")
-call s:C("SyntasticWarning",      s:medium_orange, "",              "reverse")
-call s:C("SyntasticStyleError",   s:cyan,          "",              "reverse")
-call s:C("SyntasticStyleWarning", s:light_blue,    "",              "reverse")
-hi link SyntasticErrorSign SyntasticError
-hi link SyntasticWarningSign SyntasticWarning
-hi link SyntasticStyleErrorSign SyntasticStyleError
-hi link SyntasticStyleWarningSign SyntasticStyleWarning
+" ALE highlight groups
+call s:C("ALEError",        s:white,         s:error,         "")
+call s:C("ALEWarning",      s:medium_orange, "",              "reverse")
+call s:C("ALEStyleError",   s:cyan,          "",              "reverse")
+call s:C("ALEStyleWarning", s:light_blue,    "",              "reverse")
+hi link ALEErrorSign ALEError
+hi link ALEWarningSign ALEWarning
+hi link ALEStyleErrorSign ALEStyleError
+hi link ALEStyleWarningSign ALEStyleWarning
 
 " Delete set color function {{{
 delf s:C

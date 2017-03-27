@@ -323,7 +323,6 @@ Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
-Plug 'https://github.com/scrooloose/syntastic'
 if v:version >= 704
     Plug 'https://github.com/ludovicchabant/vim-gutentags'
 endif
@@ -334,6 +333,7 @@ Plug 'https://github.com/tpope/vim-fugitive'
 Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/vim-scripts/AnsiEsc.vim'
+Plug 'https://github.com/w0rp/ale'
 " vim-gitgutter with real-time sign updates enabled occasionally produced
 " rendering errors prior to Vim 7.4.427. For more information, see:
 " - https://github.com/airblade/vim-gitgutter/issues/171
@@ -455,29 +455,24 @@ nnoremap <silent> <C-@> :CtrlPTag<CR>
 
 " }}}
 
-" Syntastic configuration {{{
+" ALE configuration {{{
 
 " Basic settings
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+let g:ale_open_list = 0
+let g:airline#extensions#ale#enabled = 1
 
 " Sign column symbols
-let g:syntastic_error_symbol = "\u2716"             " Block X
-let g:syntastic_warning_symbol = "\u26A0"           " Warning sign symbol
-let g:syntastic_style_error_symbol = "\u21E2"       " Dotted right arrow
-let g:syntastic_style_warning_symbol = "\u21E2"     " Dotted right arrow
-
-" Open the error list automatically except when the file is first opened
-let g:syntastic_auto_loc_list = 2
+let g:ale_sign_error = "\u2716 "             " Block X
+let g:ale_sign_warning = "\u26A0 "           " Warning sign symbol
+let g:ale_sign_style_error = "\u21E2 "       " Dotted right arrow
+let g:ale_sign_style_warning = g:ale_sign_style_error
 
 " File type specific configuration
-let g:syntastic_python_checkers = ['flake8', 'python']
 let g:python_virtualenv_bin_paths = {
     \ 'Pipfile': '.venv/bin',
     \ 'uranium': 'bin',
     \ }
-function! SyntasticLocateVirtualenvExecutable(executable)
+function! LocatePythonVirtualenvExecutable(executable)
     " Search for virtualenv marker files up from the current path
     let l:path = getcwd()
     let l:previous_path = ""
@@ -498,63 +493,70 @@ function! SyntasticLocateVirtualenvExecutable(executable)
         let l:path = fnamemodify(l:path, ':h')
     endwhile
 endfunction
-function! SyntasticPythonVersionDetect()  " {{{
-    let l:shebang_exe = syntastic#util#parseShebang(bufnr('%'))['exe']
+function! BufferParseShebang()
+    let l:line = getline(1)
+    if line =~# '^#!'
+        let l:line = substitute(line, '\v^#!\s*(\S+/env(\s+-\S+)*\s+)?', '', '')
+        let l:exe = matchstr(line, '\m^\S*\ze')
+        let l:args = split(matchstr(line, '\m^\S*\zs.*'))
+        return { 'exe': l:exe, 'args': l:args }
+    endif
+    return { 'exe': '', 'args': [] }
+endfunction
+function! ALEPythonVersionDetect()  " {{{
+    let l:shebang_exe = BufferParseShebang()['exe']
     if l:shebang_exe =~# '\m\<python[0-9]'
-        let b:syntastic_python_flake8_exe = l:shebang_exe . ' -m flake8'
+        let b:ale_python_flake8_executable = l:shebang_exe
+        " Save the base arguments in a separate variable for use with
+        " ALEToggleVerbosity
+        let b:base_ale_python_flake8_options = '-m flake8'
+        let b:ale_python_flake8_options = b:base_ale_python_flake8_options
     else
-        let l:flake8_exe = SyntasticLocateVirtualenvExecutable("flake8")
+        let l:flake8_exe = LocatePythonVirtualenvExecutable("flake8")
         if empty(l:flake8_exe)
             return
         endif
-        let b:syntastic_python_flake8_exe = l:flake8_exe
+        let b:ale_python_flake8_executable = l:flake8_exe
     endif
-    " Disable the fallback "python" checker, as overriding the
-    " executable path doesn't work properly
-    let b:syntastic_checkers =
-        \ filter(g:syntastic_python_checkers, 'v:val != "python"')
 endfunction  " }}}
-augroup syntastic_python_detect
+augroup ale_python_detect
     autocmd!
-    autocmd filetype python call SyntasticPythonVersionDetect()
+    autocmd filetype python call ALEPythonVersionDetect()
 augroup END
 
-" Syntastic control mappings
-" Functions to control Syntastic on a per-buffer basis {{{
-function! SyntasticToggleEnabled()
+" ALE control mappings
+" Functions to control ALE on a per-buffer basis {{{
+function! ALEToggleEnabled()
     " Idea from http://stackoverflow.com/a/36683733
     if &filetype == 'qf'
         " The location window is focused. Close it so this action will apply
         " to the corresponding buffer.
         lclose | lclose
     endif
-    let b:syntastic_skip_checks = 1 - get(b:, 'syntastic_skip_checks', 0)
-    SyntasticReset
-    if b:syntastic_skip_checks == 0
-        SyntasticCheck
-    endif
-    echo 'Syntastic ' .
-        \ (b:syntastic_skip_checks == 0 ? 'enabled' : 'disabled') .
+    ALEToggleBuffer
+    echo 'ALE ' .
+        \ (get(b:, 'ale_enabled', 1) == 1 ? 'enabled' : 'disabled') .
         \ ' for "' . @% . '"'
 endfunction
 
-function! SyntasticToggleVerbosity()
+function! ALEToggleVerbosity()
     if &filetype == 'qf'
         " The location window is focused. Close it so this action will apply
         " to the corresponding buffer.
         lclose | lclose
     endif
-    let b:syntastic_skip_checks = 0
-    if empty(get (b:, 'syntastic_quiet_messages', {}))
-        let b:syntastic_quiet_messages = {
-            \ "!level": "errors",
-            \ "type":   "style" }
+    let b:ale_quiet = 1 - get(b:, 'ale_quiet', 0)
+    if b:ale_quiet == 0
+        let b:ignore_arg_ale_python_flake8 = ''
     else
-        let b:syntastic_quiet_messages = {}
+        let b:ignore_arg_ale_python_flake8 = '--ignore=W,E,F4'
     endif
-    SyntasticCheck
-    echo 'Syntastic verbosity ' .
-        \ (b:syntastic_quiet_messages == {} ? 'increased' : 'reduced') .
+    let b:ale_python_flake8_options =
+        \ get(b:, 'base_ale_python_flake8_options', '') . ' ' .
+        \ b:ignore_arg_ale_python_flake8
+    ALELint
+    echo 'ALE verbosity ' .
+        \ (empty(b:ignore_arg_ale_python_flake8) ? 'increased' : 'reduced') .
         \ ' for "' . @% . '"'
 endfunction
 
@@ -562,15 +564,17 @@ function! ToggleLocationList()
     let l:old_last_winnr = winnr('$')
     lclose | lclose
     if l:old_last_winnr == winnr('$')
-        " Nothing was closed, open syntastic error location panel
-        Errors
+        " Nothing was closed, open ALE error location panel
+        if len(getloclist(winnr('$')))
+            lopen
+        endif
     endif
 endfunction
 
 " }}}
 nmap <silent> <Leader>l :call ToggleLocationList()<CR>
-nmap <silent> <Leader>d :call SyntasticToggleEnabled()<CR>
-nmap <silent> <C-y> :call SyntasticToggleVerbosity()<CR>
+nmap <silent> <Leader>d :call ALEToggleEnabled()<CR>
+nmap <silent> <C-y> :call ALEToggleVerbosity()<CR>
 
 " }}}
 
