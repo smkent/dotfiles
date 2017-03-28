@@ -322,13 +322,22 @@ export SHELLCHECK_OPTS="--exclude SC1090"
 
 # Load additional configuration {{{
 
-# Aliases and helper functions
-[ -f ~/.bash_aliases ] && . ~/.bash_aliases
+__source_if_exists()
+{
+    if [ -f "${1}" ]; then
+        . "${1}"
+    fi
+}
 
 # Host-specific bashrc if available
-if [ -f "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}" ]; then
-    . "${HOME}/.dotfiles/lib/bashrc.${HOSTNAME}"
-fi
+__source_if_exists ~/.dotfiles/lib/bashrc."${HOSTNAME}"
+
+# Aliases and helper functions
+__source_if_exists ~/.bash_aliases
+
+# Local configuration files
+__source_if_exists ~/.local/bashrc
+__source_if_exists ~/.local/bash_aliases
 
 # }}}
 

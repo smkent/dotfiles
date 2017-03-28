@@ -24,6 +24,10 @@
 !.gnupg/dirmngr.conf
 !.gnupg/sks-keyservers.netCA.pem
 !.mailcap
+!.local/
+.local/*
+!.local/bashrc
+!.local/bash_aliases
 !.mutt/
 .mutt/cache
 .mutt/accounts
