@@ -58,6 +58,9 @@ set timeout timeoutlen=1000 ttimeoutlen=50
 " This prevents extraneous garbage from being printed on startup
 set t_RV=
 
+" Disable swap file fsync to prevent Vim from blocking when writing swap files
+set swapsync=
+
 " }}}
 
 " Basic autocommands {{{
