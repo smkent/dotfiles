@@ -91,12 +91,12 @@
     lo = log --date=relative --pretty=format:'%C(auto,blue)%>(14)%cd %C(auto,yellow)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,reset)'
     # "log eXtra"; git log with both author and committer information
     lx = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author:    %an <%ae> %C(auto,blue)%ad (%ar)%C(auto,reset)%n%C(auto,12)Committer: %cn <%ce> %C(auto,blue)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
-    # "no push"; track another local branch with push disabled
+    # "no push"; track another branch with push disabled
     np = "!f() { b=$(git rev-parse --abbrev-ref HEAD); \
-                 if [ -z \"${1}\" ] || [ \"${b}\" = \"HEAD\" ]; then return 1; fi; \
+                 r=\"${1:-$(git rb)}\"; \
+                 if [ -z \"${r}\" ] || [ \"${b}\" = HEAD ]; then return 1; fi; \
                  set -x; \
-                 git branch --set-upstream-to \"${1}\"; \
-                 git config --local branch.\"${b}\".remote .; \
+                 git branch --set-upstream-to \"${r}\" && \
                  git config --local branch.\"${b}\".pushremote no_push; }; f"
     p = pull
     ra = rebase --abort
