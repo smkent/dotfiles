@@ -43,7 +43,7 @@ alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
 # ls aliases
 alias ll='ls -l'
 alias lh='ls -lh'
-alias la='ls -lA'
+alias la='ls -lAh'
 
 # Force SSH_AUTH_SOCK detection with ssock
 alias ssock='__detect_ssh_auth_sock'
