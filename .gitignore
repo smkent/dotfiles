@@ -29,6 +29,7 @@
 !.local/bashrc
 !.local/bash_aliases
 !.mutt/
+.mutt/certificates
 .mutt/cache
 .mutt/accounts
 !.muttrc
