@@ -81,6 +81,16 @@ fi
 __bold="\[$(tput bold)\]"
 __reset="\[$(tput sgr0)\]"
 
+# Color selection with fallback, to be used for host-specific prompt colors
+__choose_color()
+{
+    if [ ${__colors_supported} -ge 256 ]; then
+        echo "\[$(tput setaf "${1}")\]"
+        return
+    fi
+    echo "\[$(tput setaf "${2}")\]"
+}
+
 # Default user prompt colors
 __c_prompt="${__c_green}${__bold}"
 
