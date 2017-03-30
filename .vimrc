@@ -383,6 +383,12 @@ endif
 " Set vim-airline color theme to smkent
 let g:airline_theme = "smkent"
 
+" Set custom airline symbols
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.linenr = ''
+
 " Customize right statusbar section contents
 let g:airline_section_x = airline#section#create_right(
     \ ['tagbar', 'filetype', 'ffenc'])
