@@ -99,6 +99,7 @@
                  git branch --set-upstream-to \"${r}\" && \
                  git config --local branch.\"${b}\".pushremote no_push; }; f"
     p = pull
+    r = reset
     ra = rebase --abort
     # "remote branch"; print remote tracking branch
     rb = "!f() { h=${1:-$(git symbolic-ref -q HEAD)} && \
