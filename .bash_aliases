@@ -61,6 +61,13 @@ tn() {
 }
 alias tl='tmux list-sessions'
 
+# Prevent vim from trying to connect to X when running in tmux, and use "vimx"
+# to start vim normally
+if [ -n "${TMUX}" ] && [ -n "${DISPLAY}" ]; then
+    alias vim='vim -X'
+fi
+alias vimx='\vim'
+
 png2jpg() {
     for i in "${@}"; do
         echo "${i}"
