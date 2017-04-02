@@ -45,6 +45,9 @@ alias ll='ls -l'
 alias lh='ls -lh'
 alias la='ls -lAh'
 
+# vim shorthand
+alias v='vim'
+
 # Force SSH_AUTH_SOCK detection with ssock
 alias ssock='__detect_ssh_auth_sock'
 
