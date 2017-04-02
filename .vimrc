@@ -474,7 +474,7 @@ let g:syntastic_auto_loc_list = 2
 " File type specific configuration
 let g:syntastic_python_checkers = ['flake8', 'python']
 function! SyntasticPythonVersionDetect()  " {{{
-    let l:shebang_exe = syntastic#util#parseShebang()['exe']
+    let l:shebang_exe = syntastic#util#parseShebang(bufnr('%'))['exe']
     if l:shebang_exe =~# '\m\<python[0-9]'
         let b:syntastic_checkers =
             \ filter(g:syntastic_python_checkers, 'v:val != "python"')
