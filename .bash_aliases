@@ -108,3 +108,17 @@ alias gr='cd $(git rev-parse --show-toplevel)'
 
 # "wh", short for "which", also searches shell aliases/functions/built-ins
 alias wh='type -a'
+
+# Ensure the specified files have a newline at end of file. This can take a
+# list of files as arguments or read a list of files from standard input.
+eof_newlines() {
+    while [ "${#}" -gt 0 ]; do
+        sed -i "${1}" -e "\$a\\"
+        shift
+    done
+    if ! tty -s; then
+        while read -r fn; do
+            sed -i "${fn}" -e "\$a\\"
+        done
+    fi
+}
