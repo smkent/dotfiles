@@ -78,7 +78,8 @@
            {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
            print \"\\033[0;39m\"}'; }; f"
     # "find files"
-    ff = "!f() { if [ -z \"${1}\" ]; then git ls-files; else \
+    ff = "!f() { [ -n \"${GIT_PREFIX}\" ] && cd \"${GIT_PREFIX}\"; \
+                 if [ -z \"${1}\" ]; then git ls-files; else \
                  git ls-files | grep --color=auto \"${@}\"; fi; }; f"
     # "log"; git log with extra colors, commit date, and relative commit date
     l = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author: %an <%ae>%C(reset)%n%C(auto,blue)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
