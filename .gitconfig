@@ -54,7 +54,7 @@
     br = branch -vv
     ca = commit --amend
     # "create branch"; checkout a new branch with same tracking info if possible
-    cb = "!f() { [ ${#} -lt 1 ] && return 1; u=$(git rb \"${2}\"); \
+    cb = "!f() { if [ ${#} -lt 1 ]; then return 1; fi; u=$(git rb \"${2}\"); \
                  git checkout -b \"${1}\" \"${2:-HEAD}\" || return ${?}; \
                  [ -n \"${u}\" ] && git branch --set-upstream-to \"${u}\"; }; f"
     cf = commit --amend --no-edit  # "commit fixup"
@@ -78,7 +78,7 @@
            {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
            print \"\\033[0;39m\"}'; }; f"
     # "find files"
-    ff = "!f() { [ -n \"${GIT_PREFIX}\" ] && cd \"${GIT_PREFIX}\"; \
+    ff = "!f() { if [ -n \"${GIT_PREFIX}\" ]; then cd \"${GIT_PREFIX}\"; fi; \
                  if [ -z \"${1}\" ]; then git ls-files; else \
                  git ls-files | grep --color=auto \"${@}\"; fi; }; f"
     # "log"; git log with extra colors, commit date, and relative commit date
