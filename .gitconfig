@@ -93,7 +93,7 @@
     # "log oneline"
     lo = log --date=relative --pretty=format:'%C(auto,67)%>(14,trunc)%cd %C(auto,228)%h%C(auto,112 bold)%d%C(auto,reset) %-s%C(auto,reset)'
     # "log eXtra"; git log with both author and committer information
-    lx = log --pretty=format:'%C(auto,228)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,117)Author:    %an <%ae> %C(auto,67)%ad (%ar)%C(auto,reset)%n%C(auto,117)Committer: %cn <%ce> %C(auto,67)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
+    lx = log --pretty=format:'%C(auto,228)commit %H %C(auto,208)(%p)%C(auto,reset)%n%C(auto,117)Author:    %an <%ae> %C(auto,67)%ad (%ar)%C(auto,reset)%n%C(auto,117)Committer: %cn <%ce> %C(auto,67)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     # "no push"; track another branch with push disabled
     np = "!f() { b=$(git rev-parse --abbrev-ref HEAD); \
                  r=\"${1:-$(git rb)}\"; \
