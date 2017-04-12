@@ -113,17 +113,14 @@
     # "rebase interactive"; $1 is a ref, commit count, or empty for new commits
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i ${r}; }; f"
-    # "reset to remote"
-    rr = "!f() { r=\"$(git rb)\"; if [ -z \"${r}\" ]; then return 1; fi; \
-                 git reset --hard \"${r}\"; }; f"
+    rr = reset --hard @{u}  # "reset to remote"
     rt = reset --hard  # "reset to"
     s = status -s --branch
     sb = show-branch
     st = status
     su = branch --set-upstream-to  # "set upstream"
     # "upstream branch"; compare local and remote tracking branch histories
-    ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)}; u=$(git rb \"${h}\"); \
-                 [ -n \"${u}\" ] && git show-branch \"${u}\" \"${h}\"; }; f"
+    ub = "!f() { git show-branch \"${1}@{u}\" \"${1-@}\"; }; f"
     # "unset upstream"
     uu = "!f() { b=$(git rev-parse --abbrev-ref HEAD); set -x; \
                  git config --local --unset \"branch.${b}.remote\"; \
