@@ -82,16 +82,16 @@
                  if [ -z \"${1}\" ]; then git ls-files; else \
                  git ls-files | grep --color=auto \"${@}\"; fi; }; f"
     # "log"; git log with extra colors, commit date, and relative commit date
-    l = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author: %an <%ae>%C(reset)%n%C(auto,blue)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
+    l = log --pretty=format:'%C(auto,228)commit %H %C(auto,208)(%p)%C(auto,reset)%n%C(auto,117)Author: %an <%ae>%C(reset)%n%C(auto,67)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     l1 = "!git l -n 1"  # "log 1"; depends on the "l" alias
     # "log compact"; git log with metadata on one line
-    lc = log --date=relative --pretty=format:'%C(auto,yellow)%H %C(auto,12)%<(20)%an %C(auto,blue)%cd%C(auto,reset)%n%w(0,2,2)%s%n%+b'
+    lc = log --date=relative --pretty=format:'%C(auto,228)%H %C(auto,117)%<(20)%an %C(auto,67)%cd%C(auto,reset)%n%w(0,2,2)%s%n%+b'
     # "log files"; one line per commit followed by the changed file list
-    lf = log --numstat --date=relative --pretty=format:'%C(auto,yellow)%<(8)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,blue) %cd%C(auto,reset)'
+    lf = log --numstat --date=relative --pretty=format:'%C(auto,228)%<(8)%h%C(auto,112 bold)%d%C(auto,reset) %-s%C(auto,67) %cd%C(auto,reset)'
     # "log oneline"
-    lo = log --date=relative --pretty=format:'%C(auto,blue)%>(14)%cd %C(auto,yellow)%h%C(auto,blue bold)%d%C(auto,reset) %-s%C(auto,reset)'
+    lo = log --date=relative --pretty=format:'%C(auto,67)%>(14,trunc)%cd %C(auto,228)%h%C(auto,112 bold)%d%C(auto,reset) %-s%C(auto,reset)'
     # "log eXtra"; git log with both author and committer information
-    lx = log --pretty=format:'%C(auto,yellow)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,12)Author:    %an <%ae> %C(auto,blue)%ad (%ar)%C(auto,reset)%n%C(auto,12)Committer: %cn <%ce> %C(auto,blue)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
+    lx = log --pretty=format:'%C(auto,228)commit %H %C(auto,130)(%p)%C(auto,reset)%n%C(auto,117)Author:    %an <%ae> %C(auto,67)%ad (%ar)%C(auto,reset)%n%C(auto,117)Committer: %cn <%ce> %C(auto,67)%cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     # "no push"; track another branch with push disabled
     np = "!f() { b=$(git rev-parse --abbrev-ref HEAD); \
                  r=\"${1:-$(git rb)}\"; \
