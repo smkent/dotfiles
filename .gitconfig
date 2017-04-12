@@ -117,7 +117,7 @@
     rr = "!f() { r=\"$(git rb)\"; if [ -z \"${r}\" ]; then return 1; fi; \
                  git reset --hard \"${r}\"; }; f"
     rt = reset --hard  # "reset to"
-    s = status -s
+    s = status -s --branch
     sb = show-branch
     st = status
     su = branch --set-upstream-to  # "set upstream"
