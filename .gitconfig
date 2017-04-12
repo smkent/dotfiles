@@ -88,6 +88,8 @@
     lc = log --date=relative --pretty=format:'%C(auto,228)%H %C(auto,117)%<(20)%an %C(auto,67)%cd%C(auto,reset)%n%w(0,2,2)%s%n%+b'
     # "log files"; one line per commit followed by the changed file list
     lf = log --numstat --date=relative --pretty=format:'%C(auto,228)%<(8)%h%C(auto,112 bold)%d%C(auto,reset) %-s%C(auto,67) %cd%C(auto,reset)'
+    # "long line" log; similar to "lo" but with author and PGP key info added
+    ll = log --date=relative --pretty=format:'%C(auto,67)%>(14,trunc)%cd %C(auto,117)%>(15,trunc)%an %C(auto,228)%h%C(auto,13)% GK%C(auto,112 bold)%d%C(auto,reset) %-s%C(auto,reset)'
     # "log oneline"
     lo = log --date=relative --pretty=format:'%C(auto,67)%>(14,trunc)%cd %C(auto,228)%h%C(auto,112 bold)%d%C(auto,reset) %-s%C(auto,reset)'
     # "log eXtra"; git log with both author and committer information
