@@ -121,10 +121,10 @@
     sb = show-branch
     st = status
     su = branch --set-upstream-to  # "set upstream"
+    # "upstream branch"; compare local and remote tracking branch histories
+    ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)}; u=$(git rb \"${h}\"); \
+                 [ -n \"${u}\" ] && git show-branch \"${u}\" \"${h}\"; }; f"
     # "unset upstream"
     uu = "!f() { b=$(git rev-parse --abbrev-ref HEAD); set -x; \
                  git config --local --unset \"branch.${b}.remote\"; \
                  git config --local --unset \"branch.${b}.merge\"; }; f"
-    # "upstream branch"; compare local and remote tracking branch histories
-    ub = "!f() { h=${1:-$(git symbolic-ref -q HEAD)}; u=$(git rb \"${h}\"); \
-                 [ -n \"${u}\" ] && git show-branch \"${u}\" \"${h}\"; }; f"
