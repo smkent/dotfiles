@@ -30,8 +30,9 @@ if [ -x /usr/bin/notify-send ]; then
     # Add an "alert" alias for long running commands.  Use like so:
     #   sleep 10; alert
     alert() {
+        ret=${?}
         notify-send --urgency=low -i \
-            "$([ \$? = 0 ] && echo terminal || echo error)" \
+            "$([ "${ret}" -eq 0 ] && echo terminal || echo error)" \
             "$(history | tail -n1 | \
                sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"
     }
