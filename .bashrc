@@ -249,6 +249,14 @@ __append_path_if_exists "/opt/smkent/bin"
 
 # Application settings {{{
 
+# dotfiles repository configuration {{{
+
+# Create a data directory for dotfiles settings and state storage
+export DOTFILES_DATA="${HOME}/.dotfiles/.data"
+[ ! -d "${DOTFILES_DATA}" ] && mkdir "${DOTFILES_DATA}"
+
+# }}}
+
 # ls {{{
 
 # Color configuration

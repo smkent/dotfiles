@@ -7,13 +7,15 @@ while getopts "fhv" opt; do case ${opt} in
     h|\?)   echo "Usage: $(basename "${0}") [-f] [-v]" >&2; exit 1;;
     v)      opt_verbose=1;;
 esac; done
+timestamp_file="${DOTFILES_DATA}/templates_timestamp"
 [ ${opt_force} -eq 0 ] && \
-    { [ -f timestamp ] && \
-      [ -z "$(find . -newer timestamp -print -quit 2>/dev/null)" ]; } && exit 0
+    { [ -f "${timestamp_file}" ] && \
+      [ -z "$(find . -newer "${timestamp_file}" \
+              -print -quit 2>/dev/null)" ]; } && exit 0
 [ ${opt_verbose} -eq 1 ] && set -x
 find . -mindepth 2 -maxdepth 2 -executable -name install -printf '%h\n' | \
     while read -r d; do
         ( cd "${d}" && DEST="../../.." ./install; ) || \
             { echo "Error expanding ${d#./} dotfiles template"; exit 1; }
     done
-touch timestamp
+touch "${timestamp_file}"

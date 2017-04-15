@@ -9,7 +9,7 @@
 !.ctags
 !.dircolors
 !.dotfiles/
-.dotfiles/templates/timestamp
+.dotfiles/.data/
 !.face
 !.gimp-2.8/
 .gimp-2.8/*
