@@ -13,6 +13,7 @@
 
 prompt_hide_user="smkent"
 auto_update_check_interval=30
+git_update_check_interval=7200  # 2 hours
 
 # }}}
 
@@ -365,6 +366,24 @@ __auto_update_check()
         . ~/.bashrc
     fi
     export __auto_reload_last_modified="${rc_mod_time}"
+
+    # Check for dotfiles repository updates
+    local git_check_time=
+    local update_ref_file="${DOTFILES_DATA}/update_ref"
+    local update_timestamp_file="${DOTFILES_DATA}/update_timestamp"
+    if [ -f "${update_ref_file}" ]; then
+        # If a previous check found an update, apply it
+        ~/.dotfiles/bin/dotfiles-auto-update --quiet update
+        rm -f "${update_ref_file}"
+    else
+        git_check_time=$(stat -c %Y "${update_timestamp_file}" 2>/dev/null)
+        if [ "$(date +%s)" -ge \
+                "$((${git_check_time-0}+git_update_check_interval))" ]; then
+            touch "${update_timestamp_file}"
+            ~/.dotfiles/bin/dotfiles-auto-update --quiet --fork check \
+                --new-ref-file "${update_ref_file}"
+        fi
+    fi
 }
 
 # Temporarily alias . to record additional files sourced by .bashrc. These files

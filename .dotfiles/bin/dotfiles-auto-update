@@ -1,0 +1,179 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import argparse
+import os
+import subprocess
+import sys
+import tempfile
+
+
+class UpdateException(Exception):
+    '''
+    Exception type for repository configuration and status messages
+    '''
+    pass
+
+
+class DotfilesAutoPull(object):
+
+    def main(self):
+        try:
+            self._parse_args()
+            if self.args.action == 'update':
+                # If an update is available, apply it and exit
+                self._action_update()
+            elif self.args.action == 'check':
+                # Check for updates
+                self._action_check()
+        except UpdateException as e:
+            if not self.args.quiet:
+                print(str(e), file=sys.stderr)
+
+    def _action_check(self):
+        '''
+        Check the remote repository state in the background to avoid blocking
+        generation of the shell prompt. If an update is available, write it to
+        the new ref file for the shell to check later.
+        '''
+        # Fork to the background to avoid blocking the shell
+        if self.args.fork:
+            if os.fork():
+                sys.exit(0)
+
+        ref, remote = self._assert_git_repo_state()
+        if not self._check_repo_batch_access(remote):
+            raise UpdateException('Remote repository cannot be accessed')
+
+        # Check for new refs
+        new_ref = self._runcmd(['git', 'ls-remote', remote,
+                                self.args.branch]).split()[0]
+        if new_ref == ref:
+            return
+
+        if self.args.new_ref_file:
+            with open(self.args.new_ref_file, 'w') as f:
+                f.write(new_ref)
+        else:
+            if not self.args.quiet:
+                print('An update is available, but --new-ref-file was not '
+                      'specified', file=sys.stderr)
+
+    def _action_update(self):
+        '''
+        Pull updates from the remote repository
+        '''
+        prev_ref, _ = self._assert_git_repo_state()
+        subprocess.check_call(['git', 'pull'])
+        # If the local branch has been updated, print the log of changes
+        new_ref = self._runcmd(['git', 'rev-parse', '@'])
+        if new_ref != prev_ref:
+            subprocess.check_call(['git', '--no-pager', 'll',
+                                   '{}..@'.format(prev_ref)])
+            # The previous git log command doesn't print a final line break
+            # when the pager is disabled
+            print('')
+
+    def _assert_git_repo_state(self):
+        '''
+        Verify:
+        - The repository is in the current user's home directory
+        - The current branch is self.args.branch
+        - The current branch matches the local ref for the remote tracking
+          branch
+        - The working directory is clean (excluding untracked files)
+        '''
+        # Verify repository location and change to the home directory
+        os.chdir(os.path.dirname(sys.argv[0]))
+        git_toplevel = self._runcmd(['git', 'rev-parse', '--show-toplevel'])
+        if git_toplevel != os.path.expanduser('~'):
+            raise UpdateException('Auto-update only supported in a home '
+                                  'directory repository')
+        os.chdir(git_toplevel)
+
+        # Check the current branch
+        branch = self._runcmd(['git', 'rev-parse', '--abbrev-ref', '@'])
+        if branch != self.args.branch:
+            raise UpdateException('The current branch is not '
+                                  '{} '.format(self.args.branch))
+
+        # Retrieve the current branch's remote name
+        remote_branch = self._runcmd(['git', 'rev-parse', '--abbrev-ref',
+                                      '@{u}'])
+        if not remote_branch or '/' not in remote_branch:
+            raise UpdateException('{} has no remote tracking '
+                                  'branch'.format(branch))
+        remote = remote_branch.split('/')[0]
+
+        # Is the current branch up to date with the local repository's ref for
+        # the remote tracking branch?
+        branch_refs = self._runcmd(['git', 'rev-parse', '@', '@{u}']).split()
+        if branch_refs.count(branch_refs[0]) != len(branch_refs):
+            raise UpdateException('The current branch {} is out of date with '
+                                  'upstream'.format(branch))
+        ref = branch_refs[0]
+
+        # Is the current working directory clean?
+        git_status = self._runcmd(['git', 'status', '--porcelain',
+                                   '--untracked-files=no'])
+        if git_status:
+            raise UpdateException('The current branch {} has local '
+                                  'modifications'.format(branch))
+
+        ref = self._runcmd(['git', 'rev-parse', '@'])
+        return ref, remote
+
+    def _check_repo_batch_access(self, remote):
+        '''
+        Return True if the remote repository is accessible in batch mode
+        '''
+        argv0 = os.path.basename(sys.argv[0])
+        temp_f = None
+        try:
+            temp_f = tempfile.NamedTemporaryFile(suffix='.{}'.format(argv0),
+                                                 delete=False)
+            temp_f.write('ssh -o BatchMode=yes "${@}"')
+            temp_f.close()
+            os.chmod(temp_f.name, 0o0700)
+            env = os.environ.copy()
+            env['GIT_SSH'] = temp_f.name
+            p = subprocess.Popen(['git', 'remote', 'show', remote],
+                                 stdout=open('/dev/null', 'w'),
+                                 stderr=subprocess.STDOUT, env=env)
+            p.communicate()
+            return p.returncode == 0
+        finally:
+            if temp_f and os.path.isfile(temp_f.name):
+                os.unlink(temp_f.name)
+
+    def _parse_args(self):
+        description = ('Automatically pull dotfiles updates from the upstream '
+                       'repository')
+        ap = argparse.ArgumentParser(description=description)
+        ap.add_argument('-b', '--auto-update-branch', dest='branch',
+                        metavar='branch', default='master',
+                        help='Auto update branch name (default: %(default)s)')
+        ap.add_argument('-f', '--fork', dest='fork',
+                        action='store_true', help='Fork to the background')
+        ap.add_argument('-q', '--quiet', action='store_true',
+                        help=('Don\'t print repository configuration and '
+                              'status messages'))
+        ap.add_argument('--new-ref-file', dest='new_ref_file', metavar='file',
+                        help=('In the "check" action, write to the specified '
+                              'file if an update is available'))
+        ap.add_argument('action', metavar='action',
+                        choices=['check', 'update'],
+                        help='Action to run (%(choices)s)')
+        self.args = ap.parse_args()
+
+    def _runcmd(self, cmd):
+        try:
+            return subprocess.check_output(cmd,
+                                           stderr=subprocess.STDOUT).strip()
+        except subprocess.CalledProcessError:
+            return None
+
+if __name__ == '__main__':
+    d = DotfilesAutoPull()
+    d.main()
