@@ -58,6 +58,8 @@
                  git checkout -b \"${1}\" \"${2:-HEAD}\" || return ${?}; \
                  [ -n \"${u}\" ] && git branch --set-upstream-to \"${u}\"; }; f"
     cf = commit --amend --no-edit  # "commit fixup"
+    # "compare graph"; show graph log between HEAD and another branch's upstream
+    cg = "!f() { git l --graph \"${1-master}@{u}..${2-@}\"; }; f"
     ci = commit
     cm = commit -m
     co = checkout
