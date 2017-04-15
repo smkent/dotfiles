@@ -12,7 +12,7 @@
 # Configuration options {{{
 
 prompt_hide_user="smkent"
-shell_auto_reload_interval=30
+auto_update_check_interval=30
 
 # }}}
 
@@ -225,8 +225,8 @@ __prompt_generator()
         echo -ne "\033]0;${title_prefix}${USER}@${HOSTNAME%%.*} ${PWD/#$HOME/~}\007"
     fi
 
-    # Check if environment has been updated and reload if necessary
-    __auto_reload_check
+    # Check for and process environment updates
+    __auto_update_check
 }
 PROMPT_COMMAND=__prompt_generator
 
@@ -334,25 +334,29 @@ export SHELLCHECK_OPTS="--exclude SC1090"
 
 # }}}
 
-# .bashrc and sourced file auto-reload {{{
+# Automatic update and reload {{{
 
 # Partially based on:
 # http://madebynathan.com/2012/10/29/auto-reloading-your-bashrc/
 # https://github.com/ndbroadbent/dotfiles/blob/master/bashrc/auto_reload.sh
 
-# Reload check function called as part of PROMPT_COMMAND execution
-__auto_reload_check()
+# Check for and process environment updates as part of PROMPT_COMMAND execution
+__auto_update_check()
 {
-    local new_mod_time
-    if [ "${SECONDS}" -ge "${__auto_reload_check_time-0}" ]; then
-        new_mod_time=$(stat -c %Y "${__auto_reload_files[@]}" | sort | tail -n1)
-        if [ "${__auto_reload_last_modified-0}" -gt 0 ] &&
-                [ "${new_mod_time}" -gt "${__auto_reload_last_modified}" ]; then
-            . ~/.bashrc
-        fi
-        export __auto_reload_check_time=$((SECONDS+shell_auto_reload_interval));
-        export __auto_reload_last_modified="${new_mod_time}"
+    local rc_mod_time=
+    if [ "${SECONDS}" -lt "${__auto_update_check_time-0}" ]; then
+        # The update check interval has not yet elapsed
+        return
     fi
+    export __auto_update_check_time=$((SECONDS+auto_update_check_interval))
+
+    # Reload .bashrc if it or any file it sources has been modified
+    rc_mod_time=$(stat -c %Y "${__auto_reload_files[@]}" | sort | tail -n1)
+    if [ "${__auto_reload_last_modified-0}" -gt 0 ] &&
+            [ "${rc_mod_time}" -gt "${__auto_reload_last_modified}" ]; then
+        . ~/.bashrc
+    fi
+    export __auto_reload_last_modified="${rc_mod_time}"
 }
 
 # Temporarily alias . to record additional files sourced by .bashrc. These files
