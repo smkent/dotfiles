@@ -79,7 +79,7 @@ on.
 Prompt features:
 
 * Display username if different from the value of `prompt_hide_user` in
-  [.bashrc](/.bashrc)
+  [`.bashrc`](/.bashrc)
 * Display current directory name if different from `${HOME}`
 * Display exit code of the previous command if nonzero (or "bg" / "C-c" when
   backgrounding a job or typing Ctrl-C, respectively)
