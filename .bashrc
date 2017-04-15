@@ -359,6 +359,9 @@ __auto_update_check()
     fi
     export __auto_update_check_time=$((SECONDS+auto_update_check_interval))
 
+    # Check if auto update is disabled
+    [ -f "${DOTFILES_DATA}/disable_auto_update" ] && return
+
     # Reload .bashrc if it or any file it sources has been modified
     rc_mod_time=$(stat -c %Y "${__auto_reload_files[@]}" | sort | tail -n1)
     if [ "${__auto_reload_last_modified-0}" -gt 0 ] &&

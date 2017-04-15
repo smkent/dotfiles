@@ -122,3 +122,7 @@ eof_newlines() {
         done
     fi
 }
+
+# Disable or enable .bashrc auto-update checks
+alias enable-auto-update='rm -vf "${DOTFILES_DATA}/disable_auto_update"'
+alias disable-auto-update='touch "${DOTFILES_DATA}/disable_auto_update"'
