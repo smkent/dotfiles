@@ -89,6 +89,14 @@ Prompt features:
 * Display git branch (or hash on detached HEAD) if the current directory is a
   git repository
 
+Automatic update and reload:
+
+* Changes to [`.bashrc`](/.bashrc) and any dependent files (such as
+  [`.bash_aliases`](/.bash_aliases)) cause the environment to be automatically
+  reloaded.
+* Home directory repository updates are checked and fetched automatically via
+  [`dotfiles-auto-update`](/.dotfiles/bin/dotfiles-auto-update).
+
 ![bash screenshot](/.dotfiles/img/screenshot-bashrc.png)
 
 ### Tmux
