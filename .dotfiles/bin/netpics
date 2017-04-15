@@ -29,7 +29,7 @@ action_collect() {
     if [ ! -d "${dir}" ]; then
         exit 0
     fi
-    cd "${dir}"
+    cd "${dir}" || exit
 }
 
 # Convert all PNG images to JPEG, remove all EXIF data, and create a lower
