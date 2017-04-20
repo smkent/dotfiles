@@ -65,7 +65,7 @@ class DotfilesAutoPull(object):
         Pull updates from the remote repository
         '''
         prev_ref, _ = self._assert_git_repo_state()
-        subprocess.check_call(['git', 'pull'])
+        subprocess.check_call(['git', 'pull', '--ff-only'])
         # If the local branch has been updated, print the log of changes
         new_ref = self._runcmd(['git', 'rev-parse', '@'])
         if new_ref != prev_ref:
