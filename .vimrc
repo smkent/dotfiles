@@ -595,6 +595,7 @@ let g:gutentags_file_list_command = {
         \ '.hg': 'hg locate',
         \ },
     \ }
+let g:gutentags_generate_on_empty_buffer = 1
 
 " }}}
 
