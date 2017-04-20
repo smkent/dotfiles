@@ -31,4 +31,6 @@ elif [ -z "${config}" ]; then
     exit 1
 fi
 
-ACCOUNT="$(basename "${config}" .asc)" mutt
+shift
+
+ACCOUNT="$(basename "${config}" .asc)" mutt "${@}"
