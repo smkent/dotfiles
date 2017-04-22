@@ -110,7 +110,7 @@ class DotfilesAutoPull(object):
         # the remote tracking branch?
         branch_refs = self._runcmd(['git', 'rev-parse', '@', '@{u}']).split()
         if branch_refs.count(branch_refs[0]) != len(branch_refs):
-            raise UpdateException('The current branch {} is out of date with '
+            raise UpdateException('The current branch {} doesn\'t match '
                                   'upstream'.format(branch))
         ref = branch_refs[0]
 
