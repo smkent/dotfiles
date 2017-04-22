@@ -75,10 +75,11 @@
     # "find alias"; based on "finda" from: http://brettterpstra.com/2014/08/04/
     # shell-tricks-one-git-alias-to-rule-them-all/
     fa = "!f() { git config --global --get-regexp alias | \
-          grep -i \"$1\" | awk -v nr=2 \
-          '{sub(/^alias\\./,\"\")};{printf(\"\\033[1;34m%10s\\033[0;0m\", $1)};\
-           {sep=FS};{for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
-           print \"\\033[0;39m\"}'; }; f"
+                 grep -i \"$1\" | awk -v nr=2 \
+                 '{sub(/^alias\\./,\"\")};\
+                  {printf(\"\\033[1;34m%10s\\033[0;0m\", $1)};{sep=FS};\
+                  {for (x=nr; x<=NF; x++) {printf \"%s%s\", sep, $x; };\
+                  print \"\\033[0;39m\"}'; }; f"
     # "find files"
     ff = "!f() { if [ -n \"${GIT_PREFIX}\" ]; then cd \"${GIT_PREFIX}\"; fi; \
                  if [ -z \"${1}\" ]; then git ls-files; else \
