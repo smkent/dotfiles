@@ -375,8 +375,10 @@ __auto_update_check()
     local update_ref_file="${DOTFILES_DATA}/update_ref"
     local update_timestamp_file="${DOTFILES_DATA}/update_timestamp"
     if [ -f "${update_ref_file}" ]; then
-        # If a previous check found an update, apply it
-        ~/.dotfiles/bin/dotfiles-auto-update --quiet update
+        # If a previous check found an update, and it has not yet been applied,
+        # apply it
+        ~/.dotfiles/bin/dotfiles-auto-update --quiet update \
+            --skip-ref="$(cat "${update_ref_file}")"
         rm -f "${update_ref_file}"
     else
         git_check_time=$(stat -c %Y "${update_timestamp_file}" 2>/dev/null)

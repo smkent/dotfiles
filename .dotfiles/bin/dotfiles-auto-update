@@ -65,6 +65,8 @@ class DotfilesAutoPull(object):
         Pull updates from the remote repository
         '''
         prev_ref, _ = self._assert_git_repo_state()
+        if self.args.skip_ref and prev_ref == self.args.skip_ref:
+            return
         cmd = ['git', 'pull', '--ff-only']
         # Print pull command to make it obvious when an update is in progress
         print('+ {}'.format(' '.join(cmd)))
@@ -162,6 +164,10 @@ class DotfilesAutoPull(object):
         ap.add_argument('-q', '--quiet', action='store_true',
                         help=('Don\'t print repository configuration and '
                               'status messages'))
+        ap.add_argument('--skip-ref', dest='skip_ref', metavar='ref',
+                        help=('In the "update" action, quit with no action if '
+                              'the current branch already points to the '
+                              'specified ref'))
         ap.add_argument('--new-ref-file', dest='new_ref_file', metavar='file',
                         help=('In the "check" action, write to the specified '
                               'file if an update is available'))
