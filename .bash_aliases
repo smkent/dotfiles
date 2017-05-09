@@ -50,7 +50,7 @@ alias la='ls -lAh'
 alias v='vim'
 
 # Force SSH_AUTH_SOCK detection with ssock
-alias ssock='__detect_ssh_auth_sock'
+alias ssock='SSH_AUTH_SOCK= __detect_ssh_auth_sock'
 
 # tmux
 ta() {

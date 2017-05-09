@@ -302,11 +302,10 @@ __detect_ssh_auth_sock()
     if { [ -z "${SSH_AUTH_SOCK}" ] || [ ! -S "${SSH_AUTH_SOCK}" ]; } && \
             [ "${uid}" -ne 0 ]; then
         # find prints the mod time and file name for each result, one per line.
-        # Results are sorted by mod time. Reading "d" twice discards the date
-        # after sort without assigning it to a different variable.
-        # Use process substitution to allow setting SSH_AUTH_SOCK within the
-        # loop. http://stackoverflow.com/a/13727116
-        while read -r d d; do
+        # Results are sorted by mod time. Use process substitution to allow
+        # setting SSH_AUTH_SOCK within the loop.
+        # http://stackoverflow.com/a/13727116
+        while read -r d; do
             if [ -S "${d}/ssh" ]; then
                 export SSH_AUTH_SOCK="${d}/ssh"
                 break
@@ -318,8 +317,8 @@ __detect_ssh_auth_sock()
                 break
             fi
         done < <(find /tmp "/run/user/${uid}" -maxdepth 1 -uid "${uid}" \
-                      \( -iname 'keyring-*' -or -iname 'ssh-*' \) \
-                      -printf '%A@ %p\n' 2>/dev/null | sort -r)
+                      \( -iname 'keyring*' -or -iname 'ssh-*' \) \
+                      -printf '%t@ %p\n' 2>/dev/null | sort -r | cut -d@ -f2-)
     fi
 }
 __detect_ssh_auth_sock
