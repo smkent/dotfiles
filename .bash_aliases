@@ -107,6 +107,9 @@ ff() {
 # "git root"
 alias gr='cd $(git rev-parse --show-toplevel)'
 
+# "git grep"
+alias gg='git grep'
+
 # "wh", short for "which", also searches shell aliases/functions/built-ins
 alias wh='type -a'
 
