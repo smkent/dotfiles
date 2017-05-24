@@ -36,6 +36,8 @@
     changed = 203       # Brighter red
     unmerged = 11       # Bright yellow
     untracked = 32      # Brighter blue
+    localBranch = 112   # Brighter green
+    remoteBranch = 203  # Brighter red
 [merge]
     conflictstyle = diff3
 [log]
