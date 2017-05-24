@@ -89,6 +89,10 @@ class DotfilesAutoPull(object):
           branch
         - The working directory is clean (excluding untracked files)
         '''
+        # Verify git is installed
+        if not self._runcmd(['which', 'git']):
+            raise UpdateException('git is not installed')
+
         # Verify repository location and change to the home directory
         os.chdir(os.path.dirname(sys.argv[0]))
         git_toplevel = self._runcmd(['git', 'rev-parse', '--show-toplevel'])
