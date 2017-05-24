@@ -33,7 +33,7 @@
 [color "status"]
     added = 112         # Brighter green
     branch = white bold ul
-    changed = 203
+    changed = 203       # Brighter red
     unmerged = 11       # Bright yellow
     untracked = 32      # Brighter blue
 [merge]
