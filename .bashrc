@@ -382,7 +382,7 @@ __auto_update_check()
     else
         git_check_time=$(stat -c %Y "${update_timestamp_file}" 2>/dev/null)
         if [ "$(date +%s)" -ge \
-                "$((${git_check_time-0}+git_update_check_interval))" ]; then
+                "$((${git_check_time:-0}+git_update_check_interval))" ]; then
             touch "${update_timestamp_file}"
             ~/.dotfiles/bin/dotfiles-auto-update --quiet --fork check \
                 --new-ref-file "${update_ref_file}"
