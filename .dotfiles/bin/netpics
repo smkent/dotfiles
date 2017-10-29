@@ -17,13 +17,10 @@ action_collect() {
             dir="."
             ;;
     esac
-    for i in "${cwd}" ~ ~/Desktop; do
-        [ -z "${i}" ] && continue
-        find "${i}" -mindepth 1 -maxdepth 1 -type f \
-            -iregex '.*.\(jpg\|png\)' -print0 | \
-            xargs -0 -I '%' -r /bin/sh -c \
-            'mkdir -m 0700 -vp '"${dir}"' && cp -nv -t "'"${dir}"'" "%"'
-    done
+    find . -mindepth 1 -maxdepth 1 -type f \
+        -iregex '.*.\(jpg\|png\)' -print0 | \
+        xargs -0 -I '%' -r /bin/sh -c \
+        'mkdir -m 0700 -vp '"${dir}"' && cp -nv -t "'"${dir}"'" "%"'
     # If the destination images directory doesn't exist, there are no images
     # and there is nothing to do
     if [ ! -d "${dir}" ]; then
