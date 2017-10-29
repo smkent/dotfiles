@@ -26,7 +26,8 @@ dependency_list = {
 
 
 class DependencyInfo(object):
-    def __init__(self, name, config={}):
+    def __init__(self, args, name, config={}):
+        self.args = args
         self.name = name
         self.config = config
         # Computed values
@@ -49,8 +50,8 @@ class DependencyInfo(object):
         output += '{:<12} '.format(self.name)
         if self.installed:
             output += self.exec_path
-            if self.version and args.print_version:
-                if args.wrap and terminal_size:
+            if self.version and self.args.print_version:
+                if self.args.wrap and terminal_size:
                     # Wrap version strings for better readability
                     output += ' ('
                     prefix_len = len(output)
@@ -89,7 +90,7 @@ def main():
     except (subprocess.CalledProcessError, ValueError):
         terminal_size = [24, 80]
     for k, v in sorted(dependency_list.items()):
-        info = DependencyInfo(k, v)
+        info = DependencyInfo(args, k, v)
         if args.only_missing and info.installed:
             continue
         info.print(terminal_size)
