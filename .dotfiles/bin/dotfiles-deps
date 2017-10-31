@@ -15,7 +15,7 @@ dependency_list = {
     'gimp':     {'version': '{} --version'},
     'git':      {'version': '{} --version'},
     'gpg':      {'version': '{} --version | head -n1'},
-    'mdv':      {'version': '{} --version'},
+    'mdv':      {'version': '{} --version | head -n1'},
     'mutt':     {'version': '{} -v | head -n1'},
     'screen':   {'version': '{} --version | cat'},
     'shellcheck': {'version': '{} --version | grep ^version:'},
