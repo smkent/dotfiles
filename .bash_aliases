@@ -104,6 +104,18 @@ ff() {
     find "${dir:-.}" -iname "*${*}*"
 }
 
+# Print the human-readable disk usage for the specified path(s) or the contents
+# of the current directory
+dusort() {
+    {
+        if [ ${#} -gt 0 ]; then
+            du -shxc "${@}"
+        else
+            du -shxc -- *
+        fi
+    } | sort -h
+}
+
 # "git root"
 alias gr='cd $(git rev-parse --show-toplevel)'
 
