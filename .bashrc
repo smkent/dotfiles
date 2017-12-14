@@ -24,7 +24,7 @@ git_update_check_interval=7200  # 2 hours
 # History control settings
 shopt -s histappend     # Append to the history file, don't overwrite it
 HISTCONTROL=ignoreboth  # Ignore duplicates and commands beginning with a space
-HISTSIZE=10000          # Increase session history size from the default 500
+HISTSIZE=100000         # Increase session history size from the default 500
 
 # Bash won't get SIGWINCH if another process is in the foreground. Enable
 # checkwinsize so bash will check the terminal size when it regains control.
