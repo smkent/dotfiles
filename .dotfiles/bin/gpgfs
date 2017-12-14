@@ -33,6 +33,8 @@ ap.add_argument('-g', '--gnupg-subdirectory', metavar='dir', default='gnupg',
                       'filesystem (default: gnupg)'))
 ap.add_argument('-M', '--mapper', metavar='name', default='gpgfs',
                 help='cryptsetup mapper name (default: gpgfs)')
+ap.add_argument('-r', '--read-only', dest='read_only', action='store_true',
+                help='Mount filesystem read-only')
 # Device/path
 ap.add_argument('device', metavar='device/path', nargs='?',
                 help='Device/path to operate on')
@@ -56,21 +58,26 @@ def unlock(unlock_path):
 def mount_mapper():
     os.mkdir(args.mountpoint, 0o0700)
     print('Created directory {}'.format(args.mountpoint))
-    subprocess.check_call(['mount', args.mapper, args.mountpoint])
+    cmd = ['mount']
+    if args.read_only:
+        cmd += ['-o', 'ro']
+    cmd += [args.mapper, args.mountpoint]
+    subprocess.check_call(cmd)
     print('Mounted filesystem on {}'.format(args.mountpoint))
 
 
 def post_mount():
     priv_homedir = os.path.join(args.mountpoint, args.gnupg_subdirectory)
     # Perform GnuPG-specific actions as the invoking user
-    sudo_user = os.environ.get('SUDO_USER')
-    if not os.path.isdir(priv_homedir):
-        os.mkdir(priv_homedir)
-    if sudo_user:
-        chown_user = '{}:'.format(sudo_user)
-        subprocess.check_call(['chown', '-c', chown_user, args.mountpoint])
-        subprocess.check_call(['chown', '-Rc', priv_homedir])
-    subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
+    if not args.read_only:
+        sudo_user = os.environ.get('SUDO_USER')
+        if not os.path.isdir(priv_homedir):
+            os.mkdir(priv_homedir)
+        if sudo_user:
+            chown_user = '{}:'.format(sudo_user)
+            subprocess.check_call(['chown', '-c', chown_user, args.mountpoint])
+            subprocess.check_call(['chown', '-Rc', priv_homedir])
+        subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
     print('GnuPG home directory: {}'.format(priv_homedir))
     sys.exit(0)
 
