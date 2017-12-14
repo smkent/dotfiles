@@ -67,8 +67,9 @@ def post_mount():
     if not os.path.isdir(priv_homedir):
         os.mkdir(priv_homedir)
     if sudo_user:
-        subprocess.check_call(['chown', '-Rc', '{}:'.format(sudo_user),
-                               priv_homedir])
+        chown_user = '{}:'.format(sudo_user)
+        subprocess.check_call(['chown', '-c', chown_user, args.mountpoint])
+        subprocess.check_call(['chown', '-Rc', priv_homedir])
     subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
     print('GnuPG home directory: {}'.format(priv_homedir))
     sys.exit(0)
