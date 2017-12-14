@@ -63,11 +63,12 @@ def mount_mapper():
 def post_mount():
     priv_homedir = os.path.join(args.mountpoint, args.gnupg_subdirectory)
     # Perform GnuPG-specific actions as the invoking user
-    sudo_uid = os.environ.get('SUDO_UID')
-    if sudo_uid:
-        os.setuid(int(sudo_uid))
+    sudo_user = os.environ.get('SUDO_USER')
     if not os.path.isdir(priv_homedir):
         os.mkdir(priv_homedir)
+    if sudo_user:
+        subprocess.check_call(['chown', '-Rc', '{}:'.format(sudo_user),
+                               priv_homedir])
     subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
     print('GnuPG home directory: {}'.format(priv_homedir))
     sys.exit(0)
