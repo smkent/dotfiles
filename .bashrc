@@ -433,6 +433,10 @@ __source_if_exists ~/.local/bash_aliases
 unset -f __auto_reload_source_alias
 unalias .
 
+# Unset local helper functions
+unset -f __source_if_exists
+unset -f __append_path_if_exists
+
 # }}}
 
 # vim: set fdls=0 fdm=marker:
