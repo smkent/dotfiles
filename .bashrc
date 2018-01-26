@@ -310,8 +310,8 @@ __detect_ssh_auth_sock()
                 export SSH_AUTH_SOCK="${d}/ssh"
                 break
             fi
-            agent_fn=$(find "${d}" -mindepth 1 -maxdepth 1 -printf '%f\0' | \
-                                 grep -z '^agent\.[0-9]\+$' | tail -n1)
+            agent_fn=$(find "${d}" -mindepth 1 -maxdepth 1 -printf '%f\n' | \
+                       grep '^agent\.[0-9]\+$' | tail -n1)
             if [ -S "${d}/${agent_fn}" ]; then
                 export SSH_AUTH_SOCK="${d}/${agent_fn}"
                 break
