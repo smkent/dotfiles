@@ -129,7 +129,6 @@ def create(create_path):
 try:
     if [args.create, args.mount, args.unmount, args.password].count(True) > 1:
         raise ArgsError('Multiple actions specified')
-        sys.exit(1)
 
     if args.create:
         if not args.device:
@@ -142,7 +141,6 @@ try:
             raise ArgsError('No device or path specified')
         if not os.path.exists(args.device):
             raise ArgsError('{} does not exist'.format(args.device))
-            sys.exit(1)
         if not args.mountpoint:
             args.mountpoint = default_mountpoint
         unmount()
@@ -169,5 +167,3 @@ try:
                         '-p/--password.')
 except ArgsError as e:
     print('Error: {}'.format(str(e)), file=sys.stderr)
-    if not isinstance(e, ArgsError):
-        traceback.print_exc()
