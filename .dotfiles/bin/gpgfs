@@ -42,9 +42,11 @@ args = ap.parse_args()
 args.mapper = '/dev/mapper/{}'.format(args.mapper)
 
 
-# Distinguish user input errors from regular Exceptions to avoid printing stack
-# traces for user input errors
 class ArgsError(Exception):
+    '''
+    Distinguish user input errors from regular Exceptions to avoid printing
+    stack traces for user input errors
+    '''
     pass
 
 
