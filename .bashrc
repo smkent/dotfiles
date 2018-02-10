@@ -244,7 +244,6 @@ __append_path_if_exists()
 __append_path_if_exists "${HOME}/.dotfiles/bin"
 __append_path_if_exists "${HOME}/.local/bin"
 __append_path_if_exists "${HOME}/bin"
-__append_path_if_exists "/opt/smkent/bin"
 
 # }}}
 
