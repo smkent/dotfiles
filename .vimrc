@@ -473,13 +473,46 @@ let g:syntastic_auto_loc_list = 2
 
 " File type specific configuration
 let g:syntastic_python_checkers = ['flake8', 'python']
+let g:python_virtualenv_bin_paths = {
+    \ 'Pipfile': '.venv/bin',
+    \ 'uranium': 'bin',
+    \ }
+function! SyntasticLocateVirtualenvExecutable(executable)
+    " Search for virtualenv marker files up from the current path
+    let l:path = getcwd()
+    let l:previous_path = ""
+    while l:path != l:previous_path
+        for [l:marker, l:bin_path] in items(g:python_virtualenv_bin_paths)
+            let l:full_marker_path = globpath(l:path, l:marker, 1)
+            if !empty(l:full_marker_path)
+                " Check if the target executable exists in the corresponding
+                " virtualenv bin path
+                let l:exe_path =
+                    \ globpath(globpath(l:path, l:bin_path, 1), a:executable, 1)
+                if !empty(l:exe_path)
+                    return l:exe_path
+                endif
+            endif
+        endfor
+        let l:previous_path = l:path
+        let l:path = fnamemodify(l:path, ':h')
+    endwhile
+endfunction
 function! SyntasticPythonVersionDetect()  " {{{
     let l:shebang_exe = syntastic#util#parseShebang(bufnr('%'))['exe']
     if l:shebang_exe =~# '\m\<python[0-9]'
-        let b:syntastic_checkers =
-            \ filter(g:syntastic_python_checkers, 'v:val != "python"')
-        let b:syntastic_python_flake8_exe = l:shebang_exe . ' /usr/bin/flake8'
+        let b:syntastic_python_flake8_exe = l:shebang_exe . ' -m flake8'
+    else
+        let l:flake8_exe = SyntasticLocateVirtualenvExecutable("flake8")
+        if empty(l:flake8_exe)
+            return
+        endif
+        let b:syntastic_python_flake8_exe = l:flake8_exe
     endif
+    " Disable the fallback "python" checker, as overriding the
+    " executable path doesn't work properly
+    let b:syntastic_checkers =
+        \ filter(g:syntastic_python_checkers, 'v:val != "python"')
 endfunction  " }}}
 augroup syntastic_python_detect
     autocmd!
