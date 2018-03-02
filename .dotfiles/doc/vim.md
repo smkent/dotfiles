@@ -38,9 +38,9 @@ This is a summary of the configuration in [`.vimrc`](/.vimrc).
 
 Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 
+* [ALE](https://github.com/w0rp/ale)
 * [AnsiEsc](https://github.com/vim-scripts/AnsiEsc.vim)
 * [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
-* [syntastic](https://github.com/scrooloose/syntastic)
 * [tcomment_vim](https://github.com/tomtom/tcomment_vim)
 * [vim-airline](https://github.com/vim-airline/vim-airline)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
@@ -72,7 +72,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `q` | Confirm and quit (`:conf q`) |
 | `Q` | Save and quit (`:wq`) |
 | `Ctrl+e` | Open CtrlP in find buffer mode (`:CtrlPBuffer`) |
-| `Ctrl+y` | Toggle Syntastic verbosity |
+| `Ctrl+y` | Toggle ALE verbosity |
 
 ## Additional mappings
 
@@ -139,13 +139,13 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `Ctrl+e` | Open CtrlP in find buffer mode (`:CtrlPBuffer`) |
 | `Ctrl+2` | Open CtrlP in tag mode (`:CtrlPTag`) |
 
-### Syntastic plugin mappings
+### ALE plugin mappings
 
 | Mapping | Meaning |
 | :-- | :-- |
 | `<Leader>l` | Toggle location list |
-| `Ctrl+y` | Toggle Syntastic verbosity (default mapping override) |
-| `<Leader>d` | Toggle Syntastic |
+| `Ctrl+y` | Toggle ALE verbosity (default mapping override) |
+| `<Leader>d` | Toggle ALE |
 
 ### tcomment plugin mappings
 
