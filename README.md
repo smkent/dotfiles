@@ -59,7 +59,7 @@ More features become available when optional dependencies are installed:
 
 * [shellcheck](https://github.com/koalaman/shellcheck) and
   [flake8](https://pypi.python.org/pypi/flake8) (for
-  [Syntastic](https://github.com/scrooloose/syntastic))
+  [ALE](https://github.com/w0rp/ale))
 * `ctags` (for
   [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
   typically available as the `exuberant-ctags` package)
