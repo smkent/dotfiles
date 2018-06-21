@@ -47,6 +47,8 @@
 [diff]
     mnemonicprefix = true
     renames = copies
+[commit]
+    verbose = true
 [alias]
     a = add
     ap = add -u -p
