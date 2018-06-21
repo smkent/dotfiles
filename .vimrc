@@ -587,7 +587,7 @@ nmap <silent> <C-y> :call ALEToggleVerbosity()<CR>
 " https://github.com/tomtom/tcomment_vim/issues/105
 "
 " Override default gc[...] mappings
-let g:tcommentMapLeaderOp1 = ''
+let g:tcomment_opleader1 = ''
 " Default gc mappings that should be kept
 nmap <silent> gc <Plug>TComment_gc
 nmap <silent> gcb <Plug>TComment_gcb
