@@ -187,6 +187,7 @@ class DotfilesAutoPull(object):
         except subprocess.CalledProcessError:
             return None
 
+
 if __name__ == '__main__':
     d = DotfilesAutoPull()
     d.main()

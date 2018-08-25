@@ -6,7 +6,6 @@ import argparse
 import os
 import subprocess
 import sys
-import traceback
 
 if os.getuid() != 0:
     sys.exit(subprocess.call(['sudo'] + sys.argv))
@@ -127,6 +126,7 @@ def create(create_path):
         subprocess.check_call(['chown', '{}:'.format(sudo_user),
                                args.mountpoint])
     post_mount()
+
 
 try:
     if [args.create, args.mount, args.unmount, args.password].count(True) > 1:
