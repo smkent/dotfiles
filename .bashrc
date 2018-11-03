@@ -66,31 +66,31 @@ fi
 # Shell prompt generator {{{
 
 if [ ${__colors_supported} -ge 256 ]; then
-    __c_red="\[$(tput setaf 196)\]"
-    __c_green="\[$(tput setaf 2)\]"
-    __c_yellow="\[$(tput setaf 227)\]"
-    __c_orange="\[$(tput setaf 202)\]"
-    __c_blue="\[$(tput setaf 4)\]"
-    __c_purple="\[$(tput setaf 96)\]"
+    __c_red="\\[$(tput setaf 196)\\]"
+    __c_green="\\[$(tput setaf 2)\\]"
+    __c_yellow="\\[$(tput setaf 227)\\]"
+    __c_orange="\\[$(tput setaf 202)\\]"
+    __c_blue="\\[$(tput setaf 4)\\]"
+    __c_purple="\\[$(tput setaf 96)\\]"
 else
-    __c_red="\[$(tput setaf 1)\]"
-    __c_green="\[$(tput setaf 2)\]"
-    __c_yellow="\[$(tput setaf 3)\]"
+    __c_red="\\[$(tput setaf 1)\\]"
+    __c_green="\\[$(tput setaf 2)\\]"
+    __c_yellow="\\[$(tput setaf 3)\\]"
     __c_orange="${__c_yellow}"
-    __c_blue="\[$(tput setaf 4)\]"
-    __c_purple="\[$(tput setaf 5)\]"
+    __c_blue="\\[$(tput setaf 4)\\]"
+    __c_purple="\\[$(tput setaf 5)\\]"
 fi
-__bold="\[$(tput bold)\]"
-__reset="\[$(tput sgr0)\]"
+__bold="\\[$(tput bold)\\]"
+__reset="\\[$(tput sgr0)\\]"
 
 # Color selection with fallback, to be used for host-specific prompt colors
 __choose_color()
 {
     if [ ${__colors_supported} -ge 256 ]; then
-        echo "\[$(tput setaf "${1}")\]"
+        echo "\\[$(tput setaf "${1}")\\]"
         return
     fi
-    echo "\[$(tput setaf "${2}")\]"
+    echo "\\[$(tput setaf "${2}")\\]"
 }
 
 # Default user prompt colors
@@ -162,19 +162,19 @@ __prompt_generator()
     fi
     # Main section
     if [ ${EUID} -eq 0 ]; then
-        p_main="${p_main}${__c_red}${__bold}\h${__reset} "
+        p_main="${p_main}${__c_red}${__bold}\\h${__reset} "
         p_lastchar="${__c_red}${__bold}#${__reset}"
     else
         p_main="${p_main}${__c_prompt}";
         if [ "${USER}" != "${prompt_hide_user}" ]; then
-            p_main="${p_main}\u@"
+            p_main="${p_main}\\u@"
         fi
-        p_main="${p_main}\h${__reset} "
+        p_main="${p_main}\\h${__reset} "
         p_lastchar="${__c_blue}${__bold}\$${__reset}"
     fi
     # Current directory
     if [ "${PWD}" != "${HOME}" ]; then
-        p_main="${p_main}${__bold}${__c_blue}\W${__reset} ";
+        p_main="${p_main}${__bold}${__c_blue}\\W${__reset} ";
     fi
     # Directory stack
     if [ ${dir_stack_count} -gt 0 ]; then
@@ -195,7 +195,7 @@ __prompt_generator()
     fi
     # Background jobs
     if [ -n "$(jobs -p)" ]; then
-        p_jobs="${__c_orange}+\j "
+        p_jobs="${__c_orange}+\\j "
     fi
     # Assemble prompt
     PS1="${p_timer}${p_exit}${p_main}${p_dirs}${p_jobs}${p_git}${p_lastchar} "
@@ -218,12 +218,12 @@ __prompt_generator()
                 title_prefix="$(tmux display-message -p "tmux:#S #I:#W") "
             elif [ -n "${STY}" ]; then
                 title_prefix="screen:$(echo "${STY}" | sed -e 's/^[0-9]\+\.//g' \
-                                -e "s/\.${HOSTNAME}$//g") ${WINDOW} "
+                                -e "s/\\.${HOSTNAME}$//g") ${WINDOW} "
             fi
             ;;
     esac
     if [ ${set_title} -ne 0 ]; then
-        echo -ne "\033]0;${title_prefix}${USER}@${HOSTNAME%%.*} ${PWD/#$HOME/~}\007"
+        echo -ne "\\033]0;${title_prefix}${USER}@${HOSTNAME%%.*} ${PWD/#$HOME/~}\\007"
     fi
 
     # Check for and process environment updates
@@ -285,7 +285,7 @@ fi
 # Enable lesspipe {{{
 # Make less more friendly for non-text input files, see lesspipe(1)
 if [ -x /usr/bin/lesspipe ]; then
-    if grep -qe '^\s\+echo\ "export' "$(which lesspipe)"; then
+    if grep -qe '^\s\+echo\ "export' "$(command -v lesspipe)"; then
         eval "$(lesspipe)"
     else
         export LESSOPEN="|lesspipe %s"

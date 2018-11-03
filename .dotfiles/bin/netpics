@@ -59,7 +59,7 @@ action_prepare() {
 
 # Check if needed programs are installed
 for i in convert exiv2; do
-    if ! which "${i}" >/dev/null 2>&1; then
+    if ! command -v "${i}" >/dev/null 2>&1; then
         echo "Error: ${i} was not found in PATH" >&2
         exit 1
     fi

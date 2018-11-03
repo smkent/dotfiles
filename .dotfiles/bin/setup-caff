@@ -7,7 +7,7 @@ fi
 
 # Prefer GnuPG 2.x over 1.x
 gpg="gpg"
-if which gpg2 >/dev/null 2>&1; then
+if command -v gpg2 >/dev/null 2>&1; then
     gpg="gpg2"
 fi
 
