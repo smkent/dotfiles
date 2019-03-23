@@ -321,6 +321,7 @@ nnoremap <silent> <Leader>. :redraw!<CR>
 silent call plug#begin()  " Suppress error message if git is not installed
 Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
+Plug 'https://github.com/jamessan/vim-gnupg'
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
 if v:version >= 704
