@@ -45,7 +45,7 @@ stty -ixon
 [ -z "${__colors_supported}" ] && __colors_supported=0
 
 # Terminal detection is from an older version of Ubuntu's default bashrc
-if [ "${TERM}" = "xterm" ] && [ ! -z "${COLORTERM}" ]; then
+if [ "${TERM}" = "xterm" ] && [ -n "${COLORTERM}" ]; then
     case "${COLORTERM}" in
         gnome-terminal|mate-terminal|truecolor)
             # Those crafty Gnome folks require you to check COLORTERM,
