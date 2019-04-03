@@ -235,15 +235,15 @@ PROMPT_COMMAND=__prompt_generator
 
 # PATH configuration {{{
 
-__append_path_if_exists()
+__prepend_path_if_exists()
 {
     echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return
-    [ -d "${1}" ] && PATH="${PATH}:${1}"
+    [ -d "${1}" ] && PATH="${1}:${PATH}"
     return 0
 }
-__append_path_if_exists "${HOME}/.dotfiles/bin"
-__append_path_if_exists "${HOME}/.local/bin"
-__append_path_if_exists "${HOME}/bin"
+__prepend_path_if_exists "${HOME}/.dotfiles/bin"
+__prepend_path_if_exists "${HOME}/.local/bin"
+__prepend_path_if_exists "${HOME}/bin"
 
 # }}}
 
@@ -434,7 +434,7 @@ unalias .
 
 # Unset local helper functions
 unset -f __source_if_exists
-unset -f __append_path_if_exists
+unset -f __prepend_path_if_exists
 
 # }}}
 
