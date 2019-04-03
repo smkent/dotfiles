@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 import argparse
 import os
@@ -38,9 +36,9 @@ def download_fonts(dir_name, url):
     try:
         temp_dir = tempfile.mkdtemp(prefix=os.path.basename(sys.argv[0]) + '.')
         subprocess.check_call(['git', 'clone', url, '--depth', '1', temp_dir])
-        font_files = subprocess.check_output(['find', temp_dir, '-iname',
-                                              '*.[o,t]tf', '-or', '-name',
-                                              '*.pcf.gz']).splitlines()
+        font_files = subprocess.check_output(
+            ['find', temp_dir, '-iname', '*.[o,t]tf', '-or', '-name',
+             '*.pcf.gz']).decode('utf-8').splitlines()
         dest_dir = os.path.join(args.directory, dir_name)
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir, 0o755)
@@ -53,7 +51,7 @@ def download_fonts(dir_name, url):
             shutil.rmtree(temp_dir)
 
 
-for dir_name, url in fonts.iteritems():
+for dir_name, url in fonts.items():
     download_fonts(dir_name, url)
 
 if args.update_cache:

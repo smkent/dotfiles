@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 import argparse
 import os
@@ -151,7 +149,8 @@ try:
         if not args.mountpoint:
             try:
                 cmd = ['findmnt', '-nr', '-o', 'target', '-S', args.mapper]
-                mountpoint = subprocess.check_output(cmd).strip()
+                mountpoint = \
+                    subprocess.check_output(cmd).decode('utf-8').strip()
                 if mountpoint and os.path.exists(mountpoint):
                     args.mountpoint = mountpoint
                 else:

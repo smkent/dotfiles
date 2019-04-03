@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 import os
@@ -20,8 +20,8 @@ excludes = ['.git', '.gitignore', 'README.md', '.dotfiles/img/screenshot-*']
 full_dirs = ['.vim']
 
 os.chdir(os.path.dirname(sys.argv[0]))
-git_toplevel = subprocess.check_output(['git', 'rev-parse',
-                                        '--show-toplevel']).strip()
+git_toplevel = subprocess.check_output(
+    ['git', 'rev-parse', '--show-toplevel']).decode('utf-8').strip()
 os.chdir(git_toplevel)
 cmd = ['rsync', '-av', '-r', '--files-from=-']
 cmd += ['--exclude={}'.format(x) for x in excludes]
@@ -31,10 +31,10 @@ if args.no_overwrite:
     cmd.append('--update')
 cmd += ['.', '{}:{}'.format(args.host, args.directory)]
 # Copy only tracked files (not full directories containing any tracked files)
-git_files = subprocess.check_output(['git', 'ls-files'])
+git_files = subprocess.check_output(['git', 'ls-files']).decode('utf-8')
 # Copy full .vim directory instead of just tracked files
 others = subprocess.check_output(['git', 'ls-files', '--others', '--'] +
-                                 full_dirs)
+                                 full_dirs).decode('utf-8')
 p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 p.stdin.write(git_files)
 p.stdin.write(others)

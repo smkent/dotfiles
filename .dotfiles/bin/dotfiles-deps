@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 import argparse
 import distutils.spawn
@@ -40,8 +38,9 @@ class DependencyInfo(object):
                 if '{}' in version_cmd:
                     version_cmd = version_cmd.format(self.name)
                 self.version = \
-                    subprocess.check_output(version_cmd, shell=True,
-                                            stderr=subprocess.STDOUT).strip()
+                    subprocess.check_output(
+                        version_cmd, shell=True,
+                        stderr=subprocess.STDOUT).decode('utf-8').strip()
             except subprocess.CalledProcessError:
                 self.version = 'Unknown'
 
@@ -85,8 +84,10 @@ def main():
 
     try:
         cmd = ['stty', 'size']
-        terminal_size = [int(x) for x in
-                         subprocess.check_output(cmd).strip().split()]
+        terminal_size = [
+            int(x) for x in
+            subprocess.check_output(cmd).decode('utf-8').strip().split()
+        ]
     except (subprocess.CalledProcessError, ValueError):
         terminal_size = [24, 80]
     for k, v in sorted(dependency_list.items()):
