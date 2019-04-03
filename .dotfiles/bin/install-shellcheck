@@ -1,0 +1,22 @@
+#!/bin/sh
+
+export version="stable"
+
+set -ex
+
+__cleanup(){
+    if [ -n "${tmp_dir}" ] && [ -d "${tmp_dir}" ]; then
+        rm -rvf "${tmp_dir}"
+    fi
+}
+trap __cleanup EXIT
+tmp_dir=$(mktemp -d --suffix=".$(basename "${0}")")
+cd "${tmp_dir}"
+
+wget -qO- \
+    "https://storage.googleapis.com/shellcheck/shellcheck-${version}.linux.x86_64.tar.xz" \
+    | tar -xJv
+if [ ! -d "${HOME}/bin" ]; then
+    mkdir -v "${HOME}/bin"
+fi
+cp -v "shellcheck-${version}/shellcheck" -t "${HOME}/bin"
