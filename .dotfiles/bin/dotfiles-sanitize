@@ -1,0 +1,39 @@
+#!/bin/sh
+
+usage() {
+    (
+        echo "$(basename "${0}") [-r|--reset]"
+        echo
+        echo "Remove/ignore or restore/unignore README.md in ${HOME}"
+    ) >&2
+}
+
+opt_reset=0;
+
+case "${1}" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    -r|--reset)
+        opt_reset=1
+        ;;
+    "")
+        ;;
+    *)
+        usage
+        exit 1
+        ;;
+esac
+
+set -ex
+
+git ls-files | grep -ve '^\.' | while read -r fn; do
+    if [ ${opt_reset} -eq 1 ]; then
+        git update-index --no-skip-worktree "${fn}"
+        git checkout "${fn}"
+    else
+        rm -vf "${fn}"
+        git update-index --skip-worktree "${fn}"
+    fi
+done
