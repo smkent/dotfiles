@@ -6,8 +6,9 @@
 set nocompatible
 
 " set UTF-8 encoding
-set enc=utf-8
-set fenc=utf-8
+set encoding=utf-8
+set fileencoding=utf-8
+scriptencoding utf-8
 set termencoding=utf-8
 
 " Indentation settings
@@ -463,9 +464,9 @@ let g:ale_open_list = 0
 let g:airline#extensions#ale#enabled = 1
 
 " Sign column symbols
-let g:ale_sign_error = "\u2716 "             " Block X
-let g:ale_sign_warning = "\u26A0 "           " Warning sign symbol
-let g:ale_sign_style_error = "\u21E2 "       " Dotted right arrow
+let g:ale_sign_error = "✖"             " Block X
+let g:ale_sign_warning = "⚠"           " Warning sign symbol
+let g:ale_sign_style_error = "⇢"       " Dotted right arrow
 let g:ale_sign_style_warning = g:ale_sign_style_error
 
 " File type specific configuration
