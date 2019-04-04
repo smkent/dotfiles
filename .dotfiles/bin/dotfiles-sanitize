@@ -1,5 +1,8 @@
 #!/bin/sh
 
+cd "$(dirname "${0}")" || exit
+cd "$(git rev-parse --show-toplevel)" || exit
+
 usage() {
     (
         echo "$(basename "${0}") [-r|--reset]"
