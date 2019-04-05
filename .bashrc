@@ -13,6 +13,7 @@
 
 prompt_hide_user="smkent"
 auto_update_check_interval=30
+tmux_env_update_check_interval=30
 git_update_check_interval=7200  # 2 hours
 
 # }}}
@@ -228,6 +229,11 @@ __prompt_generator()
 
     # Check for and process environment updates
     __auto_update_check
+
+    if [ -n "${TMUX}" ] && [ -S "${TMUX%%,*}" ]; then
+        # Check for and process tmux environment updates
+        __tmux_env_update_check
+    fi
 }
 PROMPT_COMMAND=__prompt_generator
 
@@ -297,6 +303,28 @@ fi
 if command -v vim >/dev/null 2>&1; then
     export EDITOR="vim"
 fi
+# }}}
+
+# tmux environment update check {{{
+__tmux_env_update_check()
+{
+    local socket_mod_time=
+    if [ "${SECONDS}" -lt "${__tmux_env_update_check_time-0}" ]; then
+        # The update check interval has not yet elapsed
+        return
+    fi
+    export __tmux_env_update_check_time=$((SECONDS+tmux_env_update_check_interval))
+
+    # Reload tmux environment if the tmux session socket's change time has
+    # changed
+    socket_mod_time=$(stat -c %Z "${TMUX%%,*}")
+    if [ "${__tmux_env_reload_last_modified-0}" -gt 0 ] &&
+            [ "${socket_mod_time}" -gt "${__tmux_env_reload_last_modified}" ]; then
+        # Set environment variables from tmux
+        eval "$(tmux showenv -s)"
+    fi
+    export __tmux_env_reload_last_modified="${socket_mod_time}"
+}
 # }}}
 
 # SSH_AUTH_SOCK detection {{{
