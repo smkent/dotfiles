@@ -115,6 +115,9 @@ For a more detailed tmux configuration summary, see
 * Custom status bar configuration
   * Window ID highlight inspired by [the screenshot in this
     thread](http://crunchbang.org/forums/viewtopic.php?id=20504)
+* Automatic environment variable updates in bash (ex. `SSH_AUTH_SOCK`) after
+  reattaching to a session (changes to the tmux session socket's ctime cause
+  bash to reload tmux session environment variable values)
 * Bash helper aliases:
   * `tn`: New session. Takes an optional session name argument.
   * `ta`: Attach to session. Takes an optional session name argument.
