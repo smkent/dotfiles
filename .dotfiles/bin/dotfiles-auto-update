@@ -94,7 +94,8 @@ class DotfilesAutoPull(object):
         ref = self._lookup_ref(self.args.remote_tracking_branch)
         new_ref = self.run_stdout(
             [self.git_exe, 'ls-remote', self.remote_name,
-             self.remote_branch_name]).split()[0]
+             self.remote_branch_name],
+            stderr=open('/dev/null', 'w')).split()[0]
         if new_ref == ref:
             # Already up to date
             return
