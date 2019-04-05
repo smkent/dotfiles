@@ -38,6 +38,8 @@ key bindings.
 | `<Prefix>>` | Swap the current and marked panes |
 | `<Prefix>,` | Swap the current pane with the previous pane |
 | `<Prefix>.` | Swap the current pane with the next pane |
+| `<Prefix>/` | Enter copy mode |
+| `<Prefix>Esc` | Enter copy mode |
 | `<Prefix>H` | Create new full height vertical pane left |
 | `<Prefix>J` | Create new full width horizontal pane below |
 | `<Prefix>K` | Create new full width horizontal pane above |
