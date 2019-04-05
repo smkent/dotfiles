@@ -26,6 +26,7 @@ key bindings.
 
 | Binding | Meaning |
 | :-- | :-- |
+| `Ctrl+Home` | Enter copy mode |
 | `Ctrl+F7` | Move to the previous session |
 | `Ctrl+F8` | Move to the next session |
 | `F7` | Move to the previous window |
