@@ -308,6 +308,8 @@ fi
 # tmux environment update check {{{
 __tmux_env_update_check()
 {
+    local env_var=
+    local env_value=
     local socket_mod_time=
     if [ "${SECONDS}" -lt "${__tmux_env_update_check_time-0}" ]; then
         # The update check interval has not yet elapsed
@@ -320,7 +322,24 @@ __tmux_env_update_check()
     socket_mod_time=$(stat -c %Z "${TMUX%%,*}")
     if [ "${__tmux_env_reload_last_modified-0}" -gt 0 ] &&
             [ "${socket_mod_time}" -gt "${__tmux_env_reload_last_modified}" ]; then
-        # Set environment variables from tmux
+        # Set whitelisted environment variables from tmux
+        for env_var in \
+                DISPLAY \
+                SSH_AGENT_PID \
+                SSH_ASKPASS \
+                SSH_AUTH_SOCK \
+                SSH_CONNECTION \
+                WINDOWID \
+                XAUTHORITY \
+            ; do
+            env_value=$(tmux showenv "${env_var}")
+            if [ "${env_value:0:1}" = "-" ]; then
+                unset "${env_var}"
+                continue
+            fi
+            env_value=$(echo "${env_value}" | cut -d= -f2-)
+            export "${env_var}"="${env_value}"
+        done
         eval "$(tmux showenv -s)"
     fi
     export __tmux_env_reload_last_modified="${socket_mod_time}"
