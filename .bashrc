@@ -106,24 +106,27 @@ __timer_start()
 # Converts number of seconds to human-readable time (ex. "1h 3m 30s")
 __timer_formatter()
 {
+    local div=
     local str=
     local mod=0
     local count=${1}
-    for i in s m h d; do
+    for i in s m h d y; do
         [ "${count}" -le 0 ] && break
-        case ${i} in
-            d)  str="${count}${i} ${str}";;
-            h)
-                mod=$((count % 24))
-                count=$((count / 24))
-                str="${mod}${i} ${str}";;
-            m|s)
-                mod=$((count % 60))
-                count=$((count / 60))
-                str="${mod}${i} ${str}";;
+        case "${i}" in
+            y)      div=0;;
+            d)      div=365;;
+            h)      div=24;;
+            m|s)    div=60;;
         esac
+        if [ "${div:-0}" -gt 0 ]; then
+            mod=$((count % div))
+            count=$((count / div))
+            str="${mod}${i}"
+        else
+            str="${count}${i}"
+        fi
     done
-    echo "${str%% *}"
+    echo "${str}"
 }
 
 # Start command timer

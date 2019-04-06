@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+args="${*}"
+if [ "${args##*[!0-9]*}" != "" ]; then
+    # Value is a number of seconds, parse as a unix timestamp
+    args="@${args}"
+fi
+ts=$(date --date="${args}" +%s)
+delta=$(($(date +%s) - ts))
+if [ "${delta}" -lt 0 ]; then
+    printf "future "
+    delta=$((0 - delta))
+fi
+howlong "${delta}"
