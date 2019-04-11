@@ -62,6 +62,12 @@ set t_RV=
 " Disable swap file fsync to prevent Vim from blocking when writing swap files
 set swapsync=
 
+" Allow execution of project-specific .vimrc files
+if getcwd() != $HOME
+    set exrc
+    set secure
+endif
+
 " }}}
 
 " Basic autocommands {{{
