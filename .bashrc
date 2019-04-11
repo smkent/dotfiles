@@ -482,6 +482,25 @@ __source_if_exists ~/.local/bash_aliases
 
 # }}}
 
+# Display basic settings on first invocation {{{
+
+if [ ! -f "${DOTFILES_DATA}/welcome_message" ]; then
+    (
+        echo "This appears to be a new dotfiles instance!"
+        echo "Current settings:"
+        echo
+        echo -ne "git user name:  "
+        echo "$(tput bold)$(git config --get user.name)$(tput sgr0)"
+        echo -ne "git user email: "
+        echo "$(tput bold)$(git config --get user.email)$(tput sgr0)"
+        echo -ne "bashrc prompt_hide_user="
+        echo "$(tput bold)${prompt_hide_user}$(tput sgr0)"
+    )
+    touch "${DOTFILES_DATA}/welcome_message"
+fi
+
+# }}}
+
 # Cleanup {{{
 
 # Stop recording sourced file names for auto-reload detection
