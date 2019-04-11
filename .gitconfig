@@ -137,3 +137,5 @@
     uu = "!f() { b=$(git rev-parse --abbrev-ref HEAD); set -x; \
                  git config --local --unset \"branch.${b}.remote\"; \
                  git config --local --unset \"branch.${b}.merge\"; }; f"
+[include]
+    path = ~/.local/gitconfig
