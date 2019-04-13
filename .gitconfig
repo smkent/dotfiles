@@ -88,6 +88,9 @@
     ff = "!f() { if [ -n \"${GIT_PREFIX}\" ]; then cd \"${GIT_PREFIX}\"; fi; \
                  if [ -z \"${1}\" ]; then git ls-files; else \
                  git ls-files | grep --color=auto \"${@}\"; fi; }; f"
+    # "ID"; show current git user identity
+    id = "!f() { git config --get user.name && \
+                 git config --get user.email; }; f"
     # "log"; git log with extra colors, commit date, and relative commit date
     l = log --pretty=format:'%C(auto,228)commit %H %C(auto,208)(%p)%C(auto,reset)%n%C(auto,117)Author: %an <%ae>%C(reset)%n%C(auto,67)CDate:  %cd (%cr)%C(auto,reset)%n%n%w(0,4,4)%B'
     l1 = "!git l -n 1"  # "log 1"; depends on the "l" alias
