@@ -112,12 +112,12 @@ class DotfilesAutoPull(object):
         '''
         Pull updates from the remote repository
         '''
+        prev_ref = self._lookup_ref(self.args.remote_tracking_branch)
         self.run([self.git_exe, 'fetch', self.remote_name,
                   self.remote_branch_name])
         head_ref = self._lookup_ref('@')
         if self.args.skip_ref and head_ref == self.args.skip_ref:
             return
-        prev_ref = self._lookup_ref(self.args.remote_tracking_branch)
         if self._can_update_local_branch():
             # If the local branch tracks the target remote tracking branch,
             # then update the local branch
@@ -125,8 +125,8 @@ class DotfilesAutoPull(object):
                       self.args.remote_tracking_branch, self.current_branch])
             new_ref = self._lookup_ref('@')
             # If the local branch has been updated, print the log of changes
-            if prev_ref != new_ref:
-                self._print_log_delta(prev_ref, '@')
+            if head_ref != new_ref:
+                self._print_log_delta(head_ref, '@')
         else:
             # If the local branch doesn't track the target remote tracking
             # branch, just show that an update is available
