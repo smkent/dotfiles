@@ -1,7 +1,7 @@
 #!/bin/bash
-# Alias and helper function definitions
 
-# Color aliases
+# Color configuration for coreutils {{{
+
 if [ "${__colors_supported:-0}" -ge 2 ]; then
     # Color command aliases
     alias ls='ls --color=auto'
@@ -25,18 +25,9 @@ if [ "${__colors_supported:-0}" -ge 256 ]; then
     }
 fi
 
-# The alert alias is from the default Ubuntu bashrc
-if [ -x /usr/bin/notify-send ]; then
-    # Add an "alert" alias for long running commands.  Use like so:
-    #   sleep 10; alert
-    alert() {
-        ret=${?}
-        notify-send --urgency=low -i \
-            "$([ "${ret}" -eq 0 ] && echo terminal || echo error)" \
-            "$(history | tail -n1 | \
-               sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"
-    }
-fi
+# }}}
+
+# Filesystem utilities {{{
 
 # Alias "dirs" to print directory stack one per line
 alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
@@ -45,39 +36,6 @@ alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
 alias ll='ls -l'
 alias lh='ls -lh'
 alias la='ls -lAh'
-
-# vim shorthand
-alias v='vim'
-
-# Force SSH_AUTH_SOCK detection with ssock
-alias ssock='SSH_AUTH_SOCK= __detect_ssh_auth_sock'
-
-# tmux
-ta() {
-    args="${*}"
-    [ -n "${args}" ] && { tmux attach -d -t "${args}"; return; }
-    tmux attach -d
-}
-tn() {
-    args="${*}"
-    [ -n "${args}" ] && { tmux new-session -n '' -s "${args}"; return; }
-    tmux new-session -n ''
-}
-alias tl='tmux list-sessions'
-
-# Prevent vim from trying to connect to X when running in tmux, and use "vimx"
-# to start vim normally
-if [ -n "${TMUX}" ] && [ -n "${DISPLAY}" ]; then
-    alias vim='vim -X'
-fi
-alias vimx='\vim'
-
-png2jpg() {
-    for i in "${@}"; do
-        echo "${i}"
-        convert "${i}" "${i%%.png}.jpg"
-    done
-}
 
 # "find alias", loosely based on the git "fa" alias (see .gitconfig)
 # This lists/searches both alias and shell functions not starting with _
@@ -116,14 +74,84 @@ dusort() {
     } | sort -h
 }
 
+# }}}
+
+# tmux {{{
+
+# tmux
+ta() {
+    args="${*}"
+    [ -n "${args}" ] && { tmux attach -d -t "${args}"; return; }
+    tmux attach -d
+}
+tn() {
+    args="${*}"
+    [ -n "${args}" ] && { tmux new-session -n '' -s "${args}"; return; }
+    tmux new-session -n ''
+}
+alias tl='tmux list-sessions'
+
+# }}}
+
+# git {{{
+
 # "git root"
 alias gr='cd $(git rev-parse --show-toplevel)'
 
 # "git grep"
 alias gg='git grep'
 
+# }}}
+
+# vim {{{
+
+# vim shorthand
+alias v='vim'
+
+# Prevent vim from trying to connect to X when running in tmux, and use "vimx"
+# to start vim normally
+if [ -n "${TMUX}" ] && [ -n "${DISPLAY}" ]; then
+    alias vim='vim -X'
+fi
+alias vimx='\vim'
+
+# }}}
+
+# Environment and dotfiles utilites {{{
+
 # "wh", short for "which", also searches shell aliases/functions/built-ins
 alias wh='type -a'
+
+# Force SSH_AUTH_SOCK detection with ssock
+alias ssock='SSH_AUTH_SOCK= __detect_ssh_auth_sock'
+
+# Disable or enable .bashrc auto-update checks
+alias enable-auto-update='rm -vf "${DOTFILES_DATA}/disable_auto_update"'
+alias disable-auto-update='touch "${DOTFILES_DATA}/disable_auto_update"'
+
+# }}}
+
+# Miscellaneous {{{
+
+# The alert alias is from the default Ubuntu bashrc
+if [ -x /usr/bin/notify-send ]; then
+    # Add an "alert" alias for long running commands.  Use like so:
+    #   sleep 10; alert
+    alert() {
+        ret=${?}
+        notify-send --urgency=low -i \
+            "$([ "${ret}" -eq 0 ] && echo terminal || echo error)" \
+            "$(history | tail -n1 | \
+               sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"
+    }
+fi
+
+png2jpg() {
+    for i in "${@}"; do
+        echo "${i}"
+        convert "${i}" "${i%%.png}.jpg"
+    done
+}
 
 # Ensure the specified files have a newline at end of file. This can take a
 # list of files as arguments or read a list of files from standard input.
@@ -139,6 +167,6 @@ eof_newlines() {
     fi
 }
 
-# Disable or enable .bashrc auto-update checks
-alias enable-auto-update='rm -vf "${DOTFILES_DATA}/disable_auto_update"'
-alias disable-auto-update='touch "${DOTFILES_DATA}/disable_auto_update"'
+# }}}
+
+# vim: set fdls=0 fdm=marker:
