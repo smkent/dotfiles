@@ -37,6 +37,9 @@ alias ll='ls -l'
 alias lh='ls -lh'
 alias la='ls -lAh'
 
+# df aliases
+alias dfh='df -h'
+
 # "find alias", loosely based on the git "fa" alias (see .gitconfig)
 # This lists/searches both alias and shell functions not starting with _
 fa() {
