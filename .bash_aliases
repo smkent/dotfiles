@@ -120,6 +120,14 @@ alias vimx='\vim'
 
 # }}}
 
+# Clipboard {{{
+
+alias xcopy='xclip -selection clip -in'
+alias copy='xcopy'
+alias xpaste='xclip -selection clip -out'
+
+# }}}
+
 # Environment and dotfiles utilites {{{
 
 # "wh", short for "which", also searches shell aliases/functions/built-ins
