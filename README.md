@@ -130,11 +130,24 @@ For a more detailed tmux configuration summary, see
 For more detailed vim configuration summary, see
 [`.dotfiles/doc/vim.md`](/.dotfiles/doc/vim.md)
 
+Basic settings:
+
 * The usual basic settings (line numbers, syntax highlighting, etc.)
 * Quit vim using `q` in normal mode
 * Save files by pressing F2 or Ctrl+S, or save and quit with `Q` in normal mode
 * Highlight 81st column (via Vim 7.3+'s `colorcolumn` feature)
 * Plugins managed by [vim-plug](https://github.com/junegunn/vim-plug)
+
+Development plugins:
+
+* Real-time linting with [ALE](https://github.com/w0rp/ale)
+* Code navigation and completion using
+  [jedi-vim](https://github.com/davidhalter/jedi-vim) and
+  [completor](https://github.com/maralla/completor.vim)
+* File, tags, etc. searching via [fzf](https://github.com/junegunn/fzf.vim)
+
+Misc:
+
 * Custom [vim-airline](https://github.com/vim-airline/vim-airline) color scheme
 * Some basic and [vim-surround](https://github.com/tpope/vim-surround) keymaps
   from [YADR (Yet Another Dotfile Repo)](https://github.com/skwp/dotfiles/)
