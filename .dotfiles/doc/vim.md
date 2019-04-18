@@ -40,7 +40,9 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 
 * [ALE](https://github.com/w0rp/ale)
 * [AnsiEsc](https://github.com/vim-scripts/AnsiEsc.vim)
+* [completor](https://github.com/maralla/completor.vim)
 * [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
+* [jedi-vim](https://github.com/davidhalter/jedi-vim)
 * [tcomment_vim](https://github.com/tomtom/tcomment_vim)
 * [vim-airline](https://github.com/vim-airline/vim-airline)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
@@ -73,6 +75,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `Q` | Save and quit (`:wq`) |
 | `Ctrl+e` | Open CtrlP in find buffer mode (`:CtrlPBuffer`) |
 | `Ctrl+y` | Toggle ALE verbosity |
+| `Ctrl+]` | Go to definition using [jedi-vim](https://github.com/davidhalter/jedi-vim) |
 
 ## Additional mappings
 

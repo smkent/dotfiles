@@ -62,6 +62,9 @@ set t_RV=
 " Disable swap file fsync to prevent Vim from blocking when writing swap files
 set swapsync=
 
+" Open preview splits at the bottom instead of the top
+set splitbelow
+
 " Allow execution of project-specific .vimrc files
 if getcwd() != $HOME
     set exrc
@@ -328,12 +331,14 @@ nnoremap <silent> <Leader>. :redraw!<CR>
 silent call plug#begin()  " Suppress error message if git is not installed
 Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
+Plug 'https://github.com/davidhalter/jedi-vim'
 Plug 'https://github.com/jamessan/vim-gnupg'
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
 if v:version >= 704
     Plug 'https://github.com/ludovicchabant/vim-gutentags'
 endif
+Plug 'https://github.com/maralla/completor.vim'
 Plug 'https://github.com/smkent/vim-pipe-preview'
 Plug 'https://github.com/stephpy/vim-yaml'
 Plug 'https://github.com/tomtom/tcomment_vim'
@@ -641,6 +646,33 @@ let g:gutentags_file_list_command = {
         \ },
     \ }
 let g:gutentags_generate_on_empty_buffer = 1
+
+" }}}
+
+" Autocompletion configuration (jedi-vim and completor) {{{
+
+let g:jedi#show_call_signatures_delay = 100
+nnoremap <silent> <C-]> :call jedi#goto()<CR>
+
+let g:completor_auto_trigger = 1
+
+" From the completor README:
+" https://github.com/maralla/completor.vim#use-tab-to-trigger-completion-disable-auto-trigger
+function! Tab_Or_Complete() abort
+    " If completor is already open the `tab` cycles through suggested completions.
+    if pumvisible()
+        return "\<C-N>"
+        " If completor is not open and we are in the middle of typing a word then
+        " `tab` opens completor menu.
+    elseif col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+        return "\<C-R>=completor#do('complete')\<CR>"
+    else
+        " If we aren't typing a word and we press `tab` simply do the normal `tab`
+        " action.
+        return "\<Tab>"
+    endif
+endfunction
+inoremap <expr> <Tab> Tab_Or_Complete()
 
 " }}}
 
