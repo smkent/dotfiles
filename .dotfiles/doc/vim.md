@@ -42,6 +42,8 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [AnsiEsc](https://github.com/vim-scripts/AnsiEsc.vim)
 * [completor](https://github.com/maralla/completor.vim)
 * [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
+* [fzf](https://github.com/junegunn/fzf) and
+  [fzf.vim](https://github.com/junegunn/fzf.vim)
 * [jedi-vim](https://github.com/davidhalter/jedi-vim)
 * [tcomment_vim](https://github.com/tomtom/tcomment_vim)
 * [vim-airline](https://github.com/vim-airline/vim-airline)
@@ -134,13 +136,20 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `[T` | Move to first matching tag (`:tfirst`) |
 | `]T` | Move to last matching tag (`:tlast`) |
 
+### fzf plugin mappings
+
+| Mapping | Meaning |
+| :-- | :-- |
+| `Ctrl+e` | Search open buffers (`:Buffers`) |
+| `Ctrl+p` | Search git files (`:GFiles`) |
+| `Ctrl+@` | Search tags (`:Tags`) |
+| `<Leader>o` | Search file history (`:History`) |
+
 ### CtrlP plugin mappings
 
 | Mapping | Meaning |
 | :-- | :-- |
-| `Ctrl+p` | Open CtrlP in mixed mode (`:CtrlPMixed`) |
-| `Ctrl+e` | Open CtrlP in find buffer mode (`:CtrlPBuffer`) |
-| `Ctrl+2` | Open CtrlP in tag mode (`:CtrlPTag`) |
+| `<Leader><Leader>p` | Open CtrlP in mixed mode (`:CtrlPMixed`) |
 
 ### ALE plugin mappings
 

@@ -395,6 +395,19 @@ export GPG_TTY
 export SHELLCHECK_OPTS="--exclude SC1090"
 # }}}
 
+# fzf configuration {{{
+
+if [ -f ~/.fzf.bash ]; then
+    . ~/.fzf.bash
+fi
+
+export FZF_DEFAULT_OPTS="
+    --color pointer:148
+    --color spinner:215
+    "
+
+# }}}
+
 # }}}
 
 # Automatic update and reload {{{
@@ -514,3 +527,5 @@ unset -f __prepend_path_if_exists
 # }}}
 
 # vim: set fdls=0 fdm=marker:
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

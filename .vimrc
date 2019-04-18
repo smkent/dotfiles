@@ -334,6 +334,12 @@ Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/davidhalter/jedi-vim'
 Plug 'https://github.com/jamessan/vim-gnupg'
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
+Plug 'https://github.com/junegunn/fzf',
+            \ {
+            \     'dir': '~/.fzf',
+            \     'do': './install --completion --no-update-rc --no-key-bindings',
+            \ }
+Plug 'https://github.com/junegunn/fzf.vim'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
 if v:version >= 704
     Plug 'https://github.com/ludovicchabant/vim-gutentags'
@@ -448,9 +454,23 @@ let g:gitgutter_override_sign_column_highlight = 0
 
 " }}}
 
+" fzf configuration {{{
+
+nnoremap <silent> <C-e> :Buffers<CR>
+nnoremap <silent> <C-@> :Tags<CR>
+nnoremap <silent> <C-p> :GFiles<CR>
+nnoremap <silent> <Leader>o :History<CR>
+
+let g:fzf_colors = {
+            \ 'pointer': ['fg', 'Title'],
+            \ 'spinner': ['fg', 'Constant'],
+            \ }
+
+" }}}
+
 " CtrlP configuration {{{
 
-let g:ctrlp_map = '<c-p>'
+let g:ctrlp_map = '<Leader><Leader>p'
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_max_depth = 5
 let g:ctrlp_max_files = 30000
@@ -463,8 +483,6 @@ let g:ctrlp_user_command = {
         \ },
     \ 'fallback': 'find %s -type f'
     \ }
-nnoremap <silent> <C-e> :CtrlPBuffer<CR>
-nnoremap <silent> <C-@> :CtrlPTag<CR>
 
 " }}}
 
