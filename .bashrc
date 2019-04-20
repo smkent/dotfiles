@@ -527,5 +527,3 @@ unset -f __prepend_path_if_exists
 # }}}
 
 # vim: set fdls=0 fdm=marker:
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
