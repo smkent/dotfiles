@@ -158,7 +158,13 @@ nnoremap <silent> <F3> :noh<return><esc>
 
 " F4: Toggle paste mode
 set pastetoggle=<F4>
-nnoremap <silent> <F4> :set paste!<CR>
+function! TogglePaste() abort
+    " Toggle paste mode
+    set paste!
+    " Enable/disable completor based on new paste state
+    let g:completor_auto_trigger = (1 - &paste)
+endfunction
+nnoremap <silent> <F4> :call TogglePaste()<CR>
 
 " F9: Toggle spell checking
 nnoremap <silent> <F9> :setlocal spell!<CR>
