@@ -72,6 +72,7 @@
     cx = cherry-pick -x
     d = diff
     ds = diff --staged
+    du = diff @{u}...@  # "diff upstream"
     dw = diff --word-diff=color  # "diff words"
     ec = config --global -e  # "edit config"
     el = config --local -e  # "edit local"
