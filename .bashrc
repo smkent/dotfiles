@@ -159,7 +159,7 @@ __prompt_generator()
     # Last command exit code
     if [ ${exit_code} -ne 0 ]; then
         case ${exit_code} in
-            130)    exit_code_disp="C-c";   exit_color="${__c_yellow}";;
+            130)    exit_code_disp="^C";   exit_color="${__c_yellow}";;
             148)    exit_code_disp="bg";    exit_color="${__c_orange}";;
         esac
         p_exit="${exit_color}[${exit_code_disp}]${__reset} "
