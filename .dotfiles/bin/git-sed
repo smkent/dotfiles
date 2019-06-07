@@ -1,10 +1,12 @@
 #!/bin/sh
 
 search="${1:?}"
-replace="${2:?}"
+shift
+replace="${1:?}"
+shift
 
 set -ex
 
-for i in $(git grep "${search}" | cut -d: -f1 | sort -u); do
+for i in $(git grep "${search}" "${@}" | cut -d: -f1 | sort -u); do
     sed -i "${i}" -e "s:${search}:${replace}:g"
 done
