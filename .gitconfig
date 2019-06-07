@@ -129,6 +129,9 @@
     rt = reset --hard  # "reset to"
     s = status -s --branch
     sb = show-branch
+    # "stash push"
+    sp = "!f() { if [ -n \"${*}\" ]; then git stash push -m \"${@}\"; \
+                 else git stash push; fi; }; f"
     st = status
     su = branch --set-upstream-to  # "set upstream"
     # "upstream branch"; compare local and remote tracking branch histories
