@@ -13,6 +13,7 @@
 !.face
 !.gimp-2.8/
 .gimp-2.8/*
+!.gimp-2.8/fonts.conf
 !.gimp-2.8/scripts
 !.gitconfig
 !.gitignore
