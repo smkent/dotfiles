@@ -120,6 +120,16 @@ alias vimx='\vim'
 
 # }}}
 
+# ssh {{{
+
+# Start agent
+alias sstart='eval $(ssh-agent) && ssh-add'
+
+# "git grep"
+alias sstop='kill ${SSH_AGENT_PID}'
+
+# }}}
+
 # Clipboard {{{
 
 alias xcopy='xclip -selection clip -in'
