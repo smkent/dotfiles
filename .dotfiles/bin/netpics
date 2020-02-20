@@ -47,7 +47,7 @@ action_prepare() {
         if [ "$(stat -c '%s' "${fn}")" -gt 1048576 ]; then
             # Create lower resolution image
             mkdir -vp "thumb"
-            fn_thumb="thumb/${fn%.*}-thumb.jpg"
+            fn_thumb="thumb/${fn%.*}.jpg"
             if [ -f "${fn_thumb}" ]; then
                 echo "${fn_thumb} already exists, skipping" >&2
             else
