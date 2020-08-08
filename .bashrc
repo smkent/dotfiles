@@ -110,6 +110,7 @@ __timer_formatter()
     local str=
     local mod=0
     local count=${1}
+    local partcount=0
     for i in s m h d y; do
         [ "${count}" -le 0 ] && break
         case "${i}" in
@@ -121,12 +122,22 @@ __timer_formatter()
         if [ "${div:-0}" -gt 0 ]; then
             mod=$((count % div))
             count=$((count / div))
-            str="${mod}${i}"
+            str="${mod}${i} ${str}"
         else
-            str="${count}${i}"
+            str="${count}${i} ${str}"
         fi
     done
-    echo "${str}"
+    # shellcheck disable=2005,2046
+    echo $(
+        for part in ${str}; do
+            partcount=$((partcount+1));
+            echo "${part}"
+            if [ ${partcount} -ge 2 ]; then
+                break
+            fi
+            continue
+        done
+    )
 }
 
 # Start command timer
