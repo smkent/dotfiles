@@ -46,6 +46,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
   [fzf.vim](https://github.com/junegunn/fzf.vim)
 * [jedi-vim](https://github.com/davidhalter/jedi-vim)
 * [tcomment_vim](https://github.com/tomtom/tcomment_vim)
+* [ultisnips](https://github.com/SirVer/ultisnips)
 * [vim-airline](https://github.com/vim-airline/vim-airline)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) (if [vim patch
@@ -56,6 +57,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-python-pep8-indent](https://github.com/hynek/vim-python-pep8-indent)
 * [vim-signify](https://github.com/mhinz/vim-signify) (if vim patch 7.4.427 is
   not installed)
+* [vim-snippets](https://github.com/honza/vim-snippets)
 * [vim-surround](https://github.com/tpope/vim-surround)
 * [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
 * [vim-yaml](https://github.com/stephpy/vim-yaml)
@@ -167,6 +169,12 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `gc` | Toggle comment (visual and select modes) |
 | `gcb<motion>` | Toggle block comment across `<motion>` |
 | `<count>gcc` | Toggle comment for the current line (or `<count>` lines) |
+
+### ultisnips plugin mappings
+
+| Mapping | Meaning |
+| :-- | :-- |
+| `Ctrl+j` | Expand snippet |
 
 ### vim-surround plugin mappings
 
