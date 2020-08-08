@@ -253,6 +253,20 @@ nnoremap <Leader>y <C-y>
 nnoremap <Leader>p "+p
 nnoremap <Leader>P "+Pl
 
+" vmap <silent> "+y :!xclip -f -sel clip<CR>
+vmap <silent> "+y "yy <Bar> :call system('xclip -sel clip -i', @y)<CR>
+map "+p :r!xclip -o -sel clip<CR>
+
+" Yank to the system clipboard with ,Y in visual mode. If clipboard support is
+" not present, yank to xclip instead.
+" if !has('clipboard')
+"     if executable('xclip')
+"         " nmap <Leader>Y "+y
+"         vnoremap <silent>"+y "yy <Bar> :call system('xclip -sel clip -i', @y)<CR>
+"     endif
+" else
+" endif
+
 " Surround shortcuts
 map <Leader>' ysiW'
 vmap <Leader>' c'<C-R>"'<ESC>
