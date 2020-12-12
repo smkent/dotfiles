@@ -8,5 +8,5 @@ shift
 set -ex
 
 for i in $(git grep "${search}" "${@}" | cut -d: -f1 | sort -u); do
-    sed -i "${i}" -e "s:${search}:${replace}:g"
+    sed -i'' -e "s:${search}:${replace}:g" "${i}"
 done
