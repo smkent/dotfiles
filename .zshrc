@@ -25,3 +25,12 @@ if [ "$(uname -s)" = "Darwin" ]; then
 fi
 
 # }}}
+
+# Enable additional zsh completions on OS X
+if [ "$(uname -s)" = "Darwin" ]; then
+    if type brew &>/dev/null; then
+        FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+        autoload -Uz compinit
+        compinit -i
+    fi
+fi
