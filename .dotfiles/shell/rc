@@ -18,6 +18,28 @@ git_update_check_interval=7200  # 2 hours
 
 # }}}
 
+# Helper functions {{{
+
+__stat_mode()
+{
+    if [ "$(uname -s)" = "Darwin" ]; then
+        stat -f '%A' "${@}"
+    else
+        stat -c '%a' "${@}"
+    fi
+}
+
+__stat_mtime()
+{
+    if [ "$(uname -s)" = "Darwin" ]; then
+        stat -f '%m' "${@}"
+    else
+        stat -c '%Z' "${@}"
+    fi
+}
+
+# }}}
+
 # Basic settings {{{
 
 # Several of these are from the Gentoo/Ubuntu default bashrc.
@@ -303,10 +325,12 @@ export DOTFILES_DATA="${HOME}/.dotfiles/.data"
 
 # Color configuration
 if [ ${__colors_supported} -ge 2 ]; then
-    if [ ${__colors_supported} -ge 256 ] && [ -r ~/.dircolors ]; then
-        eval "$(dircolors -b ~/.dircolors)"
-    else
-        eval "$(dircolors -b)"
+    if [ "$(uname -s)" != "Darwin" ]; then
+        if [ ${__colors_supported} -ge 256 ] && [ -r ~/.dircolors ]; then
+            eval "$(dircolors -b ~/.dircolors)"
+        else
+            eval "$(dircolors -b)"
+        fi
     fi
 fi
 
@@ -355,7 +379,7 @@ __tmux_env_update_check()
 
     # Reload tmux environment if the tmux session socket's change time has
     # changed
-    socket_mod_time=$(stat -c %Z "${TMUX%%,*}")
+    socket_mod_time=$(__stat_mtime "${TMUX%%,*}")
     if [ "${__tmux_env_reload_last_modified-0}" -gt 0 ] &&
             [ "${socket_mod_time}" -gt "${__tmux_env_reload_last_modified}" ]; then
         # Set whitelisted environment variables from tmux
@@ -413,7 +437,7 @@ __detect_ssh_auth_sock
 # }}}
 
 # GnuPG configuration {{{
-if [ "$(stat -c '%a' ~/.gnupg 2>/dev/null)" != "700" ]; then
+if [ "$(__stat_mode ~/.gnupg 2>/dev/null)" != "700" ]; then
     chmod 0700 ~/.gnupg
     chmod -R og-rwx ~/.gnupg
 fi
@@ -463,7 +487,7 @@ __auto_update_check()
     [ -f "${DOTFILES_DATA}/disable_auto_update" ] && return
 
     # Reload .bashrc if it or any file it sources has been modified
-    rc_mod_time=$(stat -c %Y "${__auto_reload_files[@]}" | sort | tail -n1)
+    rc_mod_time=$(__stat_mtime "${__auto_reload_files[@]}" | sort | tail -n1)
     if [ "${__auto_reload_last_modified-0}" -gt 0 ] &&
             [ "${rc_mod_time}" -gt "${__auto_reload_last_modified}" ]; then
         source ~/.dotfiles/shell/rc
@@ -481,7 +505,7 @@ __auto_update_check()
             --skip-ref="$(cat "${update_ref_file}")"
         rm -f "${update_ref_file}"
     else
-        git_check_time=$(stat -c %Y "${update_timestamp_file}" 2>/dev/null)
+        git_check_time=$(__stat_mtime "${update_timestamp_file}" 2>/dev/null)
         if [ "$(date +%s)" -ge \
                 "$((${git_check_time:-0}+git_update_check_interval))" ]; then
             touch "${update_timestamp_file}"
@@ -556,6 +580,7 @@ unalias .
 # Unset local helper functions
 unset -f __source_if_exists
 unset -f __prepend_path_if_exists
+unset -f __stat_mode
 
 # }}}
 
