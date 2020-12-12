@@ -113,6 +113,8 @@
                  git branch --set-upstream-to \"${r}\" && \
                  git config --local branch.\"${b}\".pushremote no_push; }; f"
     p = pull
+    # "push (new) branch"
+    pb = "!f() { git push -u origin \"$(git rev-parse --abbrev-ref @)\" \"${@}\"; }; f"
     r = reset
     ra = rebase --abort
     # "remote branch"; print remote tracking branch
