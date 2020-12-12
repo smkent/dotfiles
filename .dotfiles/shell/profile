@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Install dotfiles templates
+~/.dotfiles/bin/expand-dotfiles

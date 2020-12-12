@@ -40,6 +40,7 @@
 .vim/.netrwhist
 .vim/plugged/
 !.vim/
+!.zshrc
 !.zsnes/
 .zsnes/*
 !.zsnes/zinput.cfg

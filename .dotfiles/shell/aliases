@@ -1,0 +1,193 @@
+#!/bin/bash
+
+# Color configuration for coreutils {{{
+
+if [ "${__colors_supported:-0}" -ge 2 ]; then
+    # Color command aliases
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+if [ "${__colors_supported:-0}" -ge 256 ]; then
+    # Use colors in man pages:
+    # - Light blue for bold text (e.g. headings, function names, etc.)
+    # - Green for underlined text (e.g. function and option arguments, etc.)
+    # Colors idea from http://unix.stackexchange.com/a/147
+    # TERMCAP variables explanation at http://unix.stackexchange.com/a/108840
+    man() {
+        env \
+        LESS_TERMCAP_md="$(tput bold; tput setaf 153)" \
+        LESS_TERMCAP_us="$(tput smul; tput setaf 114)" \
+        LESS_TERMCAP_ue="$(tput rmul; tput sgr0)" \
+        man "${@}"
+    }
+fi
+
+# }}}
+
+# Filesystem utilities {{{
+
+# Alias "dirs" to print directory stack one per line
+alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
+
+# ls aliases
+alias ll='ls -l'
+alias lh='ls -lh'
+alias la='ls -lAh'
+
+# df aliases
+alias dfh='df -h'
+
+# "find alias", loosely based on the git "fa" alias (see .gitconfig)
+# This lists/searches both alias and shell functions not starting with _
+fa() {
+    {
+        alias | sed -e 's:^alias ::' -e 's:=: :';
+        typeset -F 2>&1 | sed -e 's:^declare[ -f]* ::' | \
+            grep -ve '^_' | sed -e 's:$: (function):';
+    } | sort -u | grep -i "${1}" | \
+    awk -v nr=2 '
+        {printf("\033[1;34m%12s\033[0;0m", $1)};
+        {sep=FS};
+        {for (x=nr; x<=NF; x++) { printf "%s%s", sep, $x; };
+            print "\033[0;39m"}'
+}
+
+# "find files"
+ff() {
+    local dir
+    if [ -d "${1}" ]; then
+        dir="${1}"
+        shift
+    fi
+    find "${dir:-.}" -iname "*${*}*"
+}
+
+# Print the human-readable disk usage for the specified path(s) or the contents
+# of the current directory
+dusort() {
+    {
+        if [ ${#} -gt 0 ]; then
+            du -shxc "${@}"
+        else
+            du -shxc -- *
+        fi
+    } | sort -h
+}
+
+# }}}
+
+# tmux {{{
+
+# tmux
+ta() {
+    args="${*}"
+    [ -n "${args}" ] && { tmux attach -d -t "${args}"; return; }
+    tmux attach -d
+}
+tn() {
+    args="${*}"
+    [ -n "${args}" ] && { tmux new-session -n '' -s "${args}"; return; }
+    tmux new-session -n ''
+}
+alias tl='tmux list-sessions'
+
+# }}}
+
+# git {{{
+
+# "git root"
+alias gr='cd $(git rev-parse --show-toplevel)'
+
+# "git grep"
+alias gg='git grep'
+
+# }}}
+
+# vim {{{
+
+# vim shorthand
+alias v='vim'
+
+# Prevent vim from trying to connect to X when running in tmux, and use "vimx"
+# to start vim normally
+if [ -n "${TMUX}" ] && [ -n "${DISPLAY}" ]; then
+    alias vim='vim -X'
+fi
+alias vimx='\vim'
+
+# }}}
+
+# ssh {{{
+
+# Start agent
+alias sstart='eval $(ssh-agent) && ssh-add'
+
+# "git grep"
+alias sstop='kill ${SSH_AGENT_PID}'
+
+# }}}
+
+# Clipboard {{{
+
+alias xcopy='xclip -selection clip -in'
+alias copy='xcopy'
+alias xpaste='xclip -selection clip -out'
+
+# }}}
+
+# Environment and dotfiles utilites {{{
+
+# "wh", short for "which", also searches shell aliases/functions/built-ins
+alias wh='type -a'
+
+# Force SSH_AUTH_SOCK detection with ssock
+alias ssock='SSH_AUTH_SOCK= __detect_ssh_auth_sock'
+
+# Disable or enable .bashrc auto-update checks
+alias enable-auto-update='rm -vf "${DOTFILES_DATA}/disable_auto_update"'
+alias disable-auto-update='touch "${DOTFILES_DATA}/disable_auto_update"'
+
+# }}}
+
+# Miscellaneous {{{
+
+# The alert alias is from the default Ubuntu bashrc
+if [ -x /usr/bin/notify-send ]; then
+    # Add an "alert" alias for long running commands.  Use like so:
+    #   sleep 10; alert
+    alert() {
+        ret=${?}
+        notify-send --urgency=low -i \
+            "$([ "${ret}" -eq 0 ] && echo terminal || echo error)" \
+            "$(history | tail -n1 | \
+               sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"
+    }
+fi
+
+png2jpg() {
+    for i in "${@}"; do
+        echo "${i}"
+        convert "${i}" "${i%%.png}.jpg"
+    done
+}
+
+# Ensure the specified files have a newline at end of file. This can take a
+# list of files as arguments or read a list of files from standard input.
+eof_newlines() {
+    while [ "${#}" -gt 0 ]; do
+        sed -i "${1}" -e "\$a\\"
+        shift
+    done
+    if ! tty -s; then
+        while read -r fn; do
+            sed -i "${fn}" -e "\$a\\"
+        done
+    fi
+}
+
+# }}}
+
+# vim: set fdls=0 fdm=marker:

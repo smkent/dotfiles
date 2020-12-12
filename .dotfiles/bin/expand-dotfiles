@@ -13,9 +13,9 @@ timestamp_file="${DOTFILES_DATA}/templates_timestamp"
       [ -z "$(find . -newer "${timestamp_file}" \
               -print -quit 2>/dev/null)" ]; } && exit 0
 [ ${opt_verbose} -eq 1 ] && set -x
-find . -mindepth 2 -maxdepth 2 -executable -name install -printf '%h\n' | \
+find . -mindepth 2 -maxdepth 2 -perm +0111 -name install | \
     while read -r d; do
-        ( cd "${d}" && DEST="../../.." ./install; ) || \
+        ( cd "$(dirname "${d}")" && DEST="../../.." ./install; ) || \
             { echo "Error expanding ${d#./} dotfiles template"; exit 1; }
     done
 touch "${timestamp_file}"

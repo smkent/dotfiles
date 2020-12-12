@@ -1,5 +1,4 @@
 #!/bin/bash
 [ -f ~/.bashrc ] && . ~/.bashrc
 
-# Install dotfiles templates
-~/.dotfiles/bin/expand-dotfiles
+[ -f ~/.dotfiles/shell/profile ] && source ~/.dotfiles/shell/profile
