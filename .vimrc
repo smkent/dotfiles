@@ -338,6 +338,8 @@ silent call plug#begin()  " Suppress error message if git is not installed
 Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/davidhalter/jedi-vim'
+Plug 'https://github.com/fatih/vim-go',
+            \ { 'do': ':GoUpdateBinaries' }
 Plug 'https://github.com/jamessan/vim-gnupg'
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
 Plug 'https://github.com/junegunn/fzf',
