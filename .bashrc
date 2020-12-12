@@ -16,6 +16,8 @@ auto_update_check_interval=30
 tmux_env_update_check_interval=30
 git_update_check_interval=7200  # 2 hours
 
+[ -f ~/.dotfiles/.data/config-rc ] && source ~/.dotfiles/.data/config-rc
+
 # }}}
 
 # Basic settings {{{

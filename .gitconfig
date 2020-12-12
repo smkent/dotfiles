@@ -1,6 +1,5 @@
 [user]
     name = Stephen Kent
-    email = smkent@smkent.net
 [core]
     editor = vim
     pager = less -F -R -X -x1,5

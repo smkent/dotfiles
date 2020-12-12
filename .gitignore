@@ -29,7 +29,6 @@
 .local/*
 !.local/bashrc
 !.local/bash_aliases
-!.local/gitconfig
 !.mutt/
 .mutt/certificates
 .mutt/cache

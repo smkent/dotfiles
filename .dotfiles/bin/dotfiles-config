@@ -1,0 +1,69 @@
+#!/bin/sh
+
+set -e
+
+dotfiles_root="$(git rev-parse --show-toplevel)"
+config_rc="${dotfiles_root}/.dotfiles/.data/config-rc"
+git_config="${HOME}/.local/gitconfig"
+
+case "${1}" in
+    -h|--help)
+        (
+            echo "Usage: $(basename "${0}") [reset]"
+            echo
+            echo "If first argument is \"reset\", remove local files created "
+            echo "by this utility and exit."
+            echo
+            echo "With no arguments, configure username to hide in shell prompt"
+            echo "and email address to use with git."
+        ) >&2
+        exit 1
+        ;;
+    reset)
+        rm -v "${config_rc}" "${git_config}"
+        exit 0
+        ;;
+esac
+
+if [ -f "${config_rc}" ]; then
+    (
+        tput setaf 3
+        tput bold
+        echo "Continuing will overwrite existing ${config_rc}"
+        tput sgr0
+    ) >&2
+fi
+
+prompt_for_value()
+{
+    prompt="${1?}"
+    default="${2-}"
+    required="${3-}"
+    printf "%s" "${prompt}"
+    if [ -n "${default}" ]; then
+        printf "%s" " [$(tput bold)${default}$(tput sgr0)]"
+    fi
+    printf "%s" ": "
+    read -r input_value
+    if [ -z "${input_value}" ]; then
+        input_value="${default}"
+    fi
+    if [ -n "${required}" ] && [ -z "${input_value}" ]; then
+        echo "Error: ${prompt} is required" >&2
+        return 1
+    fi
+}
+
+prompt_for_value "Username" "${prompt_hide_user-${USER}}"
+if [ -n "${input_value}" ]; then
+    if [ -f "${config_rc}" ]; then
+        sed -i'' -e '/^prompt_hide_user/d' "${config_rc}"
+    fi
+    echo "prompt_hide_user=\"${input_value}\"" >> "${config_rc}"
+fi
+
+git_email="$(git config --get user.email 2>/dev/null || /bin/true)"
+prompt_for_value "Email" "${git_email}" "required"
+if [ -n "${input_value}" ] && [ "${input_value}" != "${git_email}" ]; then
+    git config --file "${git_config}" user.email "${input_value}"
+fi
