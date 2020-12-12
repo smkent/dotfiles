@@ -62,7 +62,7 @@ if [ -n "${input_value}" ]; then
     echo "prompt_hide_user=\"${input_value}\"" >> "${config_rc}"
 fi
 
-git_email="$(git config --get user.email 2>/dev/null || /bin/true)"
+git_email="$(git config --get user.email 2>/dev/null || true)"
 prompt_for_value "Email" "${git_email}" "required"
 if [ -n "${input_value}" ] && [ "${input_value}" != "${git_email}" ]; then
     git config --file "${git_config}" user.email "${input_value}"
