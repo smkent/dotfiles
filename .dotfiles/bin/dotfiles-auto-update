@@ -238,7 +238,7 @@ class DotfilesAutoPull(object):
         if output:
             kwargs['stdout'] = subprocess.PIPE
         if not silent:
-            print('+ {}'.format(subprocess.list2cmdline(cmd), file=sys.stderr))
+            print('+ {}'.format(subprocess.list2cmdline(cmd)), file=sys.stderr)
         return subprocess.run(cmd, check=check, **kwargs)
 
 
