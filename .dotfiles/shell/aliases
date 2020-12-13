@@ -32,6 +32,7 @@ fi
 # Filesystem utilities {{{
 
 # Alias "dirs" to print directory stack one per line
+# shellcheck disable=SC2154
 alias dirs='for d in "${DIRSTACK[@]}"; do echo "${d}"; done | tac'
 
 # ls aliases
