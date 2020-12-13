@@ -129,10 +129,10 @@ fi
 __choose_color()
 {
     if [ ${__colors_supported} -ge 256 ]; then
-        echo "$(tput setaf "${1}")"
+        tput setaf "${1}"
         return
     fi
-    echo "$(tput setaf "${2}")"
+    tput setaf "${2}"
 }
 
 # Default user prompt colors
