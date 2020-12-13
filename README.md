@@ -42,11 +42,10 @@ $ git checkout .
 
 ### Configuration
 
-When installing or forking this repository, you should:
+To configure your git email address and username to be hidden from shell
+prompts, run [`dotfiles-config`](/.dotfiles/bin/dotfiles-config).
 
-* Update [`.gitconfig`](/.gitconfig) with your name and email address
-* Set `prompt_hide_user` to your username in [`.bashrc`](/.bashrc)
-* Remove or replace `.face`
+To use a different profile picture, remove or replace `.face`.
 
 ### Dependency installation
 
