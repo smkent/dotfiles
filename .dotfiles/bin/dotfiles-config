@@ -3,7 +3,8 @@
 set -e
 
 dotfiles_root="$(git rev-parse --show-toplevel)"
-config_rc="${dotfiles_root}/.dotfiles/.data/config-rc"
+config_dir="${dotfiles_root}/.dotfiles/.data"
+config_rc="${config_dir}/config-rc"
 git_config="${HOME}/.local/gitconfig"
 
 case "${1}" in
@@ -56,6 +57,7 @@ prompt_for_value()
 
 prompt_for_value "Username" "${prompt_hide_user-${USER}}"
 if [ -n "${input_value}" ]; then
+    mkdir -vp "${config_dir}"
     if [ -f "${config_rc}" ]; then
         sed -i'' -e '/^prompt_hide_user/d' "${config_rc}"
     fi
