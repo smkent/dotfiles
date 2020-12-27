@@ -1,0 +1,42 @@
+#!/bin/sh
+
+case "${1}" in
+    -h|--help)
+        (
+            echo "Usage: $(basename "${0}")"
+            echo
+            echo "Prepare live environment for GnuPG"
+        ) >&2
+        exit 1
+        ;;
+esac
+
+set -e
+
+# Enable all repositories
+for repo in universe multiverse restricted; do
+    sudo apt-add-repository "${repo}"
+done
+
+# Install basic utils
+sudo apt install -y git tmux vim
+
+# Install PGP tools
+sudo apt install -y \
+    cryptsetup \
+    dirmngr \
+    gnupg-agent \
+    gnupg2 \
+    hopenpgp-tools \
+    pcscd \
+    scdaemon \
+    secure-delete \
+    wget \
+    yubikey-manager \
+    yubikey-personalization \
+    yubioath-desktop \
+
+# Entropy info
+echo "Available entropy: $(cat /proc/sys/kernel/random/entropy_avail)"
+
+echo "NOTE: Run vim before disconnecting networking to load plugins"
