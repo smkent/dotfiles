@@ -143,6 +143,9 @@ gpg_live() {
     local mountpoint="gpgmount"
     local fsfile="fscopy"
     local device_file="$(__gpg_device_file)"
+    if [ -z "${device_file}" ]; then
+        return 1
+    fi
     (
         set -ex
         "${HOME}/.dotfiles/bin/gpgfs" -u
