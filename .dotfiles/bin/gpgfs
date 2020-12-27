@@ -21,7 +21,7 @@ ap.add_argument('-u', '--unmount', action='store_true',
 ap.add_argument('-p', '--password', action='store_true',
                 help='Change encrypted filesystem password')
 # Options
-default_mountpoint = os.path.join(os.path.expanduser('~'), 'gpgfs')
+default_mountpoint = os.path.realpath(os.path.join('.', 'gpgfs'))
 ap.add_argument('-d', '--mountpoint', metavar='dir',
                 help=('Mount point directory (default: {} or autodetect for '
                       'unmount)'.format(default_mountpoint)))
