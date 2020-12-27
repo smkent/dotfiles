@@ -37,7 +37,10 @@ sudo apt install -y \
     yubikey-personalization \
     yubioath-desktop \
 
-# Entropy info
+# Misc info
+echo
 echo "Available entropy: $(cat /proc/sys/kernel/random/entropy_avail)"
-
+tput bold
+tput setaf 227
 echo "NOTE: Run vim before disconnecting networking to load plugins"
+tput sgr0
