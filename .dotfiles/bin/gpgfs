@@ -2,6 +2,8 @@
 
 import argparse
 import os
+import pwd
+import shutil
 import subprocess
 import sys
 
@@ -70,8 +72,17 @@ def post_mount():
     # Perform GnuPG-specific actions as the invoking user
     if not args.read_only:
         sudo_user = os.environ.get('SUDO_USER')
+        source_conf = os.path.join(
+            pwd.getpwnam(sudo_user).pw_dir, '.gnupg', 'gpg.conf'
+        )
+        dest_conf = os.path.join(priv_homedir, 'gpg.conf')
         if not os.path.isdir(priv_homedir):
             os.mkdir(priv_homedir)
+        if source_conf:
+            if os.path.isfile(dest_conf):
+                print('Updating {}'.format(dest_conf))
+                subprocess.call(['diff', '-Naur', dest_conf, source_conf])
+            shutil.copy(source_conf, dest_conf)
         if sudo_user:
             chown_user = '{}:'.format(sudo_user)
             subprocess.check_call(['chown', '-c', chown_user, args.mountpoint])
