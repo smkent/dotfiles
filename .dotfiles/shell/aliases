@@ -133,6 +133,37 @@ alias sstop='kill ${SSH_AGENT_PID}'
 
 # }}}
 
+# GnuPG {{{
+
+__gpg_device_file() {
+    find "/media/${USER}" -mindepth 1 -maxdepth 2 -type f | fzf
+}
+
+gpg_live() {
+    local mountpoint="gpgmount"
+    local fsfile="fscopy"
+    local device_file="$(__gpg_device_file)"
+    (
+        set -ex
+        "${HOME}/.dotfiles/bin/gpgfs" -u
+        cp -iv "${device_file}" "${fsfile}"
+        "${HOME}/.dotfiles/bin/gpgfs" -d "${mountpoint}" -m "${fsfile}"
+    )
+    export GNUPGHOME="$(readlink -f "${mountpoint}/gnupg")"
+}
+
+gpg_finish() {
+    local fsfile="fscopy"
+    "${HOME}/.dotfiles/bin/gpgfs" -u
+    export GNUPGHOME=
+    local device_file="$(__gpg_device_file)"
+    if [ -n "${device_file}" ]; then
+        cp -iv "${fsfile}" "${device_file}"
+    fi
+}
+
+# }}}
+
 # Clipboard {{{
 
 alias xcopy='xclip -selection clip -in'
