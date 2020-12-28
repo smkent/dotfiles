@@ -13,7 +13,9 @@ timestamp_file="${DOTFILES_DATA}/templates_timestamp"
       [ -z "$(find . -newer "${timestamp_file}" \
               -print -quit 2>/dev/null)" ]; } && exit 0
 [ ${opt_verbose} -eq 1 ] && set -x
-find . -mindepth 2 -maxdepth 2 -perm +0111 -name install | \
+find_perm="/0111"
+[ "$(uname -s)" = "Darwin" ] && find_perm="+0111"
+find . -mindepth 2 -maxdepth 2 -perm "${find_perm}" -name install | \
     while read -r d; do
         ( cd "$(dirname "${d}")" && DEST="../../.." ./install; ) || \
             { echo "Error expanding ${d#./} dotfiles template"; exit 1; }
