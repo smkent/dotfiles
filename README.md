@@ -2,7 +2,7 @@
 
 My Linux environment configuration
 
-Quick jump: [bash](#bash), [git](#git), [mutt](#mutt), [tmux](#tmux),
+Quick jump: [shell](#shell), [git](#git), [mutt](#mutt), [tmux](#tmux),
 [vim](#vim)
 
 ## Design
@@ -17,7 +17,8 @@ newer than the previous template installation timestamp, or when
 [`expand-dotfiles -f`](/.dotfiles/bin/expand-dotfiles) is run manually.
 
 My dotfiles are designed be portable with minimal required dependencies (git,
-bash, Python, and the [Powerline fonts](https://github.com/powerline/fonts)).
+bash/zsh, Python, and the
+[Powerline fonts](https://github.com/powerline/fonts)).
 
 ## Installation
 
@@ -74,14 +75,17 @@ on.
 
 ## Features
 
-### Bash
+### Shell
+
+My shell configuration primarily supports Bash, but has also been set up to work
+with zsh on OS X.
 
 Prompt features:
 
-* Display username if different from the value of `prompt_hide_user` in
-  [`.bashrc`](/.bashrc)
+* Display username if different from the value of `prompt_hide_user` configured
+  via [`dotfiles-config`](/.dotfiles/bin/dotfiles-config).
 * Display current directory name if different from `${HOME}`
-* Display exit code of the previous command if nonzero (or "bg" / "^C" when
+* Display exit code of the previous command if nonzero (or `bg` / `^C` when
   backgrounding a job or typing Ctrl-C, respectively)
 * Display runtime of the previous command if longer than 10 seconds
 * Display size of the directory stack if not empty
@@ -91,13 +95,13 @@ Prompt features:
 
 Automatic update and reload:
 
-* Changes to [`.bashrc`](/.bashrc) and any dependent files (such as
-  [`.bash_aliases`](/.bash_aliases)) cause the environment to be automatically
-  reloaded.
+* Changes to shell [`rc`](/.dotfiles/shell/rc) and any dependent files (such as
+  shell [`aliases`](/.dotfiles/shell/aliases)) cause the environment to be
+  automatically reloaded.
 * Home directory repository updates are checked and fetched automatically via
   [`dotfiles-auto-update`](/.dotfiles/bin/dotfiles-auto-update).
 
-![bash screenshot](/.dotfiles/img/screenshot-bashrc.png)
+![shell screenshot](/.dotfiles/img/screenshot-bashrc.png)
 
 ### Tmux
 
@@ -115,10 +119,10 @@ For a more detailed tmux configuration summary, see
 * Custom status bar configuration
   * Window ID highlight inspired by [the screenshot in this
     thread](http://crunchbang.org/forums/viewtopic.php?id=20504)
-* Automatic environment variable updates in bash (ex. `SSH_AUTH_SOCK`) after
+* Automatic environment variable updates in shell (ex. `SSH_AUTH_SOCK`) after
   reattaching to a session (changes to the tmux session socket's ctime cause
-  bash to reload tmux session environment variable values)
-* Bash helper aliases:
+  the shell to reload tmux session environment variable values)
+* Shell helper aliases:
   * `tn`: New session. Takes an optional session name argument.
   * `ta`: Attach to session. Takes an optional session name argument.
   * `tl`: List sessions.
