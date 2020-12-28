@@ -32,6 +32,7 @@ sudo apt install -y \
     pcscd \
     scdaemon \
     secure-delete \
+    signing-party \
     wget \
     yubikey-manager \
     yubikey-personalization \
