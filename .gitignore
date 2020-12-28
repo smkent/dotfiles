@@ -6,6 +6,13 @@
 !.bash_logout
 !.bash_profile
 !.bashrc
+!.config/
+.config/*
+!.config/google-chrome/
+.config/google-chrome/*
+!.config/google-chrome/NativeMessagingHosts/
+.config/google-chrome/NativeMessagingHosts/*
+!.config/google-chrome/NativeMessagingHosts/gpgmejson.json
 !.ctags
 !.dircolors
 !.dotfiles/
@@ -34,6 +41,11 @@
 .mutt/cache
 .mutt/accounts
 !.muttrc
+!.mozilla/
+.mozilla/*
+!.mozilla/native-messaging-hosts/
+.mozilla/native-messaging-hosts/*
+!.mozilla/native-messaging-hosts/gpgmejson.json
 !.screenrc
 !.tmux.conf
 !.vimrc
