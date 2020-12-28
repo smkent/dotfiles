@@ -170,22 +170,27 @@ gpg_sandbox() {
     if [ ! -d "${tmp_dir}" ]; then
         return 1
     fi
-    export GNUPGHOME=${tmp_dir}
     if [ -f "${HOME}/.gnupg/gpg.conf" ]; then
-        cp -v -t "${GNUPGHOME}" "${HOME}/.gnupg/gpg.conf"
+        cp -v -t "${tmp_dir}" "${HOME}/.gnupg/gpg.conf"
     fi
     while [ -n "${*}" ]; do
-        import_file="${1}"
+        local identity="${1}"
         shift
-        if [ ! -f "${import_file}" ]; then
-            echo "${import_file} is not a file"
+        if [ -f "${identity}" ]; then
+            (
+                set -x
+                gpg --import "${identity}"
+            )
             continue
+        else
+            (
+                set -x
+                gpg --export -a "${identity}" \
+                    | GNUPGHOME="${tmp_dir}" gpg --import
+            )
         fi
-        (
-            set -x
-            gpg --import "${import_file}"
-        )
     done
+    export GNUPGHOME=${tmp_dir}
     echo "GnuPG sandbox created in ${GNUPGHOME}"
 }
 
