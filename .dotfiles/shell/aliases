@@ -179,7 +179,7 @@ gpg_sandbox() {
         if [ -f "${identity}" ]; then
             (
                 set -x
-                gpg --import "${identity}"
+                GNUPGHOME="${tmp_dir}" gpg --import "${identity}"
             )
             continue
         else
