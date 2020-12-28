@@ -142,7 +142,8 @@ __gpg_device_file() {
 gpg_live() {
     local mountpoint="gpgmount"
     local fsfile="fscopy"
-    local device_file="$(__gpg_device_file)"
+    local device_file
+    device_file="$(__gpg_device_file)"
     if [ -z "${device_file}" ]; then
         return 1
     fi
@@ -152,21 +153,24 @@ gpg_live() {
         cp -iv "${device_file}" "${fsfile}"
         "${HOME}/.dotfiles/bin/gpgfs" -d "${mountpoint}" -m "${fsfile}"
     )
-    export GNUPGHOME="$(readlink -f "${mountpoint}/gnupg")"
+    GNUPGHOME="$(readlink -f "${mountpoint}/gnupg")"
+    export GNUPGHOME
 }
 
 gpg_finish() {
     local fsfile="fscopy"
     "${HOME}/.dotfiles/bin/gpgfs" -u
     export GNUPGHOME=
-    local device_file="$(__gpg_device_file)"
+    local device_file
+    device_file="$(__gpg_device_file)"
     if [ -n "${device_file}" ]; then
         cp -iv "${fsfile}" "${device_file}"
     fi
 }
 
 gpg_sandbox() {
-    local tmp_dir="$(mktemp -d --suffix='.gpg.sandbox')"
+    local tmp_dir
+    tmp_dir="$(mktemp -d --suffix='.gpg.sandbox')"
     if [ ! -d "${tmp_dir}" ]; then
         return 1
     fi
