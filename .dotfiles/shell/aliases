@@ -213,9 +213,6 @@ alias xpaste='xclip -selection clip -out'
 # "wh", short for "which", also searches shell aliases/functions/built-ins
 alias wh='type -a'
 
-# Force SSH_AUTH_SOCK detection with ssock
-alias ssock='SSH_AUTH_SOCK= __detect_ssh_auth_sock'
-
 # Disable or enable .bashrc auto-update checks
 alias enable-auto-update='rm -vf "${DOTFILES_DATA}/disable_auto_update"'
 alias disable-auto-update='touch "${DOTFILES_DATA}/disable_auto_update"'
