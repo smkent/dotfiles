@@ -370,9 +370,7 @@ fi
 # tmux environment update check {{{
 __tmux_env_update_check()
 {
-    local env_var=
-    local env_value=
-    local socket_mod_time=
+    local current_attach_time=
     if [ "${SECONDS}" -lt "${__tmux_env_update_check_time-0}" ]; then
         # The update check interval has not yet elapsed
         return
@@ -381,10 +379,10 @@ __tmux_env_update_check()
 
     # Reload tmux environment if the tmux session socket's change time has
     # changed
-    socket_mod_time=$(__stat_mtime "${TMUX%%,*}")
-    if [ "${__tmux_env_reload_last_modified-0}" -gt 0 ] &&
-            [ "${socket_mod_time}" -gt "${__tmux_env_reload_last_modified}" ]; then
-        # Set whitelisted environment variables from tmux
+    current_attach_time="$(tmux showenv __tmux_attach_time)"
+    if [ "${__tmux_env_reload_last_attach_time}" != \
+            "${current_attach_time}" ]; then
+        # Set desired environment variables from tmux
         for env_var in \
                 DISPLAY \
                 SSH_AGENT_PID \
@@ -402,13 +400,13 @@ __tmux_env_update_check()
             env_value=$(echo "${env_value}" | cut -d= -f2-)
             export "${env_var}"="${env_value}"
         done
-        eval "$(tmux showenv -s)"
     fi
-    export __tmux_env_reload_last_modified="${socket_mod_time}"
+    export __tmux_env_reload_last_attach_time=${current_attach_time}
 }
 # }}}
 
 # GnuPG configuration {{{
+
 if [ "$(__stat_mode ~/.gnupg 2>/dev/null)" != "700" ]; then
     chmod 0700 ~/.gnupg
     chmod -R og-rwx ~/.gnupg
@@ -416,9 +414,15 @@ fi
 GPG_TTY=$(tty)
 export GPG_TTY
 
+# }}}
+
+# ssh configuration {{{
+
 if [ -z "${SSH_CONNECTION}" ]; then
-    export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    export SSH_AUTH_SOCK
 fi
+
 # }}}
 
 # ShellCheck configuration {{{

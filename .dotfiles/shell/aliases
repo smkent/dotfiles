@@ -87,7 +87,12 @@ dusort() {
 # tmux
 ta() {
     args="${*}"
-    [ -n "${args}" ] && { tmux attach -d -t "${args}"; return; }
+    [ -n "${args}" ] && {
+        tmux setenv -t "${args}" __tmux_attach_time "$(date +%s)"
+        tmux attach -d -t "${args}"
+        return
+    }
+    tmux setenv __tmux_attach_time "$(date +%s)"
     tmux attach -d
 }
 tn() {
