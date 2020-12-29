@@ -180,6 +180,10 @@ class DotfilesAutoPull(object):
         '''
         Return True if the remote repository is accessible in batch mode
         '''
+        remote_url = \
+            self.run_stdout([self.git_exe, 'remote', 'get-url', remote])
+        if not remote_url.startswith('https://'):
+            return False
         argv0 = os.path.basename(sys.argv[0])
         temp_f = None
         try:
