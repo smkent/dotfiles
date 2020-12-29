@@ -379,7 +379,7 @@ __tmux_env_update_check()
 
     # Reload tmux environment if the tmux session socket's change time has
     # changed
-    current_attach_time="$(tmux showenv __tmux_attach_time)"
+    current_attach_time="$(tmux showenv __tmux_attach_time 2>/dev/null)"
     if [ "${__tmux_env_reload_last_attach_time}" != \
             "${current_attach_time}" ]; then
         # Set desired environment variables from tmux
