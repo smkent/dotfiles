@@ -47,6 +47,11 @@
 .mozilla/native-messaging-hosts/*
 !.mozilla/native-messaging-hosts/gpgmejson.json
 !.screenrc
+!.ssh/
+.ssh/*
+!.ssh/config
+!.ssh/config.d
+.ssh/config.d/local
 !.tmux.conf
 !.vimrc
 .vim/.netrwhist
