@@ -1,5 +1,6 @@
 #!/bin/sh
 cd "$(dirname "${0}")/../templates" || exit
+[ -z "${DOTFILES_DATA}" ] && exit 0
 opt_force=0
 opt_verbose=0
 while getopts "fhv" opt; do case ${opt} in
