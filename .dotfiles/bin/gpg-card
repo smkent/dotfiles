@@ -8,16 +8,17 @@ if [ -z "${id}" ]; then
     echo "Selected id: ${id}"
 fi
 
-gpg -K --with-keygrip "${id}"
-echo "Press Enter to remove these keygrips or Ctrl-C to cancel"
-read -r prompt
+if gpg -K --with-keygrip "${id}"; then
+    echo "Press Enter to remove these keygrips or Ctrl-C to cancel"
+    read -r _
 
-# Remove cached keygrips
-gnupg_dir="${GNUPGHOME-${HOME}/.gnupg}"
-gpg -K --with-keygrip "${id}" | grep Keygrip | awk '{print $3}' \
-    | while read -r keygrip; do
-        rm -vf "${gnupg_dir}/private-keys-v1.d/$keygrip.key"
-    done
+    # Remove cached keygrips
+    gnupg_dir="${GNUPGHOME-${HOME}/.gnupg}"
+    gpg -K --with-keygrip "${id}" | grep Keygrip | awk '{print $3}' \
+        | while read -r keygrip; do
+            rm -vf "${gnupg_dir}/private-keys-v1.d/$keygrip.key"
+        done
+fi
 
 # Refresh cache
 gpg --card-status
