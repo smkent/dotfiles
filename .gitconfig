@@ -62,7 +62,7 @@
                  [ -n \"${u}\" ] && git branch --set-upstream-to \"${u}\"; }; f"
     cf = commit --amend --no-edit  # "commit fixup"
     # "compare graph"; show graph log between HEAD and another branch's upstream
-    cg = "!f() { git ll --graph \"${1-master}@{u}..${2-@}\"; }; f"
+    cg = "!f() { git ll --graph \"${1-$(git db)}..${2-@}\"; }; f"
     ci = commit
     cm = commit -m
     co = checkout
@@ -70,6 +70,9 @@
     cv = commit -v
     cx = cherry-pick -x
     d = diff
+    db = rev-parse --abbrev-ref origin/HEAD  # "default branch"
+    dbr = remote set-head origin -a  # "default branch refresh"
+    dm = "!f() { git diff \"$(git db)\"... \"${@}\"; }; f"  # "diff main"
     ds = diff --staged
     du = diff @{u}...@  # "diff upstream"
     dw = diff --word-diff=color  # "diff words"
