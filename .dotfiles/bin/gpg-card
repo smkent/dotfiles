@@ -20,5 +20,7 @@ if gpg -K --with-keygrip "${id}"; then
         done
 fi
 
-# Refresh cache
-gpg --card-status
+if [ -z "${SSH_CONNECTION}" ]; then
+    # Refresh cache
+    gpg --card-status
+fi
