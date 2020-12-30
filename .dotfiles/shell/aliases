@@ -3,7 +3,11 @@
 # Color configuration for coreutils {{{
 
 if [ "${__colors_supported:-0}" -ge 2 ]; then
-    if [ "$(uname -s)" != "Darwin" ]; then
+    if [ "$(uname -s)" = "Darwin" ]; then
+        export CLICOLOR=1
+        export LSCOLORS="HxGxcxdxCxegedabagacad"
+        alias grep='grep --color=auto'
+    else
         # Color command aliases
         alias ls='ls --color=auto'
         alias grep='grep --color=auto'
