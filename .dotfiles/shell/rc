@@ -309,6 +309,7 @@ __prepend_path_if_exists()
 }
 __prepend_path_if_exists "${HOME}/.dotfiles/bin"
 __prepend_path_if_exists "${HOME}/.local/bin"
+__prepend_path_if_exists "${HOME}/.ruby/bin"
 __prepend_path_if_exists "${HOME}/bin"
 
 # }}}
@@ -443,6 +444,10 @@ export FZF_DEFAULT_OPTS="
     --color spinner:215
     "
 
+# }}}
+
+# Ruby configuration {{{
+export GEM_HOME="${HOME}/.ruby"
 # }}}
 
 # }}}
