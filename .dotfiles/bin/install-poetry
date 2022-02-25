@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -ex
+
+pip install -U --upgrade pipx
+pipx install poetry
+pipx upgrade poetry
+pipx inject poetry poetry-dynamic-versioning

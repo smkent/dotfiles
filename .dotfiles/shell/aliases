@@ -142,6 +142,12 @@ alias sstop='kill ${SSH_AGENT_PID}'
 
 # }}}
 
+# Development tool aliases {{{
+
+alias pp='poetry run poe'
+
+# }}}
+
 # GnuPG {{{
 
 __gpg_device_file() {
