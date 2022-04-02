@@ -8,6 +8,8 @@
     ui = true
 [push]
     default = upstream
+[pull]
+    rebase = true
 [branch]
     autosetuprebase = always
 [color "branch"]
