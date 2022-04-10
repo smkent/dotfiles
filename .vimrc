@@ -338,6 +338,7 @@ silent call plug#begin()  " Suppress error message if git is not installed
 Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/davidhalter/jedi-vim'
+Plug 'https://github.com/dense-analysis/ale'
 Plug 'https://github.com/fatih/vim-go',
             \ { 'do': ':GoUpdateBinaries' }
 Plug 'https://github.com/jamessan/vim-gnupg',
@@ -363,7 +364,6 @@ Plug 'https://github.com/tpope/vim-fugitive'
 Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/vim-scripts/AnsiEsc.vim'
-Plug 'https://github.com/w0rp/ale'
 " vim-gitgutter with real-time sign updates enabled occasionally produced
 " rendering errors prior to Vim 7.4.427. For more information, see:
 " - https://github.com/airblade/vim-gitgutter/issues/171
@@ -502,6 +502,7 @@ let g:ctrlp_user_command = {
 " Basic settings
 let g:ale_open_list = 0
 let g:airline#extensions#ale#enabled = 1
+let g:ale_fix_on_save = 1
 
 " Sign column symbols
 let g:ale_sign_error = "✖"             " Block X
@@ -509,62 +510,16 @@ let g:ale_sign_warning = "⚠"           " Warning sign symbol
 let g:ale_sign_style_error = "⇢"       " Dotted right arrow
 let g:ale_sign_style_warning = g:ale_sign_style_error
 
-" File type specific configuration
-let g:python_virtualenv_bin_paths = {
-    \ 'Pipfile': '.venv/bin',
-    \ 'uranium': 'bin',
-    \ }
-function! LocatePythonVirtualenvExecutable(executable)
-    " Search for virtualenv marker files up from the current path
-    let l:path = getcwd()
-    let l:previous_path = ""
-    while l:path != l:previous_path
-        for [l:marker, l:bin_path] in items(g:python_virtualenv_bin_paths)
-            let l:full_marker_path = globpath(l:path, l:marker, 1)
-            if !empty(l:full_marker_path)
-                " Check if the target executable exists in the corresponding
-                " virtualenv bin path
-                let l:exe_path =
-                    \ globpath(globpath(l:path, l:bin_path, 1), a:executable, 1)
-                if !empty(l:exe_path)
-                    return l:exe_path
-                endif
-            endif
-        endfor
-        let l:previous_path = l:path
-        let l:path = fnamemodify(l:path, ':h')
-    endwhile
-endfunction
-function! BufferParseShebang()
-    let l:line = getline(1)
-    if line =~# '^#!'
-        let l:line = substitute(line, '\v^#!\s*(\S+/env(\s+-\S+)*\s+)?', '', '')
-        let l:exe = matchstr(line, '\m^\S*\ze')
-        let l:args = split(matchstr(line, '\m^\S*\zs.*'))
-        return { 'exe': l:exe, 'args': l:args }
-    endif
-    return { 'exe': '', 'args': [] }
-endfunction
-function! ALEPythonVersionDetect()  " {{{
-    let l:shebang_exe = BufferParseShebang()['exe']
-    if l:shebang_exe =~# '\m\<python[0-9]'
-        let b:ale_python_flake8_executable = l:shebang_exe
-        " Save the base arguments in a separate variable for use with
-        " ALEToggleVerbosity
-        let b:base_ale_python_flake8_options = '-m flake8'
-        let b:ale_python_flake8_options = b:base_ale_python_flake8_options
-    else
-        let l:flake8_exe = LocatePythonVirtualenvExecutable("flake8")
-        if empty(l:flake8_exe)
-            return
-        endif
-        let b:ale_python_flake8_executable = l:flake8_exe
-    endif
-endfunction  " }}}
-augroup ale_python_detect
-    autocmd!
-    autocmd filetype python call ALEPythonVersionDetect()
-augroup END
+" Linters and fixers
+let g:ale_python_black_auto_poetry = 1
+let g:ale_python_flake8_auto_poetry = 1
+let g:ale_python_isort_auto_poetry = 1
+let g:ale_python_mypy_auto_poetry = 1
+let g:ale_fixers = {
+            \ 'python': ['black', 'isort'],
+            \ }
+
+let g:ale_python_black_options = "-l 79"
 
 " ALE control mappings
 " Functions to control ALE on a per-buffer basis {{{
@@ -617,6 +572,7 @@ endfunction
 nmap <silent> <Leader>l :call ToggleLocationList()<CR>
 nmap <silent> <Leader>d :call ALEToggleEnabled()<CR>
 nmap <silent> <C-y> :call ALEToggleVerbosity()<CR>
+nnoremap <F10> :ALEFix<CR>
 
 " }}}
 
