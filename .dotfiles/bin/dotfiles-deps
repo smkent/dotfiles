@@ -7,20 +7,20 @@ import subprocess
 import textwrap
 
 dependency_list = {
-    'bash':     {'version': '{} --version | head -n1'},
-    'ctags':    {'version': '{} --version | grep Ctags | tail -n1'},
-    'flake8':   {'version': '{} --version'},
-    'fzf':      {'version': '{} --version'},
-    'gimp':     {'version': '{} --version'},
-    'git':      {'version': '{} --version'},
-    'gpg':      {'version': '{} --version | head -n1'},
-    'mdv':      {'version': '{} --version | head -n1'},
-    'mutt':     {'version': '{} -v | head -n1'},
-    'screen':   {'version': '{} --version | cat'},
-    'shellcheck': {'version': '{} --version | grep ^version:'},
-    'tmux':     {'version': '{} -V'},
-    'vim':      {'version': '{} --version | head -n1'},
-    'xclip':    {'version': '{} -version | head -n1'},
+    "bash": {"version": "{} --version | head -n1"},
+    "ctags": {"version": "{} --version | grep Ctags | tail -n1"},
+    "flake8": {"version": "{} --version"},
+    "fzf": {"version": "{} --version"},
+    "gimp": {"version": "{} --version"},
+    "git": {"version": "{} --version"},
+    "gpg": {"version": "{} --version | head -n1"},
+    "mdv": {"version": "{} --version | head -n1"},
+    "mutt": {"version": "{} -v | head -n1"},
+    "screen": {"version": "{} --version | cat"},
+    "shellcheck": {"version": "{} --version | grep ^version:"},
+    "tmux": {"version": "{} -V"},
+    "vim": {"version": "{} --version | head -n1"},
+    "xclip": {"version": "{} -version | head -n1"},
 }
 
 
@@ -33,61 +33,78 @@ class DependencyInfo(object):
         self.exec_path = distutils.spawn.find_executable(name)
         self.installed = self.exec_path is not None
         self.version = None
-        version_cmd = self.config.get('version')
+        version_cmd = self.config.get("version")
         if version_cmd:
             try:
-                if '{}' in version_cmd:
+                if "{}" in version_cmd:
                     version_cmd = version_cmd.format(self.name)
-                self.version = \
+                self.version = (
                     subprocess.check_output(
-                        version_cmd, shell=True,
-                        stderr=subprocess.STDOUT).decode('utf-8').strip()
+                        version_cmd, shell=True, stderr=subprocess.STDOUT
+                    )
+                    .decode("utf-8")
+                    .strip()
+                )
             except subprocess.CalledProcessError:
-                self.version = 'Unknown'
+                self.version = "Unknown"
 
     def print(self, terminal_size=None):
-        output = '{} '.format(' ' if self.installed else '!')
-        output += '{:<12} '.format(self.name)
+        output = "{} ".format(" " if self.installed else "!")
+        output += "{:<12} ".format(self.name)
         if self.installed:
             output += self.exec_path
             if self.version and self.args.print_version:
                 if self.args.wrap and terminal_size:
                     # Wrap version strings for better readability
-                    output += ' ('
+                    output += " ("
                     prefix_len = len(output)
                     wrap_max = max(20, terminal_size[1] - prefix_len)
-                    lines = textwrap.wrap('{})'.format(self.version), wrap_max)
+                    lines = textwrap.wrap("{})".format(self.version), wrap_max)
                     for i, line in enumerate(lines):
-                        output += os.linesep if i > 0 else ''
-                        output += (' ' * (prefix_len if i > 0 else 0)) + line
+                        output += os.linesep if i > 0 else ""
+                        output += (" " * (prefix_len if i > 0 else 0)) + line
                 else:
-                    output += ' ({})'.format(self.version)
+                    output += " ({})".format(self.version)
         else:
-            output += '--'
+            output += "--"
         print(output)
 
 
 def main():
     global args
-    description = ('Print executable path and version information for '
-                   'programs configured by and/or depended on by the dotfiles '
-                   'repository')
+    description = (
+        "Print executable path and version information for "
+        "programs configured by and/or depended on by the dotfiles "
+        "repository"
+    )
     ap = argparse.ArgumentParser(description=description)
-    ap.add_argument('-m', '--only-missing', dest='only_missing',
-                    action='store_true',
-                    help='Only print information for missing executables')
-    ap.add_argument('-n', '--no-wrap', dest='wrap', action='store_false',
-                    help='Don\'t wrap the output text')
-    ap.add_argument('-s', '--no-version', dest='print_version',
-                    action='store_false',
-                    help='Don\t print version information for executables')
+    ap.add_argument(
+        "-m",
+        "--only-missing",
+        dest="only_missing",
+        action="store_true",
+        help="Only print information for missing executables",
+    )
+    ap.add_argument(
+        "-n",
+        "--no-wrap",
+        dest="wrap",
+        action="store_false",
+        help="Don't wrap the output text",
+    )
+    ap.add_argument(
+        "-s",
+        "--no-version",
+        dest="print_version",
+        action="store_false",
+        help="Don\t print version information for executables",
+    )
     args = ap.parse_args()
 
     try:
-        cmd = ['stty', 'size']
+        cmd = ["stty", "size"]
         terminal_size = [
-            int(x) for x in
-            subprocess.check_output(cmd).decode('utf-8').strip().split()
+            int(x) for x in subprocess.check_output(cmd).decode("utf-8").strip().split()
         ]
     except (subprocess.CalledProcessError, ValueError):
         terminal_size = [24, 80]
@@ -98,5 +115,5 @@ def main():
         info.print(terminal_size)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
