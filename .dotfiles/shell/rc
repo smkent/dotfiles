@@ -238,7 +238,7 @@ __prompt_generator()
     if [ -n "${git_toplevel}" ] && [ "${git_toplevel}" != "${HOME}" ]; then
         local git_branch
         git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-        if [ -n "${git_branch}" ] && [ "${git_branch}" != "master" ]; then
+        if [ -n "${git_branch}" ] && [ "${git_branch}" != "main" ]; then
             if [ "${git_branch}" = "HEAD" ]; then
                 git_branch=$(git rev-parse --short HEAD 2>/dev/null)
             fi

@@ -209,7 +209,7 @@ class DotfilesAutoPull(object):
         ap = argparse.ArgumentParser(description=description)
         ap.add_argument('-r', '--remote-tracking-branch',
                         dest='remote_tracking_branch', metavar='branch',
-                        default='origin/master',
+                        default='origin/main',
                         help=('Auto update remote tracking branch name '
                               '(default: %(default)s)'))
         ap.add_argument('-f', '--fork', dest='fork',
