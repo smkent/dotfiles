@@ -50,6 +50,8 @@
     renames = copies
 [commit]
     verbose = true
+[init]
+    defaultBranch = main
 [alias]
     a = add
     ap = add -u -p
