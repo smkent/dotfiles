@@ -148,6 +148,12 @@ alias pp='poetry run poe'
 
 # }}}
 
+# Docker {{{
+
+alias dcp='docker-compose'
+
+# }}}
+
 # GnuPG {{{
 
 __gpg_device_file() {
