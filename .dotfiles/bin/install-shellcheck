@@ -14,7 +14,7 @@ tmp_dir=$(mktemp -d --suffix=".$(basename "${0}")")
 cd "${tmp_dir}"
 
 wget -qO- \
-    "https://storage.googleapis.com/shellcheck/shellcheck-${version}.linux.x86_64.tar.xz" \
+    "https://github.com/koalaman/shellcheck/releases/download/${version}/shellcheck-${version}.linux.x86_64.tar.xz" \
     | tar -xJv
 if [ ! -d "${HOME}/bin" ]; then
     mkdir -v "${HOME}/bin"
