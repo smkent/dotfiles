@@ -95,6 +95,7 @@ if [ -n "${BASH_VERSION}" ]; then
         __c_orange="\\[$(tput setaf 202)\\]"
         __c_blue="\\[$(tput setaf 4)\\]"
         __c_purple="\\[$(tput setaf 96)\\]"
+        __c_github_codespace="\\[$(tput setaf 147)\\]"
     else
         __c_red="\\[$(tput setaf 1)\\]"
         __c_green="\\[$(tput setaf 2)\\]"
@@ -102,6 +103,7 @@ if [ -n "${BASH_VERSION}" ]; then
         __c_orange="${__c_yellow}"
         __c_blue="\\[$(tput setaf 4)\\]"
         __c_purple="\\[$(tput setaf 5)\\]"
+        __c_github_codespace="${__c_purple}"
     fi
     __bold="\\[$(tput bold)\\]"
     __reset="\\[$(tput sgr0)\\]"
@@ -113,6 +115,7 @@ elif [ -n "${ZSH_VERSION}" ]; then
         __c_orange="%F{202}"
         __c_blue="%F{004}"
         __c_purple="%F{096}"
+        __c_github_codespace="%F{147}"
     else
         __c_red="%F{001}"
         __c_green="%F{002}"
@@ -120,6 +123,7 @@ elif [ -n "${ZSH_VERSION}" ]; then
         __c_orange="${__c_yellow}"
         __c_blue="%F{004}"
         __c_purple="%F{005}"
+        __c_github_codespace="${__c_purple}"
     fi
     __bold="%B"
     __reset="%b%u%s%f%k"
@@ -215,16 +219,19 @@ __prompt_generator()
         p_exit="${exit_color}[${exit_code_disp}]${__reset} "
     fi
     # Main section
-    if [ ${EUID} -eq 0 ]; then
+    if [ -n "${GITHUB_CODESPACE_TOKEN}" ] && [ -n "${CODESPACES}" ]; then
+        # The GitHub Codespaces shell uses the root user.
+        # Use a different prompt color instead of red.
+        p_main="${p_main}${__c_github_codespace}";
+        p_main="${p_main}codespace/${p_host}${__reset} "
+    elif [ ${EUID} -eq 0 ]; then
         p_main="${p_main}${__c_red}${__bold}${p_host}${__reset} "
-        p_lastchar="${__c_red}${__bold}#${__reset}"
     else
         p_main="${p_main}${__c_prompt}";
         if [ "${USER}" != "${prompt_hide_user}" ]; then
             p_main="${p_main}${p_user}@"
         fi
         p_main="${p_main}${p_host}${__reset} "
-        p_lastchar="${__c_blue}${__bold}\$${__reset}"
     fi
     # Current directory
     if [ "${PWD}" != "${HOME}" ]; then
@@ -250,6 +257,12 @@ __prompt_generator()
     # Background jobs
     if [ -n "$(jobs -p)" ]; then
         p_jobs="${__c_orange}+${p_jobs_count} "
+    fi
+    # Last character
+    if [ ${EUID} -eq 0 ]; then
+        p_lastchar="${__c_red}${__bold}#${__reset}"
+    else
+        p_lastchar="${__c_blue}${__bold}\$${__reset}"
     fi
     # Assemble prompt
     PS1="${p_timer}${p_exit}${p_main}${p_dirs}${p_jobs}${p_git}${p_lastchar} "
