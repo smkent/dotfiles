@@ -2,8 +2,7 @@
 
 set -e
 
-dotfiles_root="$(git rev-parse --show-toplevel)"
-config_dir="${dotfiles_root}/.dotfiles/.data"
+config_dir="${HOME}/.dotfiles/.data"
 config_rc="${config_dir}/config-rc"
 git_config="${HOME}/.local/gitconfig"
 
