@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "${DOTFILES_DATA}" ] || [ ! -d "${DOTFILES_DATA}" ]; then
+    exit 0
+fi
+lock_file="${DOTFILES_DATA}/first_run_lock"
+if [ -e "${lock_file}" ]; then
+    echo "exit early first run"
+    exit 0
+fi
+touch "${lock_file}"
+trap 'rm -f "${lock_file}"' EXIT
+
+cd
+
+if [ -n "${GITHUB_CODESPACE_TOKEN}" ] && [ -n "${CODESPACES}" ]; then
+    (
+        cd
+        .dotfiles/bin/dotfiles-codespace-bootstrap
+    )
+fi
+
+echo "===="
+echo "This appears to be a new dotfiles instance!"
+printf "git author settings: %s <%s>\n" \
+    "$(tput bold)$(git config --get user.name)$(tput sgr0)" \
+    "$(tput bold)$(git config --get user.email)$(tput sgr0)"
+if [ -n "${prompt_hide_user}" ]; then
+    printf "bashrc prompt_hide_user=%s" \
+        "$(tput bold)${prompt_hide_user}$(tput sgr0)"
+fi
+echo
+echo "Configure with $(tput bold)dotfiles-config$(tput sgr0)"
+echo "===="
+
+touch "${DOTFILES_DATA}/welcome_message"

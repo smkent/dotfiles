@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+if [ -d "${HOME}/.git" ]; then
+    exit 0
+fi
+
+cd "$(dirname "$(readlink -f "${0}")")"
+cd "$(git rev-parse --show-toplevel)"
+
+# Install dotfiles
+mv .git ~
+cd
+git checkout .
+
+# Install software
+apt -o DPkg::Lock::Timeout=120 update
+apt -o DPkg::Lock::Timeout=10 install -y shellcheck tmux vim-nox xz-utils
+
+# Run vim once to install plugins
+echo | vim -c ':q!'

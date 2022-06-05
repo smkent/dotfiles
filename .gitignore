@@ -16,7 +16,9 @@
 !.ctags
 !.dircolors
 !.dotfiles/
-.dotfiles/.data/
+!.dotfiles/.data/
+.dotfiles/.data/*
+!.dotfiles/.data/.keep
 !.face
 !.gimp-2.8/
 .gimp-2.8/*
