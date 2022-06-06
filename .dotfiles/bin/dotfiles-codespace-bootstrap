@@ -8,10 +8,17 @@ fi
 cd "$(dirname "$(readlink -f "${0}")")"
 cd "$(git rev-parse --show-toplevel)"
 
+# Back up authorized_keys
+cp -f ~/.ssh/authorized_keys /tmp/saved_authorized_keys
+
 # Install dotfiles
 mv .git ~
 cd
 git checkout .
+
+# Restore authorized_keys
+mv /tmp/saved_authorized_keys ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
 
 # Install software
 apt -o DPkg::Lock::Timeout=120 update
