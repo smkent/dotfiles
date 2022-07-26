@@ -23,7 +23,8 @@ chmod 0600 ~/.ssh/authorized_keys
 
 # Install software
 apt -o DPkg::Lock::Timeout=120 update
-apt -o DPkg::Lock::Timeout=10 install -y shellcheck tmux vim-nox xz-utils
+apt -o DPkg::Lock::Timeout=10 install -y \
+    universal-ctags shellcheck tmux vim-nox xz-utils
 
 # Run vim once to install plugins
 echo | vim -c ':q!'
