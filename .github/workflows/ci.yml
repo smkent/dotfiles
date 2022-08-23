@@ -35,7 +35,7 @@ jobs:
           use-mypy: false
           extra-pycodestyle-options: --exclude=.mutt ${{ steps.python-files.outputs.files }}
           extra-flake8-options: --exclude=.mutt ${{ steps.python-files.outputs.files }}
-          extra-black-options: ${{ steps.python-files.outputs.files }}
+          extra-black-options: -l 79 ${{ steps.python-files.outputs.files }}
           extra-isort-options: ${{ steps.python-files.outputs.files }}
 
   Shellcheck:
