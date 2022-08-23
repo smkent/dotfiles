@@ -10,6 +10,17 @@ on:
   workflow_dispatch:
 
 jobs:
+  Python:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Check Python code quality
+        uses: ricardochaves/python-lint@v1.4.0
+
+jobs:
   Shellcheck:
     name: Shellcheck
     runs-on: ubuntu-latest
@@ -17,7 +28,7 @@ jobs:
       - name: 💾 Check out repository
         uses: actions/checkout@v3
 
-      - name: Run ShellCheck
+      - name: 🐚 Run ShellCheck
         uses: ludeeus/action-shellcheck@1.1.0
         env:
           SHELLCHECK_OPTS: -e SC1071 -e SC1090
