@@ -8,107 +8,142 @@ import subprocess
 import sys
 
 if os.getuid() != 0:
-    sys.exit(subprocess.call(['sudo'] + sys.argv))
+    sys.exit(subprocess.call(["sudo"] + sys.argv))
 
-description = 'Mount or unmount a filesystem containing private GnuPG key(s)'
+description = "Mount or unmount a filesystem containing private GnuPG key(s)"
 ap = argparse.ArgumentParser(description=description)
 # Actions
-ap.add_argument('-c', '--create', action='store_true',
-                help=('Create and mount an encrypted filesystem in a loopback '
-                      'file to contain private GnuPG key(s)'))
-ap.add_argument('-m', '--mount', action='store_true',
-                help='Mount encrypted filesystem')
-ap.add_argument('-u', '--unmount', action='store_true',
-                help='Unmount an already-mounted filesystem')
-ap.add_argument('-p', '--password', action='store_true',
-                help='Change encrypted filesystem password')
+ap.add_argument(
+    "-c",
+    "--create",
+    action="store_true",
+    help=(
+        "Create and mount an encrypted filesystem in a loopback "
+        "file to contain private GnuPG key(s)"
+    ),
+)
+ap.add_argument("-m", "--mount", action="store_true", help="Mount encrypted filesystem")
+ap.add_argument(
+    "-u", "--unmount", action="store_true", help="Unmount an already-mounted filesystem"
+)
+ap.add_argument(
+    "-p", "--password", action="store_true", help="Change encrypted filesystem password"
+)
 # Options
-default_mountpoint = os.path.realpath(os.path.join('.', 'gpgfs'))
-ap.add_argument('-d', '--mountpoint', metavar='dir',
-                help=('Mount point directory (default: {} or autodetect for '
-                      'unmount)'.format(default_mountpoint)))
-ap.add_argument('-g', '--gnupg-subdirectory', metavar='dir', default='gnupg',
-                help=('GnuPG subdirectory path within the encrypted '
-                      'filesystem (default: gnupg)'))
-ap.add_argument('-M', '--mapper', metavar='name', default='gpgfs',
-                help='cryptsetup mapper name (default: gpgfs)')
-ap.add_argument('-r', '--read-only', dest='read_only', action='store_true',
-                help='Mount filesystem read-only')
+default_mountpoint = os.path.realpath(os.path.join(".", "gpgfs"))
+ap.add_argument(
+    "-d",
+    "--mountpoint",
+    metavar="dir",
+    help=(
+        "Mount point directory (default: {} or autodetect for "
+        "unmount)".format(default_mountpoint)
+    ),
+)
+ap.add_argument(
+    "-g",
+    "--gnupg-subdirectory",
+    metavar="dir",
+    default="gnupg",
+    help=(
+        "GnuPG subdirectory path within the encrypted " "filesystem (default: gnupg)"
+    ),
+)
+ap.add_argument(
+    "-M",
+    "--mapper",
+    metavar="name",
+    default="gpgfs",
+    help="cryptsetup mapper name (default: gpgfs)",
+)
+ap.add_argument(
+    "-r",
+    "--read-only",
+    dest="read_only",
+    action="store_true",
+    help="Mount filesystem read-only",
+)
 # Device/path
-ap.add_argument('device', metavar='device/path', nargs='?',
-                help='Device/path to operate on')
+ap.add_argument(
+    "device", metavar="device/path", nargs="?", help="Device/path to operate on"
+)
 args = ap.parse_args()
-args.mapper = '/dev/mapper/{}'.format(args.mapper)
+args.mapper = "/dev/mapper/{}".format(args.mapper)
 
 
 class ArgsError(Exception):
-    '''
+    """
     Distinguish user input errors from regular Exceptions to avoid printing
     stack traces for user input errors
-    '''
+    """
+
     pass
 
 
 # Internally-used functions
 def unlock(unlock_path):
-    subprocess.check_call(['cryptsetup', 'luksOpen', unlock_path,
-                           args.mapper.replace('/dev/mapper/', '', 1)])
-    print('Created LUKS device {}'.format(args.mapper))
+    subprocess.check_call(
+        [
+            "cryptsetup",
+            "luksOpen",
+            unlock_path,
+            args.mapper.replace("/dev/mapper/", "", 1),
+        ]
+    )
+    print("Created LUKS device {}".format(args.mapper))
 
 
 def mount_mapper():
     os.mkdir(args.mountpoint, 0o0700)
-    print('Created directory {}'.format(args.mountpoint))
-    cmd = ['mount']
+    print("Created directory {}".format(args.mountpoint))
+    cmd = ["mount"]
     if args.read_only:
-        cmd += ['-o', 'ro']
+        cmd += ["-o", "ro"]
     cmd += [args.mapper, args.mountpoint]
     subprocess.check_call(cmd)
-    print('Mounted filesystem on {}'.format(args.mountpoint))
+    print("Mounted filesystem on {}".format(args.mountpoint))
 
 
 def post_mount():
     priv_homedir = os.path.join(args.mountpoint, args.gnupg_subdirectory)
     # Perform GnuPG-specific actions as the invoking user
     if not args.read_only:
-        sudo_user = os.environ.get('SUDO_USER')
-        source_conf = os.path.join(
-            pwd.getpwnam(sudo_user).pw_dir, '.gnupg', 'gpg.conf'
-        )
-        dest_conf = os.path.join(priv_homedir, 'gpg.conf')
+        sudo_user = os.environ.get("SUDO_USER")
+        source_conf = os.path.join(pwd.getpwnam(sudo_user).pw_dir, ".gnupg", "gpg.conf")
+        dest_conf = os.path.join(priv_homedir, "gpg.conf")
         if not os.path.isdir(priv_homedir):
             os.mkdir(priv_homedir)
         if source_conf:
             if os.path.isfile(dest_conf):
-                print('Updating {}'.format(dest_conf))
-                subprocess.call(['diff', '-Naur', dest_conf, source_conf])
+                print("Updating {}".format(dest_conf))
+                subprocess.call(["diff", "-Naur", dest_conf, source_conf])
             shutil.copy(source_conf, dest_conf)
         if sudo_user:
-            chown_user = '{}:'.format(sudo_user)
-            subprocess.check_call(['chown', '-c', chown_user, args.mountpoint])
-        subprocess.check_call(['chmod', '-Rc', 'go-rwx', priv_homedir])
-    print('GnuPG home directory: {}'.format(priv_homedir))
+            chown_user = "{}:".format(sudo_user)
+            subprocess.check_call(["chown", "-c", chown_user, args.mountpoint])
+        subprocess.check_call(["chmod", "-Rc", "go-rwx", priv_homedir])
+    print("GnuPG home directory: {}".format(priv_homedir))
     sys.exit(0)
 
 
 # Action functions
 def unmount():
     if os.path.isdir(args.mountpoint):
-        print('Stopping any running agents')
-        subprocess.call(['killall', 'gpg-agent', 'dirmngr'])
+        print("Stopping any running agents")
+        subprocess.call(["killall", "gpg-agent", "dirmngr"])
         if os.path.ismount(args.mountpoint):
-            print('Unmounting filesystem from {}'.format(args.mountpoint))
-            subprocess.check_call(['umount', args.mountpoint])
-        print('Removing directory {}'.format(args.mountpoint))
-        subprocess.check_call(['rmdir', args.mountpoint])
+            print("Unmounting filesystem from {}".format(args.mountpoint))
+            subprocess.check_call(["umount", args.mountpoint])
+        print("Removing directory {}".format(args.mountpoint))
+        subprocess.check_call(["rmdir", args.mountpoint])
     if os.path.exists(args.mapper):
-        print('Closing LUKS device {}'.format(args.mapper))
-        subprocess.check_call(['cryptsetup', 'luksClose', args.mapper])
+        print("Closing LUKS device {}".format(args.mapper))
+        subprocess.check_call(["cryptsetup", "luksClose", args.mapper])
 
 
 def mount(mount_path):
     if os.path.isdir(args.mountpoint):
-        raise ArgsError('{} already exists'.format(args.mountpoint))
+        raise ArgsError("{} already exists".format(args.mountpoint))
     unlock(mount_path)
     mount_mapper()
     post_mount()
@@ -116,41 +151,51 @@ def mount(mount_path):
 
 def create(create_path):
     if os.path.exists(create_path):
-        raise ArgsError('{} already exists'.format(create_path))
+        raise ArgsError("{} already exists".format(create_path))
     unmount()
-    subprocess.check_call(['dd', 'if=/dev/zero', 'of={}'.format(create_path),
-                           'bs=1M', 'count=10'])
-    sudo_user = os.environ.get('SUDO_USER')
+    subprocess.check_call(
+        ["dd", "if=/dev/zero", "of={}".format(create_path), "bs=1M", "count=10"]
+    )
+    sudo_user = os.environ.get("SUDO_USER")
     if sudo_user:
-        subprocess.check_call(['chown', '{}:'.format(sudo_user), create_path])
+        subprocess.check_call(["chown", "{}:".format(sudo_user), create_path])
     os.chmod(create_path, 0o0600)
-    cmd = ['cryptsetup', '-y', '--cipher', 'aes-xts-plain64:sha512', '--hash',
-           'sha512', '--key-size', '512', 'luksFormat', create_path]
+    cmd = [
+        "cryptsetup",
+        "-y",
+        "--cipher",
+        "aes-xts-plain64:sha512",
+        "--hash",
+        "sha512",
+        "--key-size",
+        "512",
+        "luksFormat",
+        create_path,
+    ]
     subprocess.check_call(cmd)
     unlock(create_path)
-    subprocess.check_call(['mkfs.ext4', '-m', '0', args.mapper])
+    subprocess.check_call(["mkfs.ext4", "-m", "0", args.mapper])
     mount_mapper()
     if sudo_user:
-        subprocess.check_call(['chown', '{}:'.format(sudo_user),
-                               args.mountpoint])
+        subprocess.check_call(["chown", "{}:".format(sudo_user), args.mountpoint])
     post_mount()
 
 
 try:
     if [args.create, args.mount, args.unmount, args.password].count(True) > 1:
-        raise ArgsError('Multiple actions specified')
+        raise ArgsError("Multiple actions specified")
 
     if args.create:
         if not args.device:
-            raise ArgsError('No device or path specified')
+            raise ArgsError("No device or path specified")
         if not args.mountpoint:
             args.mountpoint = default_mountpoint
         create(args.device)
     elif args.mount:
         if not args.device:
-            raise ArgsError('No device or path specified')
+            raise ArgsError("No device or path specified")
         if not os.path.exists(args.device):
-            raise ArgsError('{} does not exist'.format(args.device))
+            raise ArgsError("{} does not exist".format(args.device))
         if not args.mountpoint:
             args.mountpoint = default_mountpoint
         unmount()
@@ -158,9 +203,8 @@ try:
     elif args.unmount:
         if not args.mountpoint:
             try:
-                cmd = ['findmnt', '-nr', '-o', 'target', '-S', args.mapper]
-                mountpoint = \
-                    subprocess.check_output(cmd).decode('utf-8').strip()
+                cmd = ["findmnt", "-nr", "-o", "target", "-S", args.mapper]
+                mountpoint = subprocess.check_output(cmd).decode("utf-8").strip()
                 if mountpoint and os.path.exists(mountpoint):
                     args.mountpoint = mountpoint
                 else:
@@ -170,11 +214,13 @@ try:
         unmount()
     elif args.password:
         if not args.device:
-            raise ArgsError('No device or path specified')
-        subprocess.call(['cryptsetup', 'luksChangeKey', '-y', args.device])
+            raise ArgsError("No device or path specified")
+        subprocess.call(["cryptsetup", "luksChangeKey", "-y", args.device])
     else:
-        raise ArgsError('No action specified. Please provide one of '
-                        '-m/--mount, -u/--unmount, -c/--create, or '
-                        '-p/--password.')
+        raise ArgsError(
+            "No action specified. Please provide one of "
+            "-m/--mount, -u/--unmount, -c/--create, or "
+            "-p/--password."
+        )
 except ArgsError as e:
-    print('Error: {}'.format(str(e)), file=sys.stderr)
+    print("Error: {}".format(str(e)), file=sys.stderr)

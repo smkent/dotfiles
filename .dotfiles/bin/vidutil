@@ -8,130 +8,150 @@ import time
 
 
 def find_ffmpeg_exe():
-    for i in ['ffmpeg', 'avconv']:
+    for i in ["ffmpeg", "avconv"]:
         try:
-            subprocess.check_call(['which', i], stdout=open('/dev/null', 'w'),
-                                  stderr=subprocess.STDOUT)
+            subprocess.check_call(
+                ["which", i], stdout=open("/dev/null", "w"), stderr=subprocess.STDOUT
+            )
             return i
         except subprocess.CalledProcessError:
             continue
-    raise Exception('ffmpeg or avconv was not found')
+    raise Exception("ffmpeg or avconv was not found")
 
 
 def format_time(time_str):
-    if ':' not in time_str:
+    if ":" not in time_str:
         if int(time_str) > 60:
             return time_str
-    c = time_str.split(':')
-    c = [''] * (3 - len(c)) + c
-    return ':'.join(['{}'.format(i.zfill(2)) for i in c])
+    c = time_str.split(":")
+    c = [""] * (3 - len(c)) + c
+    return ":".join(["{}".format(i.zfill(2)) for i in c])
 
 
 def main_slice():
     if not args.overwrite and os.path.isfile(args.output):
-        raise Exception('{} already exists'.format(args.output))
+        raise Exception("{} already exists".format(args.output))
     ffmpeg_exe = find_ffmpeg_exe()
     cmd = [ffmpeg_exe]
-    if bool(args.start_time) and args.start_time != '0':
-        cmd += ['-ss', format_time(args.start_time)]
-    cmd += ['-i', args.input]
-    if ffmpeg_exe == 'avconv':
-        cmd += ['-c', 'copy']
-    elif ffmpeg_exe == 'ffmpeg':
-        cmd += ['-acodec', 'copy', '-vcodec', 'copy']
-    cmd += ['-t', format_time(args.duration)]
+    if bool(args.start_time) and args.start_time != "0":
+        cmd += ["-ss", format_time(args.start_time)]
+    cmd += ["-i", args.input]
+    if ffmpeg_exe == "avconv":
+        cmd += ["-c", "copy"]
+    elif ffmpeg_exe == "ffmpeg":
+        cmd += ["-acodec", "copy", "-vcodec", "copy"]
+    cmd += ["-t", format_time(args.duration)]
     if args.overwrite:
-        cmd += ['-y']
+        cmd += ["-y"]
     cmd += [args.output]
-    print('Executing: {}'.format(' '.join(cmd)), file=sys.stderr)
+    print("Executing: {}".format(" ".join(cmd)), file=sys.stderr)
     subprocess.call(cmd)
 
 
 def main_frames():
-    dir_name = time.strftime('frames-%Y%m%d-%H%M')
+    dir_name = time.strftime("frames-%Y%m%d-%H%M")
     if os.path.isdir(dir_name):
-        raise Exception('Directory {} already exists'.format(dir_name))
+        raise Exception("Directory {} already exists".format(dir_name))
     os.mkdir(dir_name, 0o0700)
     ffmpeg_exe = find_ffmpeg_exe()
     cmd = [ffmpeg_exe]
-    if bool(args.start_time) and args.start_time != '0':
-        cmd += ['-ss', format_time(args.start_time)]
-    cmd += ['-i', args.input, '-an', '-vcodec', 'png']
+    if bool(args.start_time) and args.start_time != "0":
+        cmd += ["-ss", format_time(args.start_time)]
+    cmd += ["-i", args.input, "-an", "-vcodec", "png"]
     if args.duration:
-        cmd += ['-t', format_time(args.duration)]
-    cmd += ['{}/frame-%05d.png'.format(dir_name)]
-    print('Executing: {}'.format(' '.join(cmd)), file=sys.stderr)
+        cmd += ["-t", format_time(args.duration)]
+    cmd += ["{}/frame-%05d.png".format(dir_name)]
+    print("Executing: {}".format(" ".join(cmd)), file=sys.stderr)
     subprocess.call(cmd)
-    print('Frames saved to: {}'.format(dir_name))
+    print("Frames saved to: {}".format(dir_name))
 
 
 def main_twitter():
     if not args.output:
         # If no output file name was specified, replace the input file name
         # extension with .mp4 and write to that file
-        args.output = '{}.mp4'.format(args.input.rsplit('.', 1)[0])
+        args.output = "{}.mp4".format(args.input.rsplit(".", 1)[0])
         if args.output == args.input:
-            raise Exception('Input and output file names are identical')
+            raise Exception("Input and output file names are identical")
     if not args.overwrite and os.path.isfile(args.output):
-        raise Exception('{} already exists'.format(args.output))
+        raise Exception("{} already exists".format(args.output))
     ffmpeg_exe = find_ffmpeg_exe()
-    cmd = [ffmpeg_exe, '-i', args.input, '-c:v', 'libx264']
+    cmd = [ffmpeg_exe, "-i", args.input, "-c:v", "libx264"]
     # avconv's support for aac audio is considered experimental
     if args.audio:
-        if ffmpeg_exe == 'avconv':
-            cmd += ['-strict', 'experimental']
+        if ffmpeg_exe == "avconv":
+            cmd += ["-strict", "experimental"]
     else:
-        cmd += ['-an']
+        cmd += ["-an"]
     if args.overwrite:
-        cmd += ['-y']
+        cmd += ["-y"]
     cmd += [args.output]
-    print('Executing: {}'.format(' '.join(cmd)), file=sys.stderr)
+    print("Executing: {}".format(" ".join(cmd)), file=sys.stderr)
     subprocess.call(cmd)
 
 
-description = 'Utility for performing simple actions with ffmpeg/avconv'
-frames_help = 'Extract frames from a video file using ffmpeg/avconv'
-slice_help = 'Extract a slice of video to a separate file using ffmpeg/avconv'
-twitter_help = 'Convert a video to a format compatible with Twitter'
+description = "Utility for performing simple actions with ffmpeg/avconv"
+frames_help = "Extract frames from a video file using ffmpeg/avconv"
+slice_help = "Extract a slice of video to a separate file using ffmpeg/avconv"
+twitter_help = "Convert a video to a format compatible with Twitter"
 
 ap = argparse.ArgumentParser(description=description)
-sp = ap.add_subparsers(metavar='action',
-                       help='Choices: slice, frames, twitter')
+sp = ap.add_subparsers(metavar="action", help="Choices: slice, frames, twitter")
 
-sp_slice = sp.add_parser('slice', description=slice_help)
-sp_slice.add_argument('input', metavar='input', help='Input video file')
-sp_slice.add_argument('start_time', metavar='start',
-                      help='Start time (hh:mm:ss or number of seconds)')
-sp_slice.add_argument('duration', metavar='duration',
-                      help='Duration (hh:mm:ss or number of seconds)')
-sp_slice.add_argument('output', metavar='output', help='Output video file')
-sp_slice.add_argument('-y', '--yes', '--overwrite', dest='overwrite',
-                      action='store_true',
-                      help='Overwrite output video file if it exists')
+sp_slice = sp.add_parser("slice", description=slice_help)
+sp_slice.add_argument("input", metavar="input", help="Input video file")
+sp_slice.add_argument(
+    "start_time", metavar="start", help="Start time (hh:mm:ss or number of seconds)"
+)
+sp_slice.add_argument(
+    "duration", metavar="duration", help="Duration (hh:mm:ss or number of seconds)"
+)
+sp_slice.add_argument("output", metavar="output", help="Output video file")
+sp_slice.add_argument(
+    "-y",
+    "--yes",
+    "--overwrite",
+    dest="overwrite",
+    action="store_true",
+    help="Overwrite output video file if it exists",
+)
 sp_slice.set_defaults(func=main_slice)
 
-sp_frames = sp.add_parser('frames', description=frames_help)
-sp_frames.add_argument('input', metavar='input', help='Input video file')
-sp_frames.add_argument('start_time', metavar='start', nargs='?',
-                       help='Start time (hh:mm:ss or number of seconds)')
-sp_frames.add_argument('duration', metavar='duration', nargs='?',
-                       help='Duration (hh:mm:ss or number of seconds)')
+sp_frames = sp.add_parser("frames", description=frames_help)
+sp_frames.add_argument("input", metavar="input", help="Input video file")
+sp_frames.add_argument(
+    "start_time",
+    metavar="start",
+    nargs="?",
+    help="Start time (hh:mm:ss or number of seconds)",
+)
+sp_frames.add_argument(
+    "duration",
+    metavar="duration",
+    nargs="?",
+    help="Duration (hh:mm:ss or number of seconds)",
+)
 # sp_frames.add_argument('output', metavar='dir', help='Destination directory')
 sp_frames.set_defaults(func=main_frames)
 
-sp_twitter = sp.add_parser('twitter', description=twitter_help)
-sp_twitter.add_argument('input', metavar='input', help='Input video file')
-sp_twitter.add_argument('output', metavar='output', help='Output video file',
-                        nargs='?')
-sp_twitter.add_argument('-a', dest='audio', action='store_true',
-                        help='Include audio in output video')
-sp_twitter.add_argument('-y', '--yes', '--overwrite', dest='overwrite',
-                        action='store_true',
-                        help='Overwrite output video file if it exists')
+sp_twitter = sp.add_parser("twitter", description=twitter_help)
+sp_twitter.add_argument("input", metavar="input", help="Input video file")
+sp_twitter.add_argument("output", metavar="output", help="Output video file", nargs="?")
+sp_twitter.add_argument(
+    "-a", dest="audio", action="store_true", help="Include audio in output video"
+)
+sp_twitter.add_argument(
+    "-y",
+    "--yes",
+    "--overwrite",
+    dest="overwrite",
+    action="store_true",
+    help="Overwrite output video file if it exists",
+)
 sp_twitter.set_defaults(func=main_twitter)
 
 args = ap.parse_args()
 try:
     args.func()
 except Exception as e:
-    print('Error: {}'.format(str(e)), file=sys.stderr)
+    print("Error: {}".format(str(e)), file=sys.stderr)
