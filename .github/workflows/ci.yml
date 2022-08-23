@@ -33,9 +33,10 @@ jobs:
         with:
           use-pylint: false
           use-mypy: false
-          extra-pycodestyle-options: --exclude=.mutt
-          extra-flake8-options: --exclude=.mutt
+          extra-pycodestyle-options: --exclude=.mutt ${{ steps.python-files.outputs.files }}
+          extra-flake8-options: --exclude=.mutt ${{ steps.python-files.outputs.files }}
           extra-black-options: ${{ steps.python-files.outputs.files }}
+          extra-isort-options: ${{ steps.python-files.outputs.files }}
 
   Shellcheck:
     name: Shellcheck
