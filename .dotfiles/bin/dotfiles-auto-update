@@ -62,7 +62,9 @@ class DotfilesAutoPull(object):
     @property
     @functools.lru_cache(maxsize=1)
     def current_branch(self):
-        return self.run_stdout([self.git_exe, "rev-parse", "--abbrev-ref", "@"])
+        return self.run_stdout(
+            [self.git_exe, "rev-parse", "--abbrev-ref", "@"]
+        )
 
     @functools.lru_cache(maxsize=1)
     def _cd_git_toplevel(self):
@@ -70,7 +72,9 @@ class DotfilesAutoPull(object):
         Verify repository location and change to the home directory
         """
         os.chdir(os.path.dirname(sys.argv[0]))
-        git_toplevel = self.run_stdout([self.git_exe, "rev-parse", "--show-toplevel"])
+        git_toplevel = self.run_stdout(
+            [self.git_exe, "rev-parse", "--show-toplevel"]
+        )
         if git_toplevel != os.path.expanduser("~"):
             raise UpdateException(
                 "Auto-update only supported in a home " "directory repository"
@@ -97,7 +101,12 @@ class DotfilesAutoPull(object):
         # Check for new refs
         ref = self._lookup_ref(self.args.remote_tracking_branch)
         new_ref = self.run_stdout(
-            [self.git_exe, "ls-remote", self.remote_name, self.remote_branch_name],
+            [
+                self.git_exe,
+                "ls-remote",
+                self.remote_name,
+                self.remote_branch_name,
+            ],
             stderr=open("/dev/null", "w"),
         ).split()[0]
         if new_ref == ref:
@@ -110,7 +119,8 @@ class DotfilesAutoPull(object):
         else:
             if not self.args.quiet:
                 raise UpdateException(
-                    "An update is available, but " "--new-ref-file was not specified"
+                    "An update is available, but "
+                    "--new-ref-file was not specified"
                 )
 
     def _action_update(self):
@@ -118,7 +128,9 @@ class DotfilesAutoPull(object):
         Pull updates from the remote repository
         """
         prev_ref = self._lookup_ref(self.args.remote_tracking_branch)
-        self.run([self.git_exe, "fetch", self.remote_name, self.remote_branch_name])
+        self.run(
+            [self.git_exe, "fetch", self.remote_name, self.remote_branch_name]
+        )
         head_ref = self._lookup_ref("@")
         if self.args.skip_ref and head_ref == self.args.skip_ref:
             return
@@ -144,7 +156,14 @@ class DotfilesAutoPull(object):
             self._print_log_delta(prev_ref, self.args.remote_tracking_branch)
 
     def _print_log_delta(self, prev_ref, new_ref):
-        self.run([self.git_exe, "--no-pager", "ll", "{}..{}".format(prev_ref, new_ref)])
+        self.run(
+            [
+                self.git_exe,
+                "--no-pager",
+                "ll",
+                "{}..{}".format(prev_ref, new_ref),
+            ]
+        )
         # The previous git log command doesn't print a final line break
         # when the pager is disabled
         print("")
@@ -161,7 +180,8 @@ class DotfilesAutoPull(object):
         )
         if not remote_branch or "/" not in remote_branch:
             raise UpdateException(
-                "{} has no remote tracking " "branch".format(self.current_branch)
+                "{} has no remote tracking "
+                "branch".format(self.current_branch)
             )
         return remote_branch == self.args.remote_tracking_branch
 
@@ -197,7 +217,9 @@ class DotfilesAutoPull(object):
         """
         Return True if the remote repository is accessible in batch mode
         """
-        remote_url = self.run_stdout([self.git_exe, "remote", "get-url", remote])
+        remote_url = self.run_stdout(
+            [self.git_exe, "remote", "get-url", remote]
+        )
         if not remote_url.startswith("https://"):
             return False
         argv0 = os.path.basename(sys.argv[0])
@@ -225,7 +247,8 @@ class DotfilesAutoPull(object):
 
     def _parse_args(self):
         description = (
-            "Automatically pull dotfiles updates from the upstream " "repository"
+            "Automatically pull dotfiles updates from the upstream "
+            "repository"
         )
         ap = argparse.ArgumentParser(description=description)
         ap.add_argument(
@@ -234,7 +257,10 @@ class DotfilesAutoPull(object):
             dest="remote_tracking_branch",
             metavar="branch",
             default="origin/main",
-            help=("Auto update remote tracking branch name " "(default: %(default)s)"),
+            help=(
+                "Auto update remote tracking branch name "
+                "(default: %(default)s)"
+            ),
         )
         ap.add_argument(
             "-f",
@@ -247,7 +273,9 @@ class DotfilesAutoPull(object):
             "-q",
             "--quiet",
             action="store_true",
-            help=("Don't print repository configuration and " "status messages"),
+            help=(
+                "Don't print repository configuration and " "status messages"
+            ),
         )
         ap.add_argument(
             "--skip-ref",

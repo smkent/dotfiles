@@ -22,12 +22,20 @@ ap.add_argument(
         "file to contain private GnuPG key(s)"
     ),
 )
-ap.add_argument("-m", "--mount", action="store_true", help="Mount encrypted filesystem")
 ap.add_argument(
-    "-u", "--unmount", action="store_true", help="Unmount an already-mounted filesystem"
+    "-m", "--mount", action="store_true", help="Mount encrypted filesystem"
 )
 ap.add_argument(
-    "-p", "--password", action="store_true", help="Change encrypted filesystem password"
+    "-u",
+    "--unmount",
+    action="store_true",
+    help="Unmount an already-mounted filesystem",
+)
+ap.add_argument(
+    "-p",
+    "--password",
+    action="store_true",
+    help="Change encrypted filesystem password",
 )
 # Options
 default_mountpoint = os.path.realpath(os.path.join(".", "gpgfs"))
@@ -46,7 +54,8 @@ ap.add_argument(
     metavar="dir",
     default="gnupg",
     help=(
-        "GnuPG subdirectory path within the encrypted " "filesystem (default: gnupg)"
+        "GnuPG subdirectory path within the encrypted "
+        "filesystem (default: gnupg)"
     ),
 )
 ap.add_argument(
@@ -65,7 +74,10 @@ ap.add_argument(
 )
 # Device/path
 ap.add_argument(
-    "device", metavar="device/path", nargs="?", help="Device/path to operate on"
+    "device",
+    metavar="device/path",
+    nargs="?",
+    help="Device/path to operate on",
 )
 args = ap.parse_args()
 args.mapper = "/dev/mapper/{}".format(args.mapper)
@@ -109,7 +121,9 @@ def post_mount():
     # Perform GnuPG-specific actions as the invoking user
     if not args.read_only:
         sudo_user = os.environ.get("SUDO_USER")
-        source_conf = os.path.join(pwd.getpwnam(sudo_user).pw_dir, ".gnupg", "gpg.conf")
+        source_conf = os.path.join(
+            pwd.getpwnam(sudo_user).pw_dir, ".gnupg", "gpg.conf"
+        )
         dest_conf = os.path.join(priv_homedir, "gpg.conf")
         if not os.path.isdir(priv_homedir):
             os.mkdir(priv_homedir)
@@ -154,7 +168,13 @@ def create(create_path):
         raise ArgsError("{} already exists".format(create_path))
     unmount()
     subprocess.check_call(
-        ["dd", "if=/dev/zero", "of={}".format(create_path), "bs=1M", "count=10"]
+        [
+            "dd",
+            "if=/dev/zero",
+            "of={}".format(create_path),
+            "bs=1M",
+            "count=10",
+        ]
     )
     sudo_user = os.environ.get("SUDO_USER")
     if sudo_user:
@@ -177,7 +197,9 @@ def create(create_path):
     subprocess.check_call(["mkfs.ext4", "-m", "0", args.mapper])
     mount_mapper()
     if sudo_user:
-        subprocess.check_call(["chown", "{}:".format(sudo_user), args.mountpoint])
+        subprocess.check_call(
+            ["chown", "{}:".format(sudo_user), args.mountpoint]
+        )
     post_mount()
 
 
@@ -204,7 +226,9 @@ try:
         if not args.mountpoint:
             try:
                 cmd = ["findmnt", "-nr", "-o", "target", "-S", args.mapper]
-                mountpoint = subprocess.check_output(cmd).decode("utf-8").strip()
+                mountpoint = (
+                    subprocess.check_output(cmd).decode("utf-8").strip()
+                )
                 if mountpoint and os.path.exists(mountpoint):
                     args.mountpoint = mountpoint
                 else:

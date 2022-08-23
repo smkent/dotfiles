@@ -11,7 +11,9 @@ def find_ffmpeg_exe():
     for i in ["ffmpeg", "avconv"]:
         try:
             subprocess.check_call(
-                ["which", i], stdout=open("/dev/null", "w"), stderr=subprocess.STDOUT
+                ["which", i],
+                stdout=open("/dev/null", "w"),
+                stderr=subprocess.STDOUT,
             )
             return i
         except subprocess.CalledProcessError:
@@ -96,15 +98,21 @@ slice_help = "Extract a slice of video to a separate file using ffmpeg/avconv"
 twitter_help = "Convert a video to a format compatible with Twitter"
 
 ap = argparse.ArgumentParser(description=description)
-sp = ap.add_subparsers(metavar="action", help="Choices: slice, frames, twitter")
+sp = ap.add_subparsers(
+    metavar="action", help="Choices: slice, frames, twitter"
+)
 
 sp_slice = sp.add_parser("slice", description=slice_help)
 sp_slice.add_argument("input", metavar="input", help="Input video file")
 sp_slice.add_argument(
-    "start_time", metavar="start", help="Start time (hh:mm:ss or number of seconds)"
+    "start_time",
+    metavar="start",
+    help="Start time (hh:mm:ss or number of seconds)",
 )
 sp_slice.add_argument(
-    "duration", metavar="duration", help="Duration (hh:mm:ss or number of seconds)"
+    "duration",
+    metavar="duration",
+    help="Duration (hh:mm:ss or number of seconds)",
 )
 sp_slice.add_argument("output", metavar="output", help="Output video file")
 sp_slice.add_argument(
@@ -136,9 +144,14 @@ sp_frames.set_defaults(func=main_frames)
 
 sp_twitter = sp.add_parser("twitter", description=twitter_help)
 sp_twitter.add_argument("input", metavar="input", help="Input video file")
-sp_twitter.add_argument("output", metavar="output", help="Output video file", nargs="?")
 sp_twitter.add_argument(
-    "-a", dest="audio", action="store_true", help="Include audio in output video"
+    "output", metavar="output", help="Output video file", nargs="?"
+)
+sp_twitter.add_argument(
+    "-a",
+    dest="audio",
+    action="store_true",
+    help="Include audio in output video",
 )
 sp_twitter.add_argument(
     "-y",
