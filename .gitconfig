@@ -57,6 +57,9 @@
     ap = add -u -p
     au = add -u
     b = branch
+    # "branch cleanup"; Delete merged branches
+    bc = "!f() { git branch --merged | grep -ve '^*\\| main$| master$' \
+                 | xargs git branch -d; }; f"
     bd = branch -d
     br = branch -vv
     ca = commit --amend
