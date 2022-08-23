@@ -11,7 +11,7 @@ on:
 
 jobs:
   Python:
-    name: Shellcheck
+    name: Python
     runs-on: ubuntu-latest
     steps:
       - name: 💾 Check out repository
@@ -19,6 +19,9 @@ jobs:
 
       - name: 🐍 Check Python code quality
         uses: ricardochaves/python-lint@v1.4.0
+        with:
+          use-pylint: false
+          use-mypy: false
 
   Shellcheck:
     name: Shellcheck
