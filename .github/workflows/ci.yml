@@ -20,7 +20,6 @@ jobs:
       - name: 🐍 Check Python code quality
         uses: ricardochaves/python-lint@v1.4.0
 
-jobs:
   Shellcheck:
     name: Shellcheck
     runs-on: ubuntu-latest
