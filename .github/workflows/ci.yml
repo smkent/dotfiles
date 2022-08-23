@@ -17,7 +17,7 @@ jobs:
       - name: 💾 Check out repository
         uses: actions/checkout@v3
 
-      - name: Locate scripts with Python shebang lines
+      - name: 🔍 Locate scripts with Python shebang lines
         run: |
           echo "::set-output name=files::$(echo \
             $(for f in $(git ls-files); do \
