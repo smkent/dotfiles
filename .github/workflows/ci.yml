@@ -8,3 +8,16 @@ on:
       - main
   workflow_call:
   workflow_dispatch:
+
+jobs:
+  Shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v3
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@1.1.0
+        env:
+          SHELLCHECK_OPTS: -e SC1071 -e SC1090
