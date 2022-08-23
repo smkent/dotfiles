@@ -22,6 +22,7 @@ jobs:
         with:
           use-pylint: false
           use-mypy: false
+          extra-pycodestyle-options: --exclude=.mutt
 
   Shellcheck:
     name: Shellcheck
