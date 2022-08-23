@@ -19,7 +19,13 @@ jobs:
 
       - name: Locate scripts with Python shebang lines
         run: |
-          echo "::set-output name=files::$(echo $(for f in $(git ls-files); do if tail -c +3 "${f}" | head -n1 | grep -qe python'[0-9]\?$'; then echo $f; fi; done))"
+          echo "::set-output name=files::$(echo \
+            $(for f in $(git ls-files); do \
+              if tail -c +3 "${f}" | head -n1 | grep -qe python'[0-9]\?$'; then \
+                echo $f; \
+              fi; \
+            done) 2>/dev/null \
+          )"
         id: python-files
 
       - name: 🐍 Check Python code quality
