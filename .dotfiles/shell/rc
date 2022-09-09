@@ -322,6 +322,7 @@ __prepend_path_if_exists()
     [ -d "${1}" ] && PATH="${1}:${PATH}"
     return 0
 }
+__prepend_path_if_exists "/opt/homebrew/bin"
 __prepend_path_if_exists "${HOME}/.dotfiles/bin"
 __prepend_path_if_exists "${HOME}/.local/bin"
 __prepend_path_if_exists "${HOME}/.ruby/bin"
