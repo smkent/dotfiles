@@ -8,6 +8,8 @@
 !.bashrc
 !.config/
 .config/*
+!.config/black
+!.config/flake8
 !.config/google-chrome/
 .config/google-chrome/*
 !.config/google-chrome/NativeMessagingHosts/
