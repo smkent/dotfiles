@@ -38,7 +38,7 @@ This is a summary of the configuration in [`.vimrc`](/.vimrc).
 
 Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 
-* [ALE](https://github.com/w0rp/ale)
+* [ALE](https://github.com/dense-analysis/ale)
 * [AnsiEsc](https://github.com/vim-scripts/AnsiEsc.vim)
 * [completor](https://github.com/maralla/completor.vim)
 * [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
@@ -51,6 +51,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) (if [vim patch
   7.4.427](http://ftp.vim.org/vim/patches/7.4/7.4.427) is installed)
+* [vim-go](https://github.com/fatih/vim-go)
 * [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags)
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
 * [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
