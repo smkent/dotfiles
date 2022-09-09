@@ -61,6 +61,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-snippets](https://github.com/honza/vim-snippets)
 * [vim-surround](https://github.com/tpope/vim-surround)
 * [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
+* [vim-toml](https://github.com/cespare/vim-toml)
 * [vim-yaml](https://github.com/stephpy/vim-yaml)
 
 # Mappings
