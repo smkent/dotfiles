@@ -49,6 +49,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [ultisnips](https://github.com/SirVer/ultisnips)
 * [vim-airline](https://github.com/vim-airline/vim-airline)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
+* [vim-gh-line](https://github.com/ruanyl/vim-gh-line)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) (if [vim patch
   7.4.427](http://ftp.vim.org/vim/patches/7.4/7.4.427) is installed)
 * [vim-go](https://github.com/fatih/vim-go)
