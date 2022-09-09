@@ -316,7 +316,9 @@ __prompt_generator()
 
 __prepend_path_if_exists()
 {
-    echo "${PATH}" | grep -qEe ":${1}(:|\$)" && return
+    # Remove any existing instances of directory from PATH
+    PATH=$(echo "${PATH}" | sed -e 's/:/\n/g' | grep -ve "^${1}\$" | xargs | tr " " ":")
+    # Prepend directory to PATH if directory exists
     [ -d "${1}" ] && PATH="${1}:${PATH}"
     return 0
 }
