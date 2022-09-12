@@ -116,6 +116,9 @@ alias gr='cd $(git rev-parse --show-toplevel)'
 # "git grep"
 alias gg='git grep'
 
+# git for overlay repository
+alias gitt='git --git-dir="${HOME}"/.git_aux --work-tree="${HOME}"'
+
 # }}}
 
 # vim {{{
