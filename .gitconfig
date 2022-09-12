@@ -122,6 +122,9 @@
                  set -x; \
                  git branch --set-upstream-to \"${r}\" && \
                  git config --local branch.\"${b}\".pushremote no_push; }; f"
+    ov = "!f() { git status -s ; \
+                git br | grep -ve '^* main ' ; \
+                git stash list; }; f"
     p = pull
     # "push (new) branch"
     pb = "!f() { git push -u origin \"$(git rev-parse --abbrev-ref @)\" \"${@}\"; }; f"
