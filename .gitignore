@@ -38,8 +38,6 @@
 !.mailcap
 !.local/
 .local/*
-!.local/bashrc
-!.local/bash_aliases
 !.mutt/
 .mutt/certificates
 .mutt/cache
@@ -55,7 +53,7 @@
 .ssh/*
 !.ssh/config
 !.ssh/config.d
-.ssh/config.d/local
+.ssh/config.d/local*
 !.tmux.conf
 !.vimrc
 .vim/.netrwhist
