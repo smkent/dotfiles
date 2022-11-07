@@ -233,6 +233,25 @@ useful aliases are:
 
 ![mutt screenshot](/.dotfiles/img/screenshot-mutt.png)
 
+## Development
+
+Static checks are managed by [pre-commit][pre-commit].
+
+Installation via [`pipx`][pipx]:
+
+```console
+pip install pipx
+pipx install pre-commit
+pre-commit install
+```
+
+Installation via `pip`:
+
+```console
+pip install pre-commit
+pre-commit install
+```
+
 ## Licensing and attribution
 
 Parts of this repository contain third-party code, which is copyright their
@@ -243,3 +262,7 @@ which pieces of third-party code were added to the repository.
 
 Original code in this repository is published under the MIT license. See
 [`.dotfiles/doc/LICENSE`](/.dotfiles/doc/LICENSE) for licensing information.
+
+
+[pipx]: https://pypa.github.io/pipx/
+[pre-commit]: https://pre-commit.com/
