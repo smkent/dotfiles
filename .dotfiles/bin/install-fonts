@@ -7,45 +7,75 @@ import subprocess
 import sys
 import tempfile
 
-description = 'Install fonts from Github'
+description = "Install fonts from Github"
 ap = argparse.ArgumentParser(description=description)
-ap.add_argument('-n', '--no-update-cache', dest='update_cache',
-                action='store_false',
-                help='Don\'t update the font cache after installing fonts')
-ap.add_argument('-d', '--directory', dest='directory', metavar='dir',
-                help='Font installation directory')
-ap.add_argument('-r', '--root', dest='root', action='store_true',
-                help='Install fonts as root')
+ap.add_argument(
+    "-n",
+    "--no-update-cache",
+    dest="update_cache",
+    action="store_false",
+    help="Don't update the font cache after installing fonts",
+)
+ap.add_argument(
+    "-d",
+    "--directory",
+    dest="directory",
+    metavar="dir",
+    help="Font installation directory",
+)
+ap.add_argument(
+    "-r",
+    "--root",
+    dest="root",
+    action="store_true",
+    help="Install fonts as root",
+)
 args = ap.parse_args()
 
 if args.root and os.getuid() != 0:
-    sys.exit(subprocess.call(['sudo'] + sys.argv))
+    sys.exit(subprocess.call(["sudo"] + sys.argv))
 
 if not args.directory:
     if os.geteuid() == 0:
-        args.directory = '/usr/local/share/fonts/truetype'
+        args.directory = "/usr/local/share/fonts/truetype"
     else:
-        args.directory = os.path.join(os.path.expanduser('~'), '.fonts')
+        args.directory = os.path.join(os.path.expanduser("~"), ".fonts")
 
-fonts = {'smkent': 'https://github.com/smkent/fonts',
-         'powerline': 'https://github.com/powerline/fonts'}
+fonts = {
+    "smkent": "https://github.com/smkent/fonts",
+    "powerline": "https://github.com/powerline/fonts",
+}
 
 
 def download_fonts(dir_name, url):
     temp_dir = None
     try:
-        temp_dir = tempfile.mkdtemp(prefix=os.path.basename(sys.argv[0]) + '.')
-        subprocess.check_call(['git', 'clone', url, '--depth', '1', temp_dir])
-        font_files = subprocess.check_output(
-            ['find', temp_dir, '-iname', '*.[o,t]tf', '-or', '-name',
-             '*.pcf.gz']).decode('utf-8').splitlines()
+        temp_dir = tempfile.mkdtemp(prefix=os.path.basename(sys.argv[0]) + ".")
+        subprocess.check_call(["git", "clone", url, "--depth", "1", temp_dir])
+        font_files = (
+            subprocess.check_output(
+                [
+                    "find",
+                    temp_dir,
+                    "-iname",
+                    "*.[o,t]tf",
+                    "-or",
+                    "-name",
+                    "*.pcf.gz",
+                ]
+            )
+            .decode("utf-8")
+            .splitlines()
+        )
         dest_dir = os.path.join(args.directory, dir_name)
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir, 0o755)
-        subprocess.check_call(['cp', '-v', '-t', dest_dir] + font_files)
+        subprocess.check_call(["cp", "-v", "-t", dest_dir] + font_files)
     except Exception as e:
-        print('Error installing fonts from {}: {}'.format(url, str(e)),
-              file=sys.stderr)
+        print(
+            "Error installing fonts from {}: {}".format(url, str(e)),
+            file=sys.stderr,
+        )
     finally:
         if temp_dir and os.path.isdir(temp_dir):
             shutil.rmtree(temp_dir)
@@ -55,4 +85,4 @@ for dir_name, url in fonts.items():
     download_fonts(dir_name, url)
 
 if args.update_cache:
-    subprocess.check_call(['fc-cache', '-vf'])
+    subprocess.check_call(["fc-cache", "-vf"])

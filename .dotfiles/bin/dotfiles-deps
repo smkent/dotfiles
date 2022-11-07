@@ -24,11 +24,11 @@ dependency_list = {
 }
 
 
-class DependencyInfo(object):
-    def __init__(self, args, name, config={}):
+class DependencyInfo:
+    def __init__(self, args, name, config=None):
         self.args = args
         self.name = name
-        self.config = config
+        self.config = config or {}
         # Computed values
         self.exec_path = distutils.spawn.find_executable(name)
         self.installed = self.exec_path is not None
@@ -104,7 +104,11 @@ def main():
     try:
         cmd = ["stty", "size"]
         terminal_size = [
-            int(x) for x in subprocess.check_output(cmd).decode("utf-8").strip().split()
+            int(x)
+            for x in subprocess.check_output(cmd)
+            .decode("utf-8")
+            .strip()
+            .split()
         ]
     except (subprocess.CalledProcessError, ValueError):
         terminal_size = [24, 80]

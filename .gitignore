@@ -27,6 +27,7 @@
 !.gimp-2.8/fonts.conf
 !.gimp-2.8/scripts
 !.gitconfig
+!.github/
 !.gitignore
 !.gitignore.global
 !.gnupg/
@@ -48,6 +49,7 @@
 !.mozilla/native-messaging-hosts/
 .mozilla/native-messaging-hosts/*
 !.mozilla/native-messaging-hosts/gpgmejson.json
+!.pre-commit-config.yaml
 !.screenrc
 !.ssh/
 .ssh/*
