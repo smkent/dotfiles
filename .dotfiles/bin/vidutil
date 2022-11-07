@@ -10,11 +10,12 @@ import time
 def find_ffmpeg_exe():
     for i in ["ffmpeg", "avconv"]:
         try:
-            subprocess.check_call(
-                ["which", i],
-                stdout=open("/dev/null", "w"),
-                stderr=subprocess.STDOUT,
-            )
+            with open("/dev/null", "w") as dev_null:
+                subprocess.check_call(
+                    ["which", i],
+                    stdout=dev_null,
+                    stderr=subprocess.STDOUT,
+                )
             return i
         except subprocess.CalledProcessError:
             continue
@@ -22,9 +23,8 @@ def find_ffmpeg_exe():
 
 
 def format_time(time_str):
-    if ":" not in time_str:
-        if int(time_str) > 60:
-            return time_str
+    if ":" not in time_str and int(time_str) > 60:
+        return time_str
     c = time_str.split(":")
     c = [""] * (3 - len(c)) + c
     return ":".join(["{}".format(i.zfill(2)) for i in c])

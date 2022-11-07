@@ -16,7 +16,7 @@ class UpdateException(Exception):
     pass
 
 
-class DotfilesAutoPull(object):
+class DotfilesAutoPull:
 
     GIT_EXE = "git"
 
@@ -91,24 +91,24 @@ class DotfilesAutoPull(object):
         the new ref file for the shell to check later.
         """
         # Fork to the background to avoid blocking the shell
-        if self.args.fork:
-            if os.fork():
-                sys.exit(0)
+        if self.args.fork and os.fork():
+            sys.exit(0)
 
         if not self._check_repo_batch_access(self.remote_name):
             raise UpdateException("Remote repository cannot be accessed")
 
         # Check for new refs
         ref = self._lookup_ref(self.args.remote_tracking_branch)
-        new_ref = self.run_stdout(
-            [
-                self.git_exe,
-                "ls-remote",
-                self.remote_name,
-                self.remote_branch_name,
-            ],
-            stderr=open("/dev/null", "w"),
-        ).split()[0]
+        with open("/dev/null", "w") as dev_null:
+            new_ref = self.run_stdout(
+                [
+                    self.git_exe,
+                    "ls-remote",
+                    self.remote_name,
+                    self.remote_branch_name,
+                ],
+                stderr=dev_null,
+            ).split()[0]
         if new_ref == ref:
             # Already up to date
             return
@@ -233,13 +233,14 @@ class DotfilesAutoPull(object):
             os.chmod(temp_f.name, 0o0700)
             env = os.environ.copy()
             env["GIT_SSH"] = temp_f.name
-            p = subprocess.Popen(
-                [self.git_exe, "remote", "show", remote],
-                stdout=open("/dev/null", "w"),
-                stderr=subprocess.STDOUT,
-                env=env,
-            )
-            p.communicate()
+            with open("/dev/null", "w") as dev_null:
+                p = subprocess.Popen(
+                    [self.git_exe, "remote", "show", remote],
+                    stdout=dev_null,
+                    stderr=subprocess.STDOUT,
+                    env=env,
+                )
+                p.communicate()
             return p.returncode == 0
         finally:
             if temp_f and os.path.isfile(temp_f.name):
