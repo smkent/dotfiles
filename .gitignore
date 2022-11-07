@@ -27,6 +27,7 @@
 !.gimp-2.8/fonts.conf
 !.gimp-2.8/scripts
 !.gitconfig
+!.github/
 !.gitignore
 !.gitignore.global
 !.gnupg/
