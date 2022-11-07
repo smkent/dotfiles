@@ -104,7 +104,11 @@ def main():
     try:
         cmd = ["stty", "size"]
         terminal_size = [
-            int(x) for x in subprocess.check_output(cmd).decode("utf-8").strip().split()
+            int(x)
+            for x in subprocess.check_output(cmd)
+            .decode("utf-8")
+            .strip()
+            .split()
         ]
     except (subprocess.CalledProcessError, ValueError):
         terminal_size = [24, 80]
