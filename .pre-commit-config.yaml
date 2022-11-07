@@ -27,3 +27,14 @@ repos:
   hooks:
   - id: isort
     args: ["--show-config", "--profile", "black", "--line-length", "79", "--atomic"]
+- repo: https://github.com/pycqa/flake8
+  rev: 5.0.4
+  hooks:
+  - id: flake8
+    additional_dependencies:
+    - flake8-bugbear
+    - flake8-pyproject
+    - flake8-simplify
+    - pep8-naming
+    args: ["--per-file-ignores=.dotfiles/bin/dotfiles-auto-update:B019"]
+    exclude: '^\.mutt/oauth2.py$'
