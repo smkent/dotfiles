@@ -343,6 +343,7 @@ Plug 'https://github.com/davidhalter/jedi-vim'
 Plug 'https://github.com/dense-analysis/ale'
 Plug 'https://github.com/fatih/vim-go',
             \ { 'do': ':GoUpdateBinaries' }
+Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 Plug 'https://github.com/honza/vim-snippets'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
 Plug 'https://github.com/jamessan/vim-gnupg',
@@ -358,9 +359,11 @@ if v:version >= 704
     Plug 'https://github.com/ludovicchabant/vim-gutentags'
 endif
 Plug 'https://github.com/maralla/completor.vim'
+Plug 'https://github.com/maxmellon/vim-jsx-pretty'
+Plug 'https://github.com/pangloss/vim-javascript'
+Plug 'https://github.com/ruanyl/vim-gh-line'
 Plug 'https://github.com/SirVer/ultisnips'
 Plug 'https://github.com/smkent/vim-pipe-preview'
-Plug 'https://github.com/ruanyl/vim-gh-line'
 Plug 'https://github.com/stephpy/vim-yaml'
 Plug 'https://github.com/tomtom/tcomment_vim'
 Plug 'https://github.com/tpope/vim-fugitive'

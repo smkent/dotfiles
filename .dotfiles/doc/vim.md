@@ -54,6 +54,8 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
   7.4.427](http://ftp.vim.org/vim/patches/7.4/7.4.427) is installed)
 * [vim-go](https://github.com/fatih/vim-go)
 * [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags)
+* [vim-jsx-pretty](https://github.com/maxmellon/vim-jsx-pretty)
+* [vim-javascript](https://github.com/pangloss/vim-javascript)
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
 * [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
 * [vim-python-pep8-indent](https://github.com/hynek/vim-python-pep8-indent)
@@ -64,6 +66,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
 * [vim-toml](https://github.com/cespare/vim-toml)
 * [vim-yaml](https://github.com/stephpy/vim-yaml)
+* [yats](https://github.com/HerringtonDarkholme/yats.vim)
 
 # Mappings
 
