@@ -54,6 +54,7 @@
     defaultBranch = main
 [alias]
     a = add
+    an = "!f() { cd \"${GIT_PREFIX-.}\"; touch \"${@}\"; git add -N \"${@}\"; }; f"
     ap = add -u -p
     au = add -u
     b = branch
