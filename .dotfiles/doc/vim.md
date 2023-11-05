@@ -57,6 +57,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-jsx-pretty](https://github.com/maxmellon/vim-jsx-pretty)
 * [vim-javascript](https://github.com/pangloss/vim-javascript)
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
+* [vim-openscad](https://github.com/sirtaj/vim-openscad)
 * [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
 * [vim-python-pep8-indent](https://github.com/hynek/vim-python-pep8-indent)
 * [vim-signify](https://github.com/mhinz/vim-signify) (if vim patch 7.4.427 is
