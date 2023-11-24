@@ -18,7 +18,7 @@ action_collect() {
             ;;
     esac
     find . -mindepth 1 -maxdepth 1 -type f \
-        -iregex '.*.\(jpg\|png\)' -print0 | \
+        -iregex '.*.\(jpg\|jpeg\|png\)' -print0 | \
         xargs -0 -I '%' -r /bin/sh -c \
         'mkdir -m 0700 -vp '"${dir}"' && cp -nv -t "'"${dir}"'" "%"'
     # If the destination images directory doesn't exist, there are no images
@@ -41,10 +41,10 @@ action_prepare() {
         fi
         rm -v "${fn}"
     done
-    find . -mindepth 1 -maxdepth 1 -type f -iname '*.jpg' | while read -r fn; do
+    find . -mindepth 1 -maxdepth 1 -type f -iname '*.jpg' -or -iname '*.jpeg' | while read -r fn; do
         # Remove EXIF data
         exiv2 -v rm "${fn}"
-        if [ "$(stat -c '%s' "${fn}")" -gt 1048576 ]; then
+        if [ "$(stat -c '%s' "${fn}")" -gt $((1048576 / 2)) ]; then
             # Create lower resolution image
             mkdir -vp "thumb"
             fn_thumb="thumb/${fn%.*}.jpg"
