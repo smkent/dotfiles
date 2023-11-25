@@ -17,7 +17,6 @@ class UpdateException(Exception):
 
 
 class DotfilesAutoPull:
-
     GIT_EXE = "git"
 
     def main(self):
