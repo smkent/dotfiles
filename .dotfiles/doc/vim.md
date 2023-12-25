@@ -48,6 +48,7 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [tcomment_vim](https://github.com/tomtom/tcomment_vim)
 * [ultisnips](https://github.com/SirVer/ultisnips)
 * [vim-airline](https://github.com/vim-airline/vim-airline)
+* [vim-dispatch](https://github.com/tpope/vim-dispatch)
 * [vim-fugitive](https://github.com/tpope/vim-fugitive)
 * [vim-gh-line](https://github.com/ruanyl/vim-gh-line)
 * [vim-gitgutter](https://github.com/airblade/vim-gitgutter) (if [vim patch
