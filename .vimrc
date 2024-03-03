@@ -364,7 +364,8 @@ Plug 'https://github.com/pangloss/vim-javascript'
 Plug 'https://github.com/ruanyl/vim-gh-line'
 Plug 'https://github.com/sirtaj/vim-openscad'
 Plug 'https://github.com/SirVer/ultisnips'
-Plug 'https://github.com/smkent/vim-pipe-preview'
+Plug 'https://github.com/smkent/vim-pipe-preview',
+            \ { 'branch': 'main' }
 Plug 'https://github.com/stephpy/vim-yaml'
 Plug 'https://github.com/tomtom/tcomment_vim'
 Plug 'https://github.com/tpope/vim-dispatch'
@@ -378,7 +379,8 @@ Plug 'https://github.com/vim-scripts/AnsiEsc.vim'
 " - http://ftp.vim.org/vim/patches/7.4/7.4.427
 if executable('git')
     if has('patch-7.4.427')
-        Plug 'https://github.com/airblade/vim-gitgutter'
+        Plug 'https://github.com/airblade/vim-gitgutter',
+                    \ { 'branch': 'main' }
         " Reduce default refresh time from 4 seconds to 0.25 seconds
         set updatetime=250
     else
