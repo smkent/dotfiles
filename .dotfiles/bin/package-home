@@ -1,0 +1,38 @@
+#!/bin/sh
+
+dest="/tmp"
+
+cd
+
+set -e
+
+# shellcheck disable=SC1091
+. /etc/lsb-release
+
+os_str=$(echo "${DISTRIB_ID}-${DISTRIB_RELEASE}" | tr '[:upper:]' '[:lower:]')
+d_str=$(echo "${PWD##/}" | tr '/' '-')
+tar_fn="$(hostname -s)-${os_str}-${d_str}-$(date +%Y%m%d).tar.gz"
+
+cat <<EOF | ( set -x && tar -X - -zcvf "${dest%%/}/${tar_fn}" . )
+./.ansible
+./.bundle
+./.cabal
+./.cache
+./.config/Signal
+./.config/google-chat-electron
+./.config/google-chrome
+./.fonts
+./.fzf
+./.local/pipx
+./.local/share/Steam
+./.local/share/Trash
+./.mozilla
+./.ruby
+./.wine
+./.Xauthority
+./.zoom
+./data
+./go
+./media
+./snap
+EOF
