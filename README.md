@@ -7,14 +7,7 @@ Quick jump: [shell](#shell), [git](#git), [mutt](#mutt), [tmux](#tmux),
 
 ## Design
 
-Most of this repository contains flat files meant to be used in place within
-`${HOME}`. A few others are organized under
-[`.dotfiles/templates/`](/.dotfiles/templates/), which are typically files that
-are modified during normal use (e.g.
-[`.ssh/config`](/.dotfiles/templates/ssh/config_append)). Templates are
-installed when a new login shell is started and any of the template files are
-newer than the previous template installation timestamp, or when
-[`expand-dotfiles -f`](/.dotfiles/bin/expand-dotfiles) is run manually.
+This repository contains flat files meant to be used in place within `${HOME}`.
 
 My dotfiles are designed be portable with minimal required dependencies (git,
 bash/zsh, Python, and the
