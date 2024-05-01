@@ -540,9 +540,6 @@ __source_if_exists()
     fi
 }
 
-# Host-specific bashrc if available
-__source_if_exists ~/.dotfiles/lib/bashrc."${HOSTNAME}"
-
 # Aliases and helper functions
 __source_if_exists ~/.dotfiles/shell/aliases
 
