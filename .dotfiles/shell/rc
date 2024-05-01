@@ -450,10 +450,6 @@ export SHELLCHECK_OPTS="--exclude SC1090"
 
 # fzf configuration {{{
 
-if [ -f ~/.fzf.bash ]; then
-    source ~/.fzf.bash
-fi
-
 export FZF_DEFAULT_OPTS="
     --color pointer:148
     --color spinner:215
