@@ -5,8 +5,25 @@ shift
 replace="${1:?}"
 shift
 
-set -ex
+set -e
 
-for i in $(git grep "${search}" "${@}" | cut -d: -f1 | sort -u); do
-    sed -i'' -e "s:${search}:${replace}:g" "${i}"
+sep=""
+for try_sep in ":" "!" "@" "$"; do
+    if echo "${search}${replace}" | grep -qe "${try_sep}"; then
+        continue
+    fi
+    sep=${try_sep}
+    break
+done
+
+if [ -z "${sep}" ]; then
+    echo "Error: No pattern separator candidates" >&2
+    exit 1
+fi
+
+git grep -I "${search}" "${@}" | cut -d: -f1 | sort -u | while read -r i; do
+    (
+        set -x
+        sed -i'' -e "s${sep}${search}${sep}${replace}${sep}g" "${i}"
+    )
 done
