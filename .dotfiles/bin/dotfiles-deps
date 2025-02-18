@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
-import distutils.spawn
 import os
+import shutil
 import subprocess
 import textwrap
 
@@ -30,7 +30,7 @@ class DependencyInfo:
         self.name = name
         self.config = config or {}
         # Computed values
-        self.exec_path = distutils.spawn.find_executable(name)
+        self.exec_path = shutil.which(name)
         self.installed = self.exec_path is not None
         self.version = None
         version_cmd = self.config.get("version")
