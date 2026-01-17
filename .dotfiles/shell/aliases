@@ -148,6 +148,7 @@ alias sstop='kill ${SSH_AGENT_PID}'
 # Development tool aliases {{{
 
 alias pp='poetry run poe'
+alias penv='$(poetry env activate)'
 
 # }}}
 

@@ -218,6 +218,10 @@ __prompt_generator()
         esac
         p_exit="${exit_color}[${exit_code_disp}]${__reset} "
     fi
+    # Python VirtualEnv detection
+    if [ -n "${VIRTUAL_ENV}" ]; then
+        p_main="${p_main}${__c_yellow}{py}${__reset} ";
+    fi
     # Main section
     if [ -n "${GITHUB_CODESPACE_TOKEN}" ] && [ -n "${CODESPACES}" ]; then
         # The GitHub Codespaces shell uses the root user.
