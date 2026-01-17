@@ -138,6 +138,7 @@
     # "rebase interactive"; $1 is a ref, commit count, or empty for new commits
     ri = "!f() { r=\"${1}\"; if [ \"${1}\" -eq \"${1}\" ]; then r=\"@~${1}\"; \
                  fi >/dev/null 2>&1; git rebase -i ${r}; }; f"
+    rp = remote prune
     rr = reset --hard @{u}  # "reset to remote"
     rt = reset --hard  # "reset to"
     s = status -s --branch
