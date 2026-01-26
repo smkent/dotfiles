@@ -346,6 +346,7 @@ Plug 'https://github.com/fatih/vim-go',
 Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 Plug 'https://github.com/honza/vim-snippets'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
+Plug 'https://github.com/isobit/vim-caddyfile'
 Plug 'https://github.com/jamessan/vim-gnupg',
             \ { 'branch': 'main' }
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle'
