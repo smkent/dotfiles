@@ -44,8 +44,8 @@ ap.add_argument(
     "--mountpoint",
     metavar="dir",
     help=(
-        f"Mount point directory (default: {default_mountpoint} or autodetect for "
-        "unmount)"
+        "Mount point directory"
+        f" (default: {default_mountpoint} or autodetect for unmount)"
     ),
 )
 ap.add_argument(
