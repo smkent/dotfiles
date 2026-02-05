@@ -1,0 +1,25 @@
+target-version = "py310"
+line-length = 79
+fix = true
+
+exclude = [
+  ".git",
+  ".venv",
+  "__pycache__",
+]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[lint]
+select = [
+  "E", "W",     # pycodestyle
+  "F",          # pyflakes
+  "I",          # isort
+  "B",          # bugbear
+  "SIM",        # flake8-simplify
+  "N",          # pep8-naming
+  "UP",         # pyupgrade
+]

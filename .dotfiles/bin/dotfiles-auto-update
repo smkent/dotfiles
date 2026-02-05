@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
-import functools
 import os
 import subprocess
 import sys
 import tempfile
+from functools import cached_property
 
 
-class UpdateException(Exception):
+class UpdateError(Exception):
     """
     Exception type for repository configuration and status messages
     """
@@ -29,12 +29,11 @@ class DotfilesAutoPull:
             elif self.args.action == "check":
                 # Check for updates
                 self._action_check()
-        except UpdateException as e:
+        except UpdateError as e:
             if not self.args.quiet:
                 print(str(e), file=sys.stderr)
 
-    @property
-    @functools.lru_cache(maxsize=1)
+    @cached_property
     def git_exe(self):
         """
         Verify git is installed and return the executable name to use
@@ -45,27 +44,23 @@ class DotfilesAutoPull:
             ).returncode
             != 0
         ):
-            raise UpdateException("git is not installed")
+            raise UpdateError("git is not installed")
         return self.GIT_EXE
 
-    @property
-    @functools.lru_cache(maxsize=1)
+    @cached_property
     def remote_name(self):
         return self.args.remote_tracking_branch.split("/", 1)[0]
 
-    @property
-    @functools.lru_cache(maxsize=1)
+    @cached_property
     def remote_branch_name(self):
         return self.args.remote_tracking_branch.split("/", 1)[1]
 
-    @property
-    @functools.lru_cache(maxsize=1)
+    @cached_property
     def current_branch(self):
         return self.run_stdout(
             [self.git_exe, "rev-parse", "--abbrev-ref", "@"]
         )
 
-    @functools.lru_cache(maxsize=1)
     def _cd_git_toplevel(self):
         """
         Verify repository location and change to the home directory
@@ -75,8 +70,8 @@ class DotfilesAutoPull:
             [self.git_exe, "rev-parse", "--show-toplevel"]
         )
         if git_toplevel != os.path.expanduser("~"):
-            raise UpdateException(
-                "Auto-update only supported in a home " "directory repository"
+            raise UpdateError(
+                "Auto-update only supported in a home directory repository"
             )
         os.chdir(git_toplevel)
 
@@ -94,7 +89,7 @@ class DotfilesAutoPull:
             sys.exit(0)
 
         if not self._check_repo_batch_access(self.remote_name):
-            raise UpdateException("Remote repository cannot be accessed")
+            raise UpdateError("Remote repository cannot be accessed")
 
         # Check for new refs
         ref = self._lookup_ref(self.args.remote_tracking_branch)
@@ -117,7 +112,7 @@ class DotfilesAutoPull:
                 f.write(new_ref)
         else:
             if not self.args.quiet:
-                raise UpdateException(
+                raise UpdateError(
                     "An update is available, but "
                     "--new-ref-file was not specified"
                 )
@@ -160,15 +155,14 @@ class DotfilesAutoPull:
                 self.git_exe,
                 "--no-pager",
                 "ll",
-                "{}..{}".format(prev_ref, new_ref),
+                f"{prev_ref}..{new_ref}",
             ]
         )
         # The previous git log command doesn't print a final line break
         # when the pager is disabled
         print("")
 
-    @property
-    @functools.lru_cache(maxsize=1)
+    @cached_property
     def branch_remote_matches(self):
         """
         Check if the current branch's remote tracking branch name matches the
@@ -178,14 +172,12 @@ class DotfilesAutoPull:
             [self.git_exe, "rev-parse", "--abbrev-ref", "@{u}"]
         )
         if not remote_branch or "/" not in remote_branch:
-            raise UpdateException(
-                "{} has no remote tracking "
-                "branch".format(self.current_branch)
+            raise UpdateError(
+                f"{self.current_branch} has no remote tracking branch"
             )
         return remote_branch == self.args.remote_tracking_branch
 
-    @property
-    @functools.lru_cache(maxsize=1)
+    @cached_property
     def working_directory_clean(self):
         """
         Check if the current working directory is clean
@@ -205,10 +197,9 @@ class DotfilesAutoPull:
         if not self.branch_remote_matches:
             return False
         if not self.working_directory_clean:
-            raise UpdateException(
-                "The current branch {} has local modifications".format(
-                    self.current_branch
-                )
+            raise UpdateError(
+                f"The current branch {self.current_branch}"
+                " has local modifications"
             )
         return True
 
@@ -222,12 +213,10 @@ class DotfilesAutoPull:
         if not remote_url.startswith("https://"):
             return False
         argv0 = os.path.basename(sys.argv[0])
-        temp_f = None
-        try:
-            temp_f = tempfile.NamedTemporaryFile(
-                suffix=".{}".format(argv0), delete=False
-            )
-            temp_f.write('ssh -o BatchMode=yes "${@}"'.encode("utf-8"))
+        with tempfile.NamedTemporaryFile(
+            suffix=f".{argv0}", delete=False
+        ) as temp_f:
+            temp_f.write(b'ssh -o BatchMode=yes "${@}"')
             temp_f.close()
             os.chmod(temp_f.name, 0o0700)
             env = os.environ.copy()
@@ -241,14 +230,10 @@ class DotfilesAutoPull:
                 )
                 p.communicate()
             return p.returncode == 0
-        finally:
-            if temp_f and os.path.isfile(temp_f.name):
-                os.unlink(temp_f.name)
 
     def _parse_args(self):
         description = (
-            "Automatically pull dotfiles updates from the upstream "
-            "repository"
+            "Automatically pull dotfiles updates from the upstream repository"
         )
         ap = argparse.ArgumentParser(description=description)
         ap.add_argument(
@@ -273,9 +258,7 @@ class DotfilesAutoPull:
             "-q",
             "--quiet",
             action="store_true",
-            help=(
-                "Don't print repository configuration and " "status messages"
-            ),
+            help=("Don't print repository configuration and status messages"),
         )
         ap.add_argument(
             "--skip-ref",
@@ -317,7 +300,7 @@ class DotfilesAutoPull:
         if output:
             kwargs["stdout"] = subprocess.PIPE
         if not silent:
-            print("+ {}".format(subprocess.list2cmdline(cmd)), file=sys.stderr)
+            print(f"+ {subprocess.list2cmdline(cmd)}", file=sys.stderr)
         return subprocess.run(cmd, check=check, **kwargs)
 
 

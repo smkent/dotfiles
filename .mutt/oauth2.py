@@ -54,8 +54,8 @@ option.
   oauth2 --generate_oauth2_string --user=xxx@gmail.com \
     --access_token=ya29.AGy[...]ezLg
 
-The output of this mode will be a base64-encoded string. To use it, connect to a
-IMAPFE and pass it as the second argument to the AUTHENTICATE command.
+The output of this mode will be a base64-encoded string. To use it, connect to
+a IMAPFE and pass it as the second argument to the AUTHENTICATE command.
 
   a AUTHENTICATE XOAUTH2 a9sha9sfs[...]9dfja929dk==
 """
@@ -63,13 +63,15 @@ IMAPFE and pass it as the second argument to the AUTHENTICATE command.
 import base64
 import imaplib
 import json
-from optparse import OptionParser
 import smtplib
 import sys
-import urllib.request, urllib.parse, urllib.error
+import urllib.error
+import urllib.parse
+import urllib.request
+from optparse import OptionParser
 
 
-def SetupOptionParser():
+def setup_option_parser():
     # Usage message is the module's docstring.
     parser = OptionParser(usage=__doc__)
     parser.add_option(
@@ -82,7 +84,7 @@ def SetupOptionParser():
         "--generate_oauth2_string",
         action="store_true",
         dest="generate_oauth2_string",
-        help="generates an initial client response string for " "OAuth2",
+        help="generates an initial client response string for OAuth2",
     )
     parser.add_option(
         "--client_id",
@@ -125,7 +127,7 @@ def SetupOptionParser():
     parser.add_option(
         "--user",
         default=None,
-        help="email address of user whose account is being " "accessed",
+        help="email address of user whose account is being accessed",
     )
     parser.add_option(
         "--quiet",
@@ -146,7 +148,7 @@ GOOGLE_ACCOUNTS_BASE_URL = "https://accounts.google.com"
 REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 
 
-def AccountsUrl(command):
+def accounts_url(command):
     """Generates the Google Accounts URL.
 
     Args:
@@ -155,20 +157,20 @@ def AccountsUrl(command):
     Returns:
       A URL for the given command.
     """
-    return "%s/%s" % (GOOGLE_ACCOUNTS_BASE_URL, command)
+    return f"{GOOGLE_ACCOUNTS_BASE_URL}/{command}"
 
 
-def UrlEscape(text):
+def url_escape(text):
     # See OAUTH 5.1 for a definition of which characters need to be escaped.
     return urllib.parse.quote(text, safe="~-._")
 
 
-def UrlUnescape(text):
+def url_unescape(text):
     # See OAUTH 5.1 for a definition of which characters need to be escaped.
     return urllib.parse.unquote(text)
 
 
-def FormatUrlParams(params):
+def format_url_params(params):
     """Formats parameters into a URL query string.
 
     Args:
@@ -179,11 +181,11 @@ def FormatUrlParams(params):
     """
     param_fragments = []
     for param in sorted(iter(params.items()), key=lambda x: x[0]):
-        param_fragments.append("%s=%s" % (param[0], UrlEscape(param[1])))
+        param_fragments.append(f"{param[0]}={url_escape(param[1])}")
     return "&".join(param_fragments)
 
 
-def GeneratePermissionUrl(client_id, scope="https://mail.google.com/"):
+def generate_permission_url(client_id, scope="https://mail.google.com/"):
     """Generates the URL for authorizing access.
 
     This uses the "OAuth2 for Installed Applications" flow described at
@@ -200,14 +202,17 @@ def GeneratePermissionUrl(client_id, scope="https://mail.google.com/"):
     params["redirect_uri"] = REDIRECT_URI
     params["scope"] = scope
     params["response_type"] = "code"
-    return "%s?%s" % (AccountsUrl("o/oauth2/auth"), FormatUrlParams(params))
+    return "{}?{}".format(
+        accounts_url("o/oauth2/auth"), format_url_params(params)
+    )
 
 
-def AuthorizeTokens(client_id, client_secret, authorization_code):
+def authorize_tokens(client_id, client_secret, authorization_code):
     """Obtains OAuth access token and refresh token.
 
-    This uses the application portion of the "OAuth2 for Installed Applications"
-    flow at https://developers.google.com/accounts/docs/OAuth2InstalledApp#handlingtheresponse
+    This uses the application portion of the
+    "OAuth2 for Installed Applications" flow at
+    https://developers.google.com/accounts/docs/OAuth2InstalledApp#handlingtheresponse
 
     Args:
       client_id: Client ID obtained by registering your app.
@@ -224,7 +229,7 @@ def AuthorizeTokens(client_id, client_secret, authorization_code):
     params["code"] = authorization_code
     params["redirect_uri"] = REDIRECT_URI
     params["grant_type"] = "authorization_code"
-    request_url = AccountsUrl("o/oauth2/token")
+    request_url = accounts_url("o/oauth2/token")
 
     response = urllib.request.urlopen(
         request_url, urllib.parse.urlencode(params)
@@ -232,7 +237,7 @@ def AuthorizeTokens(client_id, client_secret, authorization_code):
     return json.loads(response)
 
 
-def RefreshToken(client_id, client_secret, refresh_token):
+def refresh_token(client_id, client_secret, refresh_token):
     """Obtains a new token given a refresh token.
 
     See https://developers.google.com/accounts/docs/OAuth2InstalledApp#refresh
@@ -250,7 +255,7 @@ def RefreshToken(client_id, client_secret, refresh_token):
     params["client_secret"] = client_secret
     params["refresh_token"] = refresh_token
     params["grant_type"] = "refresh_token"
-    request_url = AccountsUrl("o/oauth2/token")
+    request_url = accounts_url("o/oauth2/token")
 
     response = urllib.request.urlopen(
         request_url, urllib.parse.urlencode(params).encode("utf-8")
@@ -258,7 +263,7 @@ def RefreshToken(client_id, client_secret, refresh_token):
     return json.loads(response)
 
 
-def GenerateOAuth2String(username, access_token, base64_encode=True):
+def generate_oauth2_string(username, access_token, base64_encode=True):
     """Generates an IMAP OAuth2 authentication string.
 
     See https://developers.google.com/google-apps/gmail/oauth2_overview
@@ -271,21 +276,22 @@ def GenerateOAuth2String(username, access_token, base64_encode=True):
     Returns:
       The SASL argument for the OAuth2 mechanism.
     """
-    auth_string = "user=%s\1auth=Bearer %s\1\1" % (username, access_token)
+    auth_string = f"user={username}\1auth=Bearer {access_token}\1\1"
     if base64_encode:
         auth_string = base64.b64encode(auth_string)
     return auth_string
 
 
-def TestImapAuthentication(user, auth_string):
+def test_imap_authentication(user, auth_string):
     """Authenticates to IMAP with the given auth_string.
 
     Prints a debug trace of the attempted IMAP connection.
 
     Args:
       user: The Gmail username (full email address)
-      auth_string: A valid OAuth2 string, as returned by GenerateOAuth2String.
-          Must not be base64-encoded, since imaplib does its own base64-encoding.
+      auth_string: A valid OAuth2 string, as returned by
+          generate_oauth2_string. Must not be base64-encoded, since imaplib
+          does its own base64-encoding.
     """
     print()
     imap_conn = imaplib.IMAP4_SSL("imap.gmail.com")
@@ -294,13 +300,13 @@ def TestImapAuthentication(user, auth_string):
     imap_conn.select("INBOX")
 
 
-def TestSmtpAuthentication(user, auth_string):
+def test_smtp_authentication(user, auth_string):
     """Authenticates to SMTP with the given auth_string.
 
     Args:
       user: The Gmail username (full email address)
       auth_string: A valid OAuth2 string, not base64-encoded, as returned by
-          GenerateOAuth2String.
+          generate_oauth2_string.
     """
     print()
     smtp_conn = smtplib.SMTP("smtp.gmail.com", 587)
@@ -310,31 +316,33 @@ def TestSmtpAuthentication(user, auth_string):
     smtp_conn.docmd("AUTH", "XOAUTH2 " + base64.b64encode(auth_string))
 
 
-def RequireOptions(options, *args):
+def require_options(options, *args):
     missing = [arg for arg in args if getattr(options, arg) is None]
     if missing:
-        print("Missing options: %s" % " ".join(missing))
+        print("Missing options: {}".format(" ".join(missing)))
         sys.exit(-1)
 
 
 def main(argv):
-    options_parser = SetupOptionParser()
+    options_parser = setup_option_parser()
     (options, args) = options_parser.parse_args()
     if options.refresh_token:
-        RequireOptions(options, "client_id", "client_secret")
-        response = RefreshToken(
+        require_options(options, "client_id", "client_secret")
+        response = refresh_token(
             options.client_id, options.client_secret, options.refresh_token
         )
         if options.quiet:
             print(response["access_token"])
         else:
-            print("Access Token: %s" % response["access_token"])
+            print("Access Token: {}".format(response["access_token"]))
             print(
-                "Access Token Expiration Seconds: %s" % response["expires_in"]
+                "Access Token Expiration Seconds: {}".format(
+                    response["expires_in"]
+                )
             )
     elif options.generate_oauth2_string:
-        RequireOptions(options, "user", "access_token")
-        oauth2_string = GenerateOAuth2String(
+        require_options(options, "user", "access_token")
+        oauth2_string = generate_oauth2_string(
             options.user, options.access_token
         )
         if options.quiet:
@@ -342,29 +350,33 @@ def main(argv):
         else:
             print("OAuth2 argument:\n" + oauth2_string)
     elif options.generate_oauth2_token:
-        RequireOptions(options, "client_id", "client_secret")
+        require_options(options, "client_id", "client_secret")
         print("To authorize token, visit this url and follow the directions:")
-        print("  %s" % GeneratePermissionUrl(options.client_id, options.scope))
+        print(f"  {generate_permission_url(options.client_id, options.scope)}")
         authorization_code = input("Enter verification code: ")
-        response = AuthorizeTokens(
+        response = authorize_tokens(
             options.client_id, options.client_secret, authorization_code
         )
-        print("Refresh Token: %s" % response["refresh_token"])
-        print("Access Token: %s" % response["access_token"])
-        print("Access Token Expiration Seconds: %s" % response["expires_in"])
+        print("Refresh Token: {}".format(response["refresh_token"]))
+        print("Access Token: {}".format(response["access_token"]))
+        print(
+            "Access Token Expiration Seconds: {}".format(
+                response["expires_in"]
+            )
+        )
     elif options.test_imap_authentication:
-        RequireOptions(options, "user", "access_token")
-        TestImapAuthentication(
+        require_options(options, "user", "access_token")
+        test_imap_authentication(
             options.user,
-            GenerateOAuth2String(
+            generate_oauth2_string(
                 options.user, options.access_token, base64_encode=False
             ),
         )
     elif options.test_smtp_authentication:
-        RequireOptions(options, "user", "access_token")
-        TestSmtpAuthentication(
+        require_options(options, "user", "access_token")
+        test_smtp_authentication(
             options.user,
-            GenerateOAuth2String(
+            generate_oauth2_string(
                 options.user, options.access_token, base64_encode=False
             ),
         )

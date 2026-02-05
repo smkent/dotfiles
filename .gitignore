@@ -50,6 +50,7 @@
 .mozilla/native-messaging-hosts/*
 !.mozilla/native-messaging-hosts/gpgmejson.json
 !.pre-commit-config.yaml
+!.ruff.toml
 !.screenrc
 !.ssh/
 .ssh/*

@@ -73,7 +73,7 @@ def download_fonts(dir_name, url):
         subprocess.check_call(["cp", "-v", "-t", dest_dir] + font_files)
     except Exception as e:
         print(
-            "Error installing fonts from {}: {}".format(url, str(e)),
+            f"Error installing fonts from {url}: {str(e)}",
             file=sys.stderr,
         )
     finally:
