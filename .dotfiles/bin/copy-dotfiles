@@ -40,12 +40,12 @@ git_toplevel = (
 )
 os.chdir(git_toplevel)
 cmd = ["rsync", "-av", "-r", "--files-from=-"]
-cmd += ["--exclude={}".format(x) for x in excludes]
+cmd += [f"--exclude={x}" for x in excludes]
 if args.pretend:
     cmd.append("--dry-run")
 if args.no_overwrite:
     cmd.append("--update")
-cmd += [".", "{}:{}".format(args.host, args.directory)]
+cmd += [".", f"{args.host}:{args.directory}"]
 # Copy only tracked files (not full directories containing any tracked files)
 git_files = subprocess.check_output(["git", "ls-files"]).decode("utf-8")
 # Copy full .vim directory instead of just tracked files

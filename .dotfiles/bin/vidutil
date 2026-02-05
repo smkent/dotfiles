@@ -27,12 +27,12 @@ def format_time(time_str):
         return time_str
     c = time_str.split(":")
     c = [""] * (3 - len(c)) + c
-    return ":".join(["{}".format(i.zfill(2)) for i in c])
+    return ":".join([f"{i.zfill(2)}" for i in c])
 
 
 def main_slice():
     if not args.overwrite and os.path.isfile(args.output):
-        raise Exception("{} already exists".format(args.output))
+        raise Exception(f"{args.output} already exists")
     ffmpeg_exe = find_ffmpeg_exe()
     cmd = [ffmpeg_exe]
     if bool(args.start_time) and args.start_time != "0":
@@ -53,7 +53,7 @@ def main_slice():
 def main_frames():
     dir_name = time.strftime("frames-%Y%m%d-%H%M")
     if os.path.isdir(dir_name):
-        raise Exception("Directory {} already exists".format(dir_name))
+        raise Exception(f"Directory {dir_name} already exists")
     os.mkdir(dir_name, 0o0700)
     ffmpeg_exe = find_ffmpeg_exe()
     cmd = [ffmpeg_exe]
@@ -62,10 +62,10 @@ def main_frames():
     cmd += ["-i", args.input, "-an", "-vcodec", "png"]
     if args.duration:
         cmd += ["-t", format_time(args.duration)]
-    cmd += ["{}/frame-%05d.png".format(dir_name)]
+    cmd += [f"{dir_name}/frame-%05d.png"]
     print("Executing: {}".format(" ".join(cmd)), file=sys.stderr)
     subprocess.call(cmd)
-    print("Frames saved to: {}".format(dir_name))
+    print(f"Frames saved to: {dir_name}")
 
 
 def main_twitter():
@@ -76,7 +76,7 @@ def main_twitter():
         if args.output == args.input:
             raise Exception("Input and output file names are identical")
     if not args.overwrite and os.path.isfile(args.output):
-        raise Exception("{} already exists".format(args.output))
+        raise Exception(f"{args.output} already exists")
     ffmpeg_exe = find_ffmpeg_exe()
     cmd = [ffmpeg_exe, "-i", args.input, "-c:v", "libx264"]
     # avconv's support for aac audio is considered experimental
@@ -167,4 +167,4 @@ args = ap.parse_args()
 try:
     args.func()
 except Exception as e:
-    print("Error: {}".format(str(e)), file=sys.stderr)
+    print(f"Error: {str(e)}", file=sys.stderr)

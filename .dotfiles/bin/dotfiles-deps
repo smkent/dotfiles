@@ -50,7 +50,7 @@ class DependencyInfo:
 
     def print(self, terminal_size=None):
         output = "{} ".format(" " if self.installed else "!")
-        output += "{:<12} ".format(self.name)
+        output += f"{self.name:<12} "
         if self.installed:
             output += self.exec_path
             if self.version and self.args.print_version:
@@ -59,12 +59,12 @@ class DependencyInfo:
                     output += " ("
                     prefix_len = len(output)
                     wrap_max = max(20, terminal_size[1] - prefix_len)
-                    lines = textwrap.wrap("{})".format(self.version), wrap_max)
+                    lines = textwrap.wrap(f"{self.version})", wrap_max)
                     for i, line in enumerate(lines):
                         output += os.linesep if i > 0 else ""
                         output += (" " * (prefix_len if i > 0 else 0)) + line
                 else:
-                    output += " ({})".format(self.version)
+                    output += f" ({self.version})"
         else:
             output += "--"
         print(output)

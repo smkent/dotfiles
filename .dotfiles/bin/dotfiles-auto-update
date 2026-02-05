@@ -76,7 +76,7 @@ class DotfilesAutoPull:
         )
         if git_toplevel != os.path.expanduser("~"):
             raise UpdateException(
-                "Auto-update only supported in a home " "directory repository"
+                "Auto-update only supported in a home directory repository"
             )
         os.chdir(git_toplevel)
 
@@ -160,7 +160,7 @@ class DotfilesAutoPull:
                 self.git_exe,
                 "--no-pager",
                 "ll",
-                "{}..{}".format(prev_ref, new_ref),
+                f"{prev_ref}..{new_ref}",
             ]
         )
         # The previous git log command doesn't print a final line break
@@ -179,8 +179,7 @@ class DotfilesAutoPull:
         )
         if not remote_branch or "/" not in remote_branch:
             raise UpdateException(
-                "{} has no remote tracking "
-                "branch".format(self.current_branch)
+                f"{self.current_branch} has no remote tracking branch"
             )
         return remote_branch == self.args.remote_tracking_branch
 
@@ -206,9 +205,7 @@ class DotfilesAutoPull:
             return False
         if not self.working_directory_clean:
             raise UpdateException(
-                "The current branch {} has local modifications".format(
-                    self.current_branch
-                )
+                f"The current branch {self.current_branch} has local modifications"
             )
         return True
 
@@ -225,9 +222,9 @@ class DotfilesAutoPull:
         temp_f = None
         try:
             temp_f = tempfile.NamedTemporaryFile(
-                suffix=".{}".format(argv0), delete=False
+                suffix=f".{argv0}", delete=False
             )
-            temp_f.write('ssh -o BatchMode=yes "${@}"'.encode("utf-8"))
+            temp_f.write(b'ssh -o BatchMode=yes "${@}"')
             temp_f.close()
             os.chmod(temp_f.name, 0o0700)
             env = os.environ.copy()
@@ -247,8 +244,7 @@ class DotfilesAutoPull:
 
     def _parse_args(self):
         description = (
-            "Automatically pull dotfiles updates from the upstream "
-            "repository"
+            "Automatically pull dotfiles updates from the upstream repository"
         )
         ap = argparse.ArgumentParser(description=description)
         ap.add_argument(
@@ -273,9 +269,7 @@ class DotfilesAutoPull:
             "-q",
             "--quiet",
             action="store_true",
-            help=(
-                "Don't print repository configuration and " "status messages"
-            ),
+            help=("Don't print repository configuration and status messages"),
         )
         ap.add_argument(
             "--skip-ref",
@@ -317,7 +311,7 @@ class DotfilesAutoPull:
         if output:
             kwargs["stdout"] = subprocess.PIPE
         if not silent:
-            print("+ {}".format(subprocess.list2cmdline(cmd)), file=sys.stderr)
+            print(f"+ {subprocess.list2cmdline(cmd)}", file=sys.stderr)
         return subprocess.run(cmd, check=check, **kwargs)
 
 

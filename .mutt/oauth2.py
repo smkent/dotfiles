@@ -63,10 +63,12 @@ IMAPFE and pass it as the second argument to the AUTHENTICATE command.
 import base64
 import imaplib
 import json
-from optparse import OptionParser
 import smtplib
 import sys
-import urllib.request, urllib.parse, urllib.error
+import urllib.error
+import urllib.parse
+import urllib.request
+from optparse import OptionParser
 
 
 def SetupOptionParser():
@@ -82,7 +84,7 @@ def SetupOptionParser():
         "--generate_oauth2_string",
         action="store_true",
         dest="generate_oauth2_string",
-        help="generates an initial client response string for " "OAuth2",
+        help="generates an initial client response string for OAuth2",
     )
     parser.add_option(
         "--client_id",
@@ -125,7 +127,7 @@ def SetupOptionParser():
     parser.add_option(
         "--user",
         default=None,
-        help="email address of user whose account is being " "accessed",
+        help="email address of user whose account is being accessed",
     )
     parser.add_option(
         "--quiet",
