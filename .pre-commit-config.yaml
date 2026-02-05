@@ -17,24 +17,9 @@ repos:
   - id: shellcheck
     args: ["-e", "SC1090"]
     exclude: '^\.zshrc'
-- repo: https://github.com/psf/black
-  rev: 26.1.0
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.14.11
   hooks:
-  - id: black
-    args: ["--line-length", "79"]
-- repo: https://github.com/pycqa/isort
-  rev: 7.0.0
-  hooks:
-  - id: isort
-    args: ["--show-config", "--profile", "black", "--line-length", "79", "--atomic"]
-- repo: https://github.com/pycqa/flake8
-  rev: 7.3.0
-  hooks:
-  - id: flake8
-    additional_dependencies:
-    - flake8-bugbear
-    - flake8-pyproject
-    - flake8-simplify
-    - pep8-naming
-    args: ["--per-file-ignores=.dotfiles/bin/dotfiles-auto-update:B019"]
-    exclude: '^\.mutt/oauth2.py$'
+  - id: ruff
+    args: ["--fix"]
+  - id: ruff-format
