@@ -9,7 +9,6 @@ import textwrap
 dependency_list = {
     "bash": {"version": "{} --version | head -n1"},
     "ctags": {"version": "{} --version | grep Ctags | tail -n1"},
-    "flake8": {"version": "{} --version"},
     "fzf": {"version": "{} --version"},
     "gimp": {"version": "{} --version"},
     "git": {"version": "{} --version"},
@@ -18,6 +17,7 @@ dependency_list = {
     "mutt": {"version": "{} -v | head -n1"},
     "screen": {"version": "{} --version | cat"},
     "shellcheck": {"version": "{} --version | grep ^version:"},
+    "ruff": {"version": "{} --version"},
     "tmux": {"version": "{} -V"},
     "vim": {"version": "{} --version | head -n1"},
     "xclip": {"version": "{} -version | head -n1"},
@@ -97,7 +97,7 @@ def main():
         "--no-version",
         dest="print_version",
         action="store_false",
-        help="Don\t print version information for executables",
+        help="Don't print version information for executables",
     )
     args = ap.parse_args()
 
