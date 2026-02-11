@@ -461,6 +461,17 @@ export FZF_DEFAULT_OPTS="
 
 # }}}
 
+# Python (pyenv) configuration {{{
+
+PYENV_ROOT="${HOME}/.pyenv"
+if [ -x "${PYENV_ROOT}/bin/pyenv" ]; then
+    __prepend_path_if_exists "${PYENV_ROOT}/bin"
+    eval "$("${PYENV_ROOT}/bin/pyenv" init - bash)"
+    eval "$("${PYENV_ROOT}/bin/pyenv" virtualenv-init -)"
+fi
+
+# }}}
+
 # Ruby configuration {{{
 export GEM_HOME="${HOME}/.ruby"
 # }}}
