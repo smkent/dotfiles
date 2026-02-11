@@ -5,22 +5,8 @@ set -e
 if [ -z "${DOTFILES_DATA}" ] || [ ! -d "${DOTFILES_DATA}" ]; then
     exit 0
 fi
-lock_file="${DOTFILES_DATA}/first_run_lock"
-if [ -e "${lock_file}" ]; then
-    echo "exit early first run"
-    exit 0
-fi
-touch "${lock_file}"
-trap 'rm -f "${lock_file}"' EXIT
 
 cd
-
-if [ -n "${GITHUB_CODESPACE_TOKEN}" ] && [ -n "${CODESPACES}" ]; then
-    (
-        cd
-        .dotfiles/bin/dotfiles-codespace-bootstrap
-    )
-fi
 
 echo "===="
 echo "This appears to be a new dotfiles instance!"

@@ -95,7 +95,6 @@ if [ -n "${BASH_VERSION}" ]; then
         __c_orange="\\[$(tput setaf 202)\\]"
         __c_blue="\\[$(tput setaf 4)\\]"
         __c_purple="\\[$(tput setaf 96)\\]"
-        __c_github_codespace="\\[$(tput setaf 147)\\]"
     else
         __c_red="\\[$(tput setaf 1)\\]"
         __c_green="\\[$(tput setaf 2)\\]"
@@ -103,7 +102,6 @@ if [ -n "${BASH_VERSION}" ]; then
         __c_orange="${__c_yellow}"
         __c_blue="\\[$(tput setaf 4)\\]"
         __c_purple="\\[$(tput setaf 5)\\]"
-        __c_github_codespace="${__c_purple}"
     fi
     __bold="\\[$(tput bold)\\]"
     __reset="\\[$(tput sgr0)\\]"
@@ -115,7 +113,6 @@ elif [ -n "${ZSH_VERSION}" ]; then
         __c_orange="%F{202}"
         __c_blue="%F{004}"
         __c_purple="%F{096}"
-        __c_github_codespace="%F{147}"
     else
         __c_red="%F{001}"
         __c_green="%F{002}"
@@ -123,7 +120,6 @@ elif [ -n "${ZSH_VERSION}" ]; then
         __c_orange="${__c_yellow}"
         __c_blue="%F{004}"
         __c_purple="%F{005}"
-        __c_github_codespace="${__c_purple}"
     fi
     __bold="%B"
     __reset="%b%u%s%f%k"
@@ -223,12 +219,7 @@ __prompt_generator()
         p_main="${p_main}${__c_yellow}{py}${__reset} ";
     fi
     # Main section
-    if [ -n "${GITHUB_CODESPACE_TOKEN}" ] && [ -n "${CODESPACES}" ]; then
-        # The GitHub Codespaces shell uses the root user.
-        # Use a different prompt color instead of red.
-        p_main="${p_main}${__c_github_codespace}";
-        p_main="${p_main}codespace/${p_host}${__reset} "
-    elif [ ${EUID} -eq 0 ]; then
+    if [ ${EUID} -eq 0 ]; then
         p_main="${p_main}${__c_red}${__bold}${p_host}${__reset} "
     else
         p_main="${p_main}${__c_prompt}";
