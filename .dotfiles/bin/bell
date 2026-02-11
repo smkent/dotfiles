@@ -1,7 +1,0 @@
-#!/bin/sh
-# Prefix another command with this script to ring the terminal bell on command
-# completion
-"${@}"
-ret=${?}
-tput bel
-exit ${ret}
