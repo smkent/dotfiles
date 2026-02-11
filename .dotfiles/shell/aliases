@@ -259,6 +259,13 @@ if [ -x /usr/bin/notify-send ]; then
     }
 fi
 
+bell() {
+    "${@}"
+    ret=${?}
+    tput bel
+    return "${ret}"
+}
+
 png2jpg() {
     for i in "${@}"; do
         echo "${i}"
