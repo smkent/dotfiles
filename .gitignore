@@ -33,6 +33,7 @@
 !.gnupg/gpg.conf
 !.gnupg/gpg-agent.conf
 !.gnupg/dirmngr.conf
+!.gnupg/scdaemon.conf
 !.mailcap
 !.mutt/
 .mutt/certificates
