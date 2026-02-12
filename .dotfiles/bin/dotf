@@ -2,14 +2,17 @@
 
 import argparse
 import os
+import shlex
 import shutil
 import subprocess
 import sys
 import textwrap
+from collections.abc import Sequence
 from contextlib import suppress
 from enum import Enum
 from functools import cached_property
 from pathlib import Path
+from typing import Any
 
 PROGRAM_NAME = Path(__file__).stem
 DOTFILES_DEPENDENCIES = (
@@ -111,6 +114,24 @@ class Dotfiles:
                 name, cmd = name
             print(_str(name, cmd))
 
+    def pack(self) -> None:
+        if (
+            dest := Path(self.args.output)
+        ).exists() and not self.args.overwrite:
+            raise CLIError(f"{dest} exists")
+        git_root = subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"], text=True
+        ).strip()
+        print(git_root)
+        git_ls_files = subprocess.Popen(
+            ["git", "ls-files"], cwd=git_root, stdout=subprocess.PIPE
+        )
+        self._run(
+            ["tar", "-zcf", str(dest), "-C", str(git_root), "-T", "-"],
+            stdin=git_ls_files.stdout,
+        )
+        git_ls_files.communicate()
+
     def _prompt(
         self, prompt: str, default: str = "", required: bool = False
     ) -> str:
@@ -134,6 +155,11 @@ class Dotfiles:
                 continue
             return value
 
+    def _run(self, cmd: Sequence[str], *args: Any, **kwargs: Any) -> Any:
+        kwargs.setdefault("check", True)
+        print("+", " ".join(shlex.quote(c) for c in cmd), file=sys.stderr)
+        return subprocess.run(cmd, *args, **kwargs)
+
     @cached_property
     def args(self) -> argparse.Namespace:
         ap = argparse.ArgumentParser(description="Dotfiles helpers")
@@ -149,7 +175,22 @@ class Dotfiles:
         deps_p = subp.add_parser(
             "deps", help="Show depencies status and versions"
         )
-        deps_p.set_defaults(command_func=self.deps)
+        deps_p.set_defaults(command_func=self.pack)
+        pack_p = subp.add_parser("pack", help="Pack dotfiles for offline use")
+        pack_p.set_defaults(command_func=self.pack)
+        pack_p.add_argument(
+            "output",
+            nargs="?",
+            metavar="path",
+            default=Path(".") / "dotfiles.tar.gz",
+            help="Output file (default: %(default)s)",
+        )
+        pack_p.add_argument(
+            "-y",
+            "--overwrite",
+            action="store_true",
+            help="Overwrite existing file",
+        )
         args = ap.parse_args()
         if not getattr(args, "command_func", None):
             ap.print_help()
