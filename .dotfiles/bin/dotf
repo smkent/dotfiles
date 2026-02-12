@@ -2,14 +2,32 @@
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
+import textwrap
 from contextlib import suppress
 from enum import Enum
 from functools import cached_property
 from pathlib import Path
 
 PROGRAM_NAME = Path(__file__).stem
+DOTFILES_DEPENDENCIES = (
+    "bash",
+    "ctags",
+    "fzf",
+    "gimp",
+    "git",
+    "gpg",
+    "mdv",
+    ("mutt", "{} -v"),
+    "screen",
+    ("shellcheck", "{} --version | grep ^version:"),
+    "ruff",
+    ("tmux", "{} -V"),
+    "vim",
+    "xclip",
+)
 
 
 class CLIError(Exception):
@@ -64,6 +82,35 @@ class Dotfiles:
         _config_username()
         _config_git_email()
 
+    def deps(self) -> None:
+        def _str(name: str, cmd: str | None = None) -> str:
+            exe = shutil.which(name)
+            output = f"{' ' if exe else '!'} {name:<12} {exe if exe else '--'}"
+            version = None
+            if cmd:
+                with suppress(subprocess.CalledProcessError):
+                    cmd_output = subprocess.check_output(
+                        cmd.format(name),
+                        shell=True,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                    )
+                    version = cmd_output.strip().splitlines()[0].strip()
+            if not version:
+                return output
+            width = max(20, shutil.get_terminal_size().columns - len(output))
+            return output + textwrap.fill(
+                f" ({version})",
+                width=width,
+                subsequent_indent=" " * (len(output) + 2),
+            )
+
+        for name in DOTFILES_DEPENDENCIES:
+            cmd = "{} --version"
+            if isinstance(name, tuple):
+                name, cmd = name
+            print(_str(name, cmd))
+
     def _prompt(
         self, prompt: str, default: str = "", required: bool = False
     ) -> str:
@@ -99,6 +146,10 @@ class Dotfiles:
             action="store_true",
             help="Overwrite existing configuration",
         )
+        deps_p = subp.add_parser(
+            "deps", help="Show depencies status and versions"
+        )
+        deps_p.set_defaults(command_func=self.deps)
         args = ap.parse_args()
         if not getattr(args, "command_func", None):
             ap.print_help()
