@@ -565,7 +565,7 @@ if [ ! -f "${DOTFILES_DATA}/welcome_message" ]; then
             "$(tput bold)${prompt_hide_user}$(tput sgr0)"
     fi
     echo
-    echo "Configure with $(tput bold)dotfiles-config$(tput sgr0)"
+    echo "Configure with $(tput bold)dotf config$(tput sgr0)"
     echo "===="
     touch "${DOTFILES_DATA}/welcome_message"
 fi
