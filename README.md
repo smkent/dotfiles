@@ -37,7 +37,7 @@ $ git checkout .
 ### Configuration
 
 To configure your git email address and username to be hidden from shell
-prompts, run [`dotfiles-config`](/.dotfiles/bin/dotfiles-config).
+prompts, run `[dotf](/.dotfiles/bin/dotf) config`.
 
 To use a different profile picture, remove or replace `.face`.
 
@@ -62,9 +62,8 @@ More features become available when optional dependencies are installed:
   (for previewing Markdown files with
   [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview))
 
-Run [`dotfiles-deps`](/.dotfiles/bin/dotfiles-deps) to see the executable path
-and version information for programs that this repository configures or depends
-on.
+Run `[dotf](/.dotfiles/bin/dotf) deps` to see the executable path and version
+information for programs that this repository configures or depends on.
 
 ## Features
 
@@ -76,7 +75,7 @@ with zsh on OS X.
 Prompt features:
 
 * Display username if different from the value of `prompt_hide_user` configured
-  via [`dotfiles-config`](/.dotfiles/bin/dotfiles-config).
+  via `[dotf](/.dotfiles/bin/dotf) config`.
 * Display current directory name if different from `${HOME}`
 * Display exit code of the previous command if nonzero (or `bg` / `^C` when
   backgrounding a job or typing Ctrl-C, respectively)

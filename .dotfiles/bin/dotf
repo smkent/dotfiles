@@ -1,0 +1,202 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+import textwrap
+from collections.abc import Sequence
+from contextlib import suppress
+from enum import Enum
+from functools import cached_property
+from pathlib import Path
+from typing import Any
+
+PROGRAM_NAME = Path(__file__).stem
+DOTFILES_DEPENDENCIES = (
+    "bash",
+    "ctags",
+    "fzf",
+    "gimp",
+    "git",
+    "gpg",
+    "mdv",
+    ("mutt", "{} -v"),
+    "screen",
+    ("shellcheck", "{} --version | grep ^version:"),
+    "ruff",
+    ("tmux", "{} -V"),
+    "vim",
+    "xclip",
+)
+
+
+class CLIError(Exception):
+    pass
+
+
+class CLIColors(Enum):
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    YELLOW = "\033[33m"
+
+
+class Dotfiles:
+    def __call__(self) -> None:
+        try:
+            self.args.command_func()
+        except CLIError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    def config(self) -> None:
+        config_dir = Path().home() / ".dotfiles" / ".data"
+        rc_conf = config_dir / "config-rc"
+        if not self.args.overwrite and rc_conf.exists():
+            raise CLIError(f"Configuration exists in {rc_conf}")
+
+        def _config_username() -> None:
+            username = self._prompt("Username", default=os.environ.get("USER"))
+            if not username:
+                return
+            config_dir.mkdir(exist_ok=True, parents=True)
+            rc_content = [f'prompt_hide_user="{username}"'] + [
+                line
+                for line in (
+                    rc_conf.read_text().splitlines() if rc_conf.exists else []
+                )
+                if not line.startswith("prompt_hide_user=")
+            ]
+            rc_conf.write_text(os.linesep.join(rc_content) + os.linesep)
+
+        def _config_git_email() -> None:
+            conf = Path().home() / ".local" / "gitconfig"
+            git_email = ""
+            with suppress(subprocess.CalledProcessError):
+                git_email = subprocess.check_output(
+                    ["git", "config", "--get", "user.email"], text=True
+                ).strip()
+            email = self._prompt("Email", default=git_email, required=True)
+            cmd = ["git", "config", "--file", str(conf), "user.email", email]
+            subprocess.run(cmd)
+
+        _config_username()
+        _config_git_email()
+
+    def deps(self) -> None:
+        def _str(name: str, cmd: str | None = None) -> str:
+            exe = shutil.which(name)
+            output = f"{' ' if exe else '!'} {name:<12} {exe if exe else '--'}"
+            version = None
+            if cmd:
+                with suppress(subprocess.CalledProcessError):
+                    cmd_output = subprocess.check_output(
+                        cmd.format(name),
+                        shell=True,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                    )
+                    version = cmd_output.strip().splitlines()[0].strip()
+            if not version:
+                return output
+            width = max(20, shutil.get_terminal_size().columns - len(output))
+            return output + textwrap.fill(
+                f" ({version})",
+                width=width,
+                subsequent_indent=" " * (len(output) + 2),
+            )
+
+        for name in DOTFILES_DEPENDENCIES:
+            cmd = "{} --version"
+            if isinstance(name, tuple):
+                name, cmd = name
+            print(_str(name, cmd))
+
+    def pack(self) -> None:
+        if (
+            dest := Path(self.args.output)
+        ).exists() and not self.args.overwrite:
+            raise CLIError(f"{dest} exists")
+        git_root = subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"], text=True
+        ).strip()
+        print(git_root)
+        git_ls_files = subprocess.Popen(
+            ["git", "ls-files"], cwd=git_root, stdout=subprocess.PIPE
+        )
+        self._run(
+            ["tar", "-zcf", str(dest), "-C", str(git_root), "-T", "-"],
+            stdin=git_ls_files.stdout,
+        )
+        git_ls_files.communicate()
+
+    def _prompt(
+        self, prompt: str, default: str = "", required: bool = False
+    ) -> str:
+        if default:
+            prompt += (
+                f" [{CLIColors.BOLD.value}{default}{CLIColors.RESET.value}]"
+            )
+        while True:
+            try:
+                value = input(f"{prompt}: ").strip() or default
+            except EOFError:
+                value = default
+                print("")
+            if required and not value:
+                print(
+                    f"{CLIColors.YELLOW.value}"
+                    f"Error: {prompt} is required"
+                    f"{CLIColors.RESET.value}",
+                    flush=True,
+                )
+                continue
+            return value
+
+    def _run(self, cmd: Sequence[str], *args: Any, **kwargs: Any) -> Any:
+        kwargs.setdefault("check", True)
+        print("+", " ".join(shlex.quote(c) for c in cmd), file=sys.stderr)
+        return subprocess.run(cmd, *args, **kwargs)
+
+    @cached_property
+    def args(self) -> argparse.Namespace:
+        ap = argparse.ArgumentParser(description="Dotfiles helpers")
+        subp = ap.add_subparsers(title="Commands", metavar="command")
+        config_p = subp.add_parser("config", help="Configure dotfiles")
+        config_p.set_defaults(command_func=self.config)
+        config_p.add_argument(
+            "-y",
+            "--overwrite",
+            action="store_true",
+            help="Overwrite existing configuration",
+        )
+        deps_p = subp.add_parser(
+            "deps", help="Show depencies status and versions"
+        )
+        deps_p.set_defaults(command_func=self.pack)
+        pack_p = subp.add_parser("pack", help="Pack dotfiles for offline use")
+        pack_p.set_defaults(command_func=self.pack)
+        pack_p.add_argument(
+            "output",
+            nargs="?",
+            metavar="path",
+            default=Path(".") / "dotfiles.tar.gz",
+            help="Output file (default: %(default)s)",
+        )
+        pack_p.add_argument(
+            "-y",
+            "--overwrite",
+            action="store_true",
+            help="Overwrite existing file",
+        )
+        args = ap.parse_args()
+        if not getattr(args, "command_func", None):
+            ap.print_help()
+            sys.exit(0)
+        return args
+
+
+if __name__ == "__main__":
+    Dotfiles()()
