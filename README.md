@@ -45,9 +45,7 @@ To use a different profile picture, remove or replace `.face`.
 
 My [vim-airline](https://github.com/vim-airline/vim-airline) and
 [tmux](https://github.com/tmux/tmux) configurations require the [Powerline
-fonts](https://github.com/powerline/fonts), which can be installed using
-[`install-fonts`](/.dotfiles/bin/install-fonts) after installing this
-repository.
+fonts](https://github.com/powerline/fonts).
 
 More features become available when optional dependencies are installed:
 
