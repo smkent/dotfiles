@@ -8,8 +8,6 @@
 !.bashrc
 !.config/
 .config/*
-!.config/black
-!.config/flake8
 !.config/google-chrome/
 .config/google-chrome/*
 !.config/google-chrome/NativeMessagingHosts/
@@ -35,10 +33,7 @@
 !.gnupg/gpg.conf
 !.gnupg/gpg-agent.conf
 !.gnupg/dirmngr.conf
-!.gnupg/sks-keyservers.netCA.pem
 !.mailcap
-!.local/
-.local/*
 !.mutt/
 .mutt/certificates
 .mutt/cache
@@ -62,9 +57,9 @@
 !.ssh/sockets/.keep
 !.tmux.conf
 !.vimrc
+!.vim/
 .vim/.netrwhist
 .vim/plugged/
-!.vim/
 !.zshrc
 !.zsnes/
 .zsnes/*
