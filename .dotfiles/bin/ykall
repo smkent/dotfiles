@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+
+import argparse
+import shlex
+import subprocess
+import sys
+from collections.abc import Sequence
+from functools import cached_property
+from typing import Any
+
+
+class CLIError(Exception):
+    pass
+
+
+class YKAll:
+    def __call__(self) -> None:
+        try:
+            self.args.command_func()
+        except CLIError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    def command_default(
+        self, custom_args: Sequence[str, str] | None = None
+    ) -> None:
+        self._run_ykman(self.extra_args)
+
+    def command_addtotp(self) -> None:
+        self._run_ykman(
+            ["oath", "accounts", "add", "-t", "-f"] + self.extra_args
+        )
+
+    def command_deltotp(self) -> None:
+        self._run_ykman(["oath", "accounts", "delete"] + self.extra_args)
+
+    def _run_ykman(self, cmd_args: Sequence[str, str]) -> None:
+        self._run(["ykman", "list"])
+        if not cmd_args:
+            return
+        for serial in sorted(self.serial_numbers):
+            try:
+                self._run(["ykman", "--device", str(serial)] + cmd_args)
+            except subprocess.CalledProcessError as e:
+                sys.exit(e.returncode)
+            if {"-h", "--help"} & set(cmd_args):
+                break
+
+    def _run(self, cmd: Sequence[str], *args: Any, **kwargs: Any) -> Any:
+        kwargs.setdefault("check", True)
+        print("+", " ".join(shlex.quote(c) for c in cmd), file=sys.stderr)
+        return subprocess.run(cmd, *args, **kwargs)
+
+    @cached_property
+    def args(self) -> argparse.Namespace:
+        return self._args[0]
+
+    @cached_property
+    def extra_args(self) -> dict[str, str]:
+        return self._args[1]
+
+    @cached_property
+    def _args(self) -> tuple[argparse.Namespace, dict[str, str]]:
+        ap = argparse.ArgumentParser(
+            description="ykman helpers", add_help=False
+        )
+        ap.add_argument(
+            "-H", action="help", help="Show this help message and exit."
+        )
+        ap.set_defaults(command_func=self.command_default)
+        subp = ap.add_subparsers(
+            title="Commands", metavar="command", required=False
+        )
+        default_p = subp.add_parser("default", help="Default")
+        default_p.set_defaults(command_func=self.command_default)
+        addtotp_p = subp.add_parser("addtotp", help="Add TOTP account")
+        addtotp_p.set_defaults(command_func=self.command_addtotp)
+        deltotp_p = subp.add_parser("deltotp", help="Add TOTP account")
+        deltotp_p.set_defaults(command_func=self.command_deltotp)
+        if len(sys.argv) > 1 and not hasattr(self, f"command_{sys.argv[1]}"):
+            sys.argv.insert(1, "default")
+        return ap.parse_known_args()
+
+    @cached_property
+    def serial_numbers(self) -> set[int]:
+        output = subprocess.check_output(["ykman", "list", "-s"], text=True)
+        return {int(s) for s in output.strip().splitlines()}
+
+
+if __name__ == "__main__":
+    YKAll()()
