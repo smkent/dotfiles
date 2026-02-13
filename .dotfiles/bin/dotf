@@ -175,7 +175,7 @@ class Dotfiles:
         deps_p = subp.add_parser(
             "deps", help="Show depencies status and versions"
         )
-        deps_p.set_defaults(command_func=self.pack)
+        deps_p.set_defaults(command_func=self.deps)
         pack_p = subp.add_parser("pack", help="Pack dotfiles for offline use")
         pack_p.set_defaults(command_func=self.pack)
         pack_p.add_argument(
