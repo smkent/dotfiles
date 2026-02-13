@@ -163,6 +163,7 @@ class Dotfiles:
     @cached_property
     def args(self) -> argparse.Namespace:
         ap = argparse.ArgumentParser(description="Dotfiles helpers")
+        ap.set_defaults(command_func=ap.print_help)
         subp = ap.add_subparsers(title="Commands", metavar="command")
         config_p = subp.add_parser("config", help="Configure dotfiles")
         config_p.set_defaults(command_func=self.config)
@@ -191,11 +192,7 @@ class Dotfiles:
             action="store_true",
             help="Overwrite existing file",
         )
-        args = ap.parse_args()
-        if not getattr(args, "command_func", None):
-            ap.print_help()
-            sys.exit(0)
-        return args
+        return ap.parse_args()
 
 
 if __name__ == "__main__":
