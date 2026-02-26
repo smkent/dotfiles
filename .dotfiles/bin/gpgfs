@@ -1,248 +1,667 @@
 #!/usr/bin/env python3
-
 import argparse
 import os
-import pwd
+import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
+from collections.abc import Iterator, Sequence
+from contextlib import contextmanager, suppress
+from dataclasses import dataclass, fields
+from datetime import datetime, timezone
+from functools import cached_property
+from pathlib import Path
+from typing import Any
+from zoneinfo import ZoneInfo
 
-if os.getuid() != 0:
-    sys.exit(subprocess.call(["sudo"] + sys.argv))
-
-description = "Mount or unmount a filesystem containing private GnuPG key(s)"
-ap = argparse.ArgumentParser(description=description)
-# Actions
-ap.add_argument(
-    "-c",
-    "--create",
-    action="store_true",
-    help=(
-        "Create and mount an encrypted filesystem in a loopback "
-        "file to contain private GnuPG key(s)"
-    ),
-)
-ap.add_argument(
-    "-m", "--mount", action="store_true", help="Mount encrypted filesystem"
-)
-ap.add_argument(
-    "-u",
-    "--unmount",
-    action="store_true",
-    help="Unmount an already-mounted filesystem",
-)
-ap.add_argument(
-    "-p",
-    "--password",
-    action="store_true",
-    help="Change encrypted filesystem password",
-)
-# Options
-default_mountpoint = os.path.realpath(os.path.join(".", "gpgfs"))
-ap.add_argument(
-    "-d",
-    "--mountpoint",
-    metavar="dir",
-    help=(
-        "Mount point directory"
-        f" (default: {default_mountpoint} or autodetect for unmount)"
-    ),
-)
-ap.add_argument(
-    "-g",
-    "--gnupg-subdirectory",
-    metavar="dir",
-    default="gnupg",
-    help=(
-        "GnuPG subdirectory path within the encrypted "
-        "filesystem (default: gnupg)"
-    ),
-)
-ap.add_argument(
-    "-M",
-    "--mapper",
-    metavar="name",
-    default="gpgfs",
-    help="cryptsetup mapper name (default: gpgfs)",
-)
-ap.add_argument(
-    "-r",
-    "--read-only",
-    dest="read_only",
-    action="store_true",
-    help="Mount filesystem read-only",
-)
-# Device/path
-ap.add_argument(
-    "device",
-    metavar="device/path",
-    nargs="?",
-    help="Device/path to operate on",
-)
-args = ap.parse_args()
-args.mapper = f"/dev/mapper/{args.mapper}"
+PROGRAM_NAME = "gpgfs"
+LABEL = PROGRAM_NAME
+MAPPER_NAME = PROGRAM_NAME
+CONFIG_FILE = Path(".") / f"{PROGRAM_NAME}.env"
 
 
-class ArgsError(Exception):
-    """
-    Distinguish user input errors from regular Exceptions to avoid printing
-    stack traces for user input errors
-    """
-
+class CLIError(Exception):
     pass
 
 
-# Internally-used functions
-def unlock(unlock_path):
-    subprocess.check_call(
-        [
-            "cryptsetup",
-            "luksOpen",
-            unlock_path,
-            args.mapper.replace("/dev/mapper/", "", 1),
-        ]
-    )
-    print(f"Created LUKS device {args.mapper}")
+def run(cmd: Sequence[str], *args: Any, **kwargs: Any) -> Any:
+    kwargs.setdefault("check", True)
+    cmd = [str(c) for c in cmd]
+    print("+", " ".join(shlex.quote(c) for c in cmd), file=sys.stderr)
+    return subprocess.run(cmd, *args, **kwargs)
 
 
-def mount_mapper():
-    os.mkdir(args.mountpoint, 0o0700)
-    print(f"Created directory {args.mountpoint}")
-    cmd = ["mount"]
-    if args.read_only:
-        cmd += ["-o", "ro"]
-    cmd += [args.mapper, args.mountpoint]
-    subprocess.check_call(cmd)
-    print(f"Mounted filesystem on {args.mountpoint}")
+def sudo_run(cmd: Sequence[str], *args: Any, **kwargs: Any) -> Any:
+    return run(["sudo"] + list(cmd), *args, **kwargs)
 
 
-def post_mount():
-    priv_homedir = os.path.join(args.mountpoint, args.gnupg_subdirectory)
-    # Perform GnuPG-specific actions as the invoking user
-    if not args.read_only:
-        sudo_user = os.environ.get("SUDO_USER")
-        source_conf = os.path.join(
-            pwd.getpwnam(sudo_user).pw_dir, ".gnupg", "gpg.conf"
+@dataclass
+class Config:
+    fs_passphrase: str
+    pgp_passphrase: str
+    card_pin: str
+    card_admin_pin: str
+
+    @cached_property
+    def environ(self) -> dict[str, str]:
+        return {
+            f.name.upper(): val
+            for f in fields(self)
+            if (val := getattr(self, f.name, None))
+        }
+
+    @classmethod
+    def create(cls) -> None:
+        env = Config.load().environ
+        config_template = os.linesep.join(
+            [
+                f"{fu}={env.get(fu, '')}"
+                for f in fields(cls)
+                if (fu := f.name.upper())
+            ]
         )
-        dest_conf = os.path.join(priv_homedir, "gpg.conf")
-        if not os.path.isdir(priv_homedir):
-            os.mkdir(priv_homedir)
-        if source_conf:
-            if os.path.isfile(dest_conf):
-                print(f"Updating {dest_conf}")
-                subprocess.call(["diff", "-Naur", dest_conf, source_conf])
-            shutil.copy(source_conf, dest_conf)
-        if sudo_user:
-            chown_user = f"{sudo_user}:"
-            subprocess.check_call(["chown", "-c", chown_user, args.mountpoint])
-        subprocess.check_call(["chmod", "-Rc", "go-rwx", priv_homedir])
-    print(f"GnuPG home directory: {priv_homedir}")
-    sys.exit(0)
+        CONFIG_FILE.write_text(config_template + os.linesep)
+        os.chmod(CONFIG_FILE, 0o0600)
+        print(f"Wrote {CONFIG_FILE}")
+
+    @classmethod
+    def load(cls) -> "Config":
+        config_fields = [f.name for f in fields(cls)]
+        config_vars = [f.upper() for f in config_fields]
+        file_vars = {}
+        if CONFIG_FILE.exists():
+            for line in CONFIG_FILE.read_text().splitlines():
+                if not (line := line.strip()) or "=" not in line:
+                    continue
+                k, v = line.split("=", 1)
+                if (k := k.strip()) not in config_vars:
+                    continue
+                file_vars[k] = " ".join(shlex.split(v.strip()))
+        kwargs = {
+            f: (os.environ.get(fu := f.upper()) or file_vars.get(fu, ""))
+            for f in config_fields
+        }
+        return cls(**kwargs)
 
 
-# Action functions
-def unmount():
-    if os.path.isdir(args.mountpoint):
+@dataclass
+class GnuPG:
+    home: Path
+    config: Config
+
+    @cached_property
+    def environ(self) -> dict[str, str]:
+        return (
+            os.environ
+            | {"GNUPGHOME": str(self.home.resolve())}
+            | self.config.environ
+        )
+
+    @cached_property
+    def expire_next(self) -> str:
+        dt = (now := datetime.now(timezone.utc)).replace(
+            year=now.year + (2 - (now.year % 2)),
+            month=1,
+            day=1,
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0,
+            tzinfo=ZoneInfo("America/Los_Angeles"),
+        )
+        if (dt - now).days < (30 * 6):
+            dt = dt.replace(year=dt.year + 2)
+        return dt.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%S")
+
+    def run(self, cmd: Sequence[str], *args: Any, **kwargs: Any) -> Any:
+        write = kwargs.pop("write", True)
+        kwargs.setdefault("env", self.environ)
+        gpg_cmd = ["gpg", "--batch"]
+        if write:
+            if not (pgp_root_key := self.config.pgp_passphrase):
+                raise CLIError("$PGP_PASSPHRASE is not set")
+            kwargs.setdefault("input", pgp_root_key)
+            kwargs.setdefault("text", True)
+            gpg_cmd += ["--pinentry-mode", "loopback", "--passphrase-fd", "0"]
+        return run(gpg_cmd + cmd, *args, **kwargs)
+
+    @cached_property
+    def root_key_fpr(self) -> str:
+        return self.key_fprs[0]
+
+    @cached_property
+    def key_fprs(self) -> Sequence[str]:
+        return [
+            line.split(":")[9]
+            for line in (
+                self.run(
+                    ["-K", "--with-colons"],
+                    write=False,
+                    capture_output=True,
+                    text=True,
+                )
+                .stdout.strip()
+                .splitlines()
+            )
+            if line.startswith("fpr:")
+        ]
+
+
+class GPGFS:
+    def __call__(self) -> None:
+        try:
+            self.args.command_func()
+        except CLIError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    @cached_property
+    def args(self) -> argparse.Namespace:
+        ap = argparse.ArgumentParser(
+            description=(
+                "Mount or unmount a filesystem containing private GnuPG key(s)"
+            )
+        )
+
+        device_common_common_p = argparse.ArgumentParser(add_help=False)
+        device_common_common_p.add_argument(
+            "-k",
+            "--key-file",
+            dest="key_file",
+            metavar="path",
+            help="Passphrase file (default: $FS_PASSPHRASE content or prompt)",
+        )
+        device_common_p = argparse.ArgumentParser(
+            add_help=False, parents=[device_common_common_p]
+        )
+        device_common_p.add_argument(
+            "device",
+            metavar="path",
+            help="Device/path to operate on",
+        )
+        device_optional_common_p = argparse.ArgumentParser(
+            add_help=False, parents=[device_common_common_p]
+        )
+        device_optional_common_p.add_argument(
+            "device",
+            metavar="path",
+            nargs="?",
+            help="Device/path to operate on",
+        )
+        device_copy_common_p = argparse.ArgumentParser(add_help=False)
+        device_copy_common_p.add_argument(
+            "-t",
+            "--copy",
+            "--temp",
+            dest="vault_temp_copy",
+            action="store_true",
+            help="Use a temporary vault copy, ALL CHANGES WILL BE LOST",
+        )
+        mount_common_p = argparse.ArgumentParser(add_help=False)
+        mount_common_p.add_argument(
+            "-d",
+            "--mountpoint",
+            dest="mount_point",
+            metavar="dir",
+            default=(Path(".") / "gpgfs"),
+            help="Mount point directory (default: %(default)s)",
+        )
+        mount_readonly_common_p = argparse.ArgumentParser(add_help=False)
+        mount_readonly_common_p.add_argument(
+            "-r",
+            "--read-only",
+            dest="read_only",
+            action="store_true",
+            help="Mount filesystem read-only",
+        )
+        subp = ap.add_subparsers(title="Commands", metavar="command")
+        config_p = subp.add_parser(
+            "config", help="Create secrets configuration"
+        )
+        config_p.set_defaults(
+            command_func=self.command_config, read_only=False
+        )
+        create_p = subp.add_parser(
+            "create",
+            parents=[device_common_p, mount_common_p],
+            help="Create encrypted filesystem and generate new PGP key set",
+        )
+        create_p.set_defaults(
+            command_func=self.command_create, read_only=False
+        )
+        create_p.add_argument(
+            "key_name", metavar="name", help="Name for generated key"
+        )
+        create_p.add_argument(
+            "key_email",
+            metavar="email",
+            help="E-mail address for generated key",
+        )
+        expire_p = subp.add_parser(
+            "expire",
+            parents=[device_optional_common_p, mount_common_p],
+            help="Update contained key expiration",
+        )
+        expire_p.set_defaults(
+            command_func=self.command_expire, read_only=False
+        )
+        export_p = subp.add_parser(
+            "export",
+            parents=[device_optional_common_p, mount_common_p],
+            help="Export contained public key",
+        )
+        export_p.set_defaults(
+            command_func=self.command_export,
+            read_only=False,
+            vault_temp_copy=True,
+        )
+        export_p.add_argument(
+            "-o",
+            "--output",
+            dest="output",
+            metavar="path",
+            default="public.asc",
+            help="Output file (default: %(default)s)",
+        )
+        export_p.add_argument(
+            "-y",
+            "--overwrite",
+            action="store_true",
+            help="Overwrite existing output file",
+        )
+        mount_p = subp.add_parser(
+            "mount",
+            parents=[device_common_p, mount_common_p, mount_readonly_common_p],
+            help="Mount encrypted filesystem",
+        )
+        mount_p.set_defaults(command_func=self.command_mount)
+        shell_p = subp.add_parser(
+            "shell",
+            parents=[
+                device_optional_common_p,
+                device_copy_common_p,
+                mount_common_p,
+                mount_readonly_common_p,
+            ],
+            help="Enter shell with GNUPGHOME set to encrypted directory",
+        )
+        shell_p.set_defaults(command_func=self.command_shell)
+        password_p = subp.add_parser(
+            "password",
+            parents=[device_common_p],
+            help="Change encrypted filesystem password",
+        )
+        password_p.set_defaults(command_func=self.command_password)
+        unmount_p = subp.add_parser(
+            "unmount", help="Unmount encrypted filesystem"
+        )
+        unmount_p.set_defaults(command_func=self.command_unmount)
+        resetyk_p = subp.add_parser(
+            "resetyk",
+            help=(
+                "Erase all OpenPGP data on Yubikey and configure new settings"
+            ),
+        )
+        resetyk_p.set_defaults(command_func=self.command_resetyk)
+        args = ap.parse_args()
+        if not getattr(args, "command_func", None):
+            ap.print_help()
+            sys.exit(0)
+        if isinstance(getattr(args, "device", None), str):
+            args.device = Path(args.device)
+        return args
+
+    @cached_property
+    def config(self) -> Config:
+        return Config.load()
+
+    @cached_property
+    def gpg(self) -> GnuPG:
+        return GnuPG(
+            home=(self.args.mount_point / "gnupg").resolve(),
+            config=self.config,
+        )
+
+    @contextmanager
+    def _key_file(self) -> Iterator[Sequence[str]]:
+        if self.config.fs_passphrase:
+            with tempfile.TemporaryDirectory() as d:
+                kf = Path(d) / "key"
+                kf.write_text(self.config.fs_passphrase)
+                yield ["--key-file", str(kf)]
+            return
+        yield []
+
+    @contextmanager
+    def _temp_vault_copy(self) -> Iterator[None]:
+        if not self.args.device:
+            raise CLIError("Device is required")
+        if not getattr(self.args, "vault_temp_copy", False):
+            yield
+            return
+        if self.mapper_dev.exists():
+            raise CLIError(
+                f"Temporary vault copy requested but {self.mapper_dev} exists"
+            )
+        with tempfile.TemporaryDirectory() as d:
+            temp_vault = Path(d) / "temp_vault"
+            shutil.copy(self.args.device, temp_vault)
+            self.args.device = temp_vault
+            print("!!!")
+            print(f"!!! THIS SESSION USES A TEMPORARY COPY AT {temp_vault}")
+            print("!!! ANY CHANGES WILL BE LOST!")
+            print("!!!")
+            yield
+
+    @contextmanager
+    def _vault_mounted(self) -> Iterator[None]:
+        with self._temp_vault_copy():
+            should_unmount = self.command_mount(exist_ok=True)
+            try:
+                yield
+            finally:
+                if should_unmount:
+                    self.command_unmount()
+
+    @cached_property
+    def mapper_dev(self) -> Path:
+        return Path(f"/dev/mapper/{MAPPER_NAME}")
+
+    def _unlock(self):
+        if not self.args.device:
+            raise CLIError("Device path is required")
+        with self._key_file() as key_args:
+            sudo_run(
+                ["cryptsetup", "luksOpen", str(self.args.device), MAPPER_NAME]
+                + key_args
+            )
+        # Ensure mapper device exists
+        if not self.mapper_dev.is_block_device():
+            raise CLIError(f"{self.mapper_dev} not created")
+
+    def post_mount(self):
+        priv_homedir = self.gpg.home
+        # Perform GnuPG-specific actions as the invoking user
+        if not self.args.read_only:
+            source_conf = Path().home() / ".gnupg" / "gpg.conf"
+            dest_conf = priv_homedir / "gpg.conf"
+            priv_homedir.mkdir(exist_ok=True)
+            if source_conf.is_file() and (
+                not (dest_existed := dest_conf.is_file())
+                or dest_conf.read_text() != source_conf.read_text()
+            ):
+                if dest_existed:
+                    print(f"Updating {dest_conf}")
+                    with suppress(subprocess.CalledProcessError):
+                        run(["diff", "-Naur", dest_conf, source_conf])
+                shutil.copy(source_conf, dest_conf)
+            subprocess.check_call(["chmod", "-Rc", "go-rwx", priv_homedir])
+        print(f"GnuPG home directory: {priv_homedir}")
+
+    def command_unmount(self):
+        # Check if mapper device exists
+        if not self.mapper_dev.exists():
+            return
+        # Stop processes
         print("Stopping any running agents")
         subprocess.call(["killall", "gpg-agent", "dirmngr"])
-        if os.path.ismount(args.mountpoint):
-            print(f"Unmounting filesystem from {args.mountpoint}")
-            subprocess.check_call(["umount", args.mountpoint])
-        print(f"Removing directory {args.mountpoint}")
-        subprocess.check_call(["rmdir", args.mountpoint])
-    if os.path.exists(args.mapper):
-        print(f"Closing LUKS device {args.mapper}")
-        subprocess.check_call(["cryptsetup", "luksClose", args.mapper])
+        # Locate mount point
+        try:
+            mount_point = Path(
+                sudo_run(
+                    [
+                        "findmnt",
+                        "-n",
+                        "--output",
+                        "TARGET",
+                        "--source",
+                        str(self.mapper_dev),
+                    ],
+                    stdout=subprocess.PIPE,
+                    text=True,
+                ).stdout.strip()
+            )
+        except subprocess.CalledProcessError:
+            mount_point = None
+        if mount_point:
+            if not mount_point.is_mount():
+                raise CLIError(f"Detected {mount_point} is not a mount point")
+            if not mount_point.is_dir():
+                raise CLIError(f"Detected {mount_point} is not a directory")
+            # Unmount filesystem
+            sudo_run(["umount", str(self.mapper_dev)])
+            # Check mount point directory is empty
+            if any(mount_point.iterdir()):
+                raise CLIError(f"Mount point {mount_point} is not empty")
+            # Remove mount point directory
+            sudo_run(["rmdir", "-v", str(mount_point)])
+        # Close encrypted volume
+        sudo_run(["cryptsetup", "luksClose", MAPPER_NAME])
 
-
-def mount(mount_path):
-    if os.path.isdir(args.mountpoint):
-        raise ArgsError(f"{args.mountpoint} already exists")
-    unlock(mount_path)
-    mount_mapper()
-    post_mount()
-
-
-def create(create_path):
-    if os.path.exists(create_path):
-        raise ArgsError(f"{create_path} already exists")
-    unmount()
-    subprocess.check_call(
-        [
-            "dd",
-            "if=/dev/zero",
-            f"of={create_path}",
-            "bs=1M",
-            "count=10",
-        ]
-    )
-    sudo_user = os.environ.get("SUDO_USER")
-    if sudo_user:
-        subprocess.check_call(["chown", f"{sudo_user}:", create_path])
-    os.chmod(create_path, 0o0600)
-    cmd = [
-        "cryptsetup",
-        "-y",
-        "--cipher",
-        "aes-xts-plain64:sha512",
-        "--hash",
-        "sha512",
-        "--key-size",
-        "512",
-        "luksFormat",
-        create_path,
-    ]
-    subprocess.check_call(cmd)
-    unlock(create_path)
-    subprocess.check_call(["mkfs.ext4", "-m", "0", args.mapper])
-    mount_mapper()
-    if sudo_user:
-        subprocess.check_call(["chown", f"{sudo_user}:", args.mountpoint])
-    post_mount()
-
-
-try:
-    if [args.create, args.mount, args.unmount, args.password].count(True) > 1:
-        raise ArgsError("Multiple actions specified")
-
-    if args.create:
-        if not args.device:
-            raise ArgsError("No device or path specified")
-        if not args.mountpoint:
-            args.mountpoint = default_mountpoint
-        create(args.device)
-    elif args.mount:
-        if not args.device:
-            raise ArgsError("No device or path specified")
-        if not os.path.exists(args.device):
-            raise ArgsError(f"{args.device} does not exist")
-        if not args.mountpoint:
-            args.mountpoint = default_mountpoint
-        unmount()
-        mount(args.device)
-    elif args.unmount:
-        if not args.mountpoint:
+    def _mount_mapper_volume(self, mount_point: Path | None = None) -> None:
+        # Ensure mapper device exists
+        if not self.mapper_dev.is_block_device():
+            raise CLIError(f"{self.mapper_dev} not created")
+        try:
+            # Verify mount target
+            if mount_point.is_mount():
+                raise CLIError(f"{mount_point} is already mounted")
+            if not mount_point.is_dir() and mount_point.parent.is_dir():
+                sudo_run(["mkdir", "-v", str(mount_point)])
+            if not mount_point.is_dir():
+                raise CLIError(f"Mount point {mount_point} does not exist")
+            if any(mount_point.iterdir()):
+                raise CLIError(f"Mount point {mount_point} is not empty")
+            # Mount filesystem
+            cmd = ["mount", str(self.mapper_dev), str(mount_point)]
+            if self.args.read_only:
+                cmd += ["-o", "ro"]
+            sudo_run(cmd)
             try:
-                cmd = ["findmnt", "-nr", "-o", "target", "-S", args.mapper]
-                mountpoint = (
-                    subprocess.check_output(cmd).decode("utf-8").strip()
+                if not self.args.read_only:
+                    sudo_run(
+                        [
+                            "chown",
+                            "-Rc",
+                            f"{os.geteuid()}:{os.getegid()}",
+                            str(mount_point),
+                        ]
+                    )
+                print(f"Mounted at {mount_point}")
+                unmount_command = [Path(sys.argv[0]).name, "unmount"]
+                print()
+                print(
+                    f"When finished, unmount with: {' '.join(unmount_command)}"
                 )
-                if mountpoint and os.path.exists(mountpoint):
-                    args.mountpoint = mountpoint
-                else:
-                    args.mountpoint = default_mountpoint
-            except subprocess.CalledProcessError:
-                args.mountpoint = default_mountpoint
-        unmount()
-    elif args.password:
-        if not args.device:
-            raise ArgsError("No device or path specified")
-        subprocess.call(["cryptsetup", "luksChangeKey", "-y", args.device])
-    else:
-        raise ArgsError(
-            "No action specified. Please provide one of "
-            "-m/--mount, -u/--unmount, -c/--create, or "
-            "-p/--password."
+            except Exception:
+                # Unmount filesystem
+                sudo_run(["umount", str(self.mapper_dev)])
+                raise
+        except Exception:
+            # Close encrypted volume
+            sudo_run(["cryptsetup", "luksClose", MAPPER_NAME])
+            raise
+
+    def command_mount(self, exist_ok: bool = False) -> bool:
+        # Check if mapper device exists
+        if self.mapper_dev.exists():
+            if not exist_ok:
+                raise CLIError(f"{self.mapper_dev} already exists")
+            return False
+        self._unlock()
+        self._mount_mapper_volume(mount_point=self.args.mount_point)
+        self.post_mount()
+        return True
+
+    def command_shell(self) -> None:
+        with self._vault_mounted():
+            print(">>>")
+            print(f">>> GNUPGHOME={self.gpg.home}")
+            print(">>>")
+            try:
+                subprocess.run(
+                    [self.gpg.environ.get("SHELL")], env=self.gpg.environ
+                )
+            finally:
+                print("<<<")
+
+    def command_expire(self) -> None:
+        with self._vault_mounted():
+            key_fpr, *subkey_fprs = self.gpg.key_fprs
+            self.gpg.run(["--quick-set-expire", key_fpr, self.gpg.expire_next])
+            for subkey_fpr in subkey_fprs:
+                self.gpg.run(
+                    [
+                        "--quick-set-expire",
+                        key_fpr,
+                        self.gpg.expire_next,
+                        subkey_fpr,
+                    ]
+                )
+            self.gpg.run(["-k"] + ["--with-fingerprint"] * 2, write=False)
+
+    def command_export(self) -> None:
+        if (
+            dest := Path(self.args.output)
+        ).exists() and not self.args.overwrite:
+            raise CLIError(f"{dest} already exists")
+        with self._vault_mounted():
+            key_fpr, *_ = self.gpg.key_fprs
+            self.gpg.run(
+                ["-o", str(dest), "--export", "-a", key_fpr], write=False
+            )
+
+    def command_config(self) -> None:
+        Config.create()
+
+    def command_create(self) -> None:
+        if self.args.device.is_block_device():
+            raise CLIError(
+                f"{self.args.device} must be a file path, not a block device"
+            )
+        if self.args.device.exists():
+            raise CLIError(f"{self.args.device} already exists")
+        print(f"Create new vault at {self.args.device}")
+        # Check for existing mounts
+        try:
+            sudo_run(["findmnt", "--source", str(self.args.device)])
+            sys.exit(1)
+        except subprocess.CalledProcessError as e:
+            if e.returncode != 1:
+                raise
+        # Create encrypted volume
+        run(
+            [
+                "dd",
+                "if=/dev/zero",
+                f"of={self.args.device}",
+                "bs=1M",
+                "count=64",
+            ]
         )
-except ArgsError as e:
-    print(f"Error: {str(e)}", file=sys.stderr)
+        with self._key_file() as key_args:
+            sudo_run(
+                [
+                    "cryptsetup",
+                    "luksFormat",
+                    "--batch-mode",
+                    "--type",
+                    "luks2",
+                    "--cipher",
+                    "aes-xts-plain64",
+                    "--key-size",
+                    "512",
+                    "--pbkdf",
+                    "argon2id",
+                    "--hash",
+                    "sha512",
+                    str(self.args.device),
+                ]
+                + key_args
+            )
+        # Open encrypted volume
+        self._unlock()
+        # Create filesystem
+        sudo_run(["mkfs.ext4", "-m", "0", "-L", LABEL, str(self.mapper_dev)])
+        # Mount filesystem
+        self._mount_mapper_volume(mount_point=self.args.mount_point)
+        self.post_mount()
+        try:
+            # Generate key
+            self._generate_key_set()
+        finally:
+            # Unmount filesystem
+            self.command_unmount()
+
+    def _generate_key_set(self) -> None:
+        key_uid = f"{self.args.key_name} <{self.args.key_email}>"
+        self.gpg.run(
+            [
+                "--quick-gen-key",
+                key_uid,
+                "rsa4096",
+                "cert,sign",
+                self.gpg.expire_next,
+            ]
+        )
+        for key_type in ("sign", "encr", "auth"):
+            self.gpg.run(
+                [
+                    "--quick-add-key",
+                    self.gpg.root_key_fpr,
+                    "rsa4096",
+                    key_type,
+                    self.gpg.expire_next,
+                ]
+            )
+        self.gpg.run(["-k"] + ["--with-fingerprint"] * 2, write=False)
+
+    def command_resetyk(self) -> None:
+        if not self.config.card_pin:
+            raise CLIError("$CARD_PIN is empty")
+        if not self.config.card_admin_pin:
+            raise CLIError("$CARD_ADMIN_PIN is empty")
+        run(["ykman", "list"])
+        run(["ykman", "openpgp", "info"])
+        run(["ykman", "openpgp", "reset"])
+        access_cmd = ["ykman", "openpgp", "access"]
+        run(
+            access_cmd
+            + ["change-pin", "-P", "123456", "-n", self.config.card_pin]
+        )
+        run(
+            access_cmd
+            + [
+                "change-admin-pin",
+                "-a",
+                "12345678",
+                "-n",
+                self.config.card_admin_pin,
+            ]
+        )
+        for slot_name in ["sig", "dec", "aut"]:
+            run(
+                [
+                    "ykman",
+                    "openpgp",
+                    "keys",
+                    "set-touch",
+                    "-a",
+                    self.config.card_admin_pin,
+                    "-f",
+                    slot_name,
+                    "fixed",
+                ]
+            )
+        run(["ykman", "openpgp", "info"])
+
+    def command_password(self) -> None:
+        if self.args.password:
+            subprocess.call(
+                ["cryptsetup", "luksChangeKey", "-y", self.args.device]
+            )
+
+
+if __name__ == "__main__":
+    GPGFS()()
