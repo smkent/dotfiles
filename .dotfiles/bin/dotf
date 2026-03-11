@@ -65,7 +65,9 @@ class Dotfiles:
             rc_content = [f'prompt_hide_user="{username}"'] + [
                 line
                 for line in (
-                    rc_conf.read_text().splitlines() if rc_conf.exists else []
+                    rc_conf.read_text().splitlines()
+                    if rc_conf.exists()
+                    else []
                 )
                 if not line.startswith("prompt_hide_user=")
             ]
