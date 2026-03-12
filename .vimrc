@@ -59,6 +59,14 @@ set timeout timeoutlen=1000 ttimeoutlen=50
 " This prevents extraneous garbage from being printed on startup
 set t_RV=
 
+" Enabled bracketed paste mode support
+if has("patch-8.0.0210")
+    let &t_BE = "\e[?2004h"
+    let &t_BD = "\e[?2004l"
+    let &t_PS = "\e[200~"
+    let &t_PE = "\e[201~"
+endif
+
 " Disable swap file fsync to prevent Vim from blocking when writing swap files
 set swapsync=
 
