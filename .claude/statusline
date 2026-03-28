@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+import json
+import re
+import shutil
+import subprocess
+import sys
+import time
+
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+RED = "\033[31m"
+RESET = "\033[0m"
+
+ANSI = re.compile(r"\033\[[0-9;]*m")
+
+
+def visible_len(s):
+    return len(ANSI.sub("", s))
+
+
+def bar(pct, width=8):
+    pct = max(0, min(100, int(pct or 0)))
+    filled = round(pct * width / 100)
+    color = RED if pct >= 90 else YELLOW if pct >= 70 else GREEN
+    return f"{color}{'█' * filled}{'░' * (width - filled)}{RESET} {pct}%"
+
+
+data = json.load(sys.stdin)
+
+model = data.get("model", {}).get("display_name", "?")
+project_dir = data.get("workspace", {}).get("project_dir") or data.get(
+    "cwd", "?"
+)
+
+ctx_pct = int(data.get("context_window", {}).get("used_percentage") or 0)
+
+rl = data.get("rate_limits", {})
+fh = rl.get("five_hour", {})
+fh_pct = fh.get("used_percentage")
+fh_resets_at = fh.get("resets_at")
+sd_pct = rl.get("seven_day", {}).get("used_percentage")
+
+
+def time_until(ts):
+    secs = max(0, int(ts - time.time()))
+    h, m = divmod(secs // 60, 60)
+    return f"{h}h{m:02d}m" if h else f"{m}m"
+
+
+try:
+    branch = (
+        subprocess.check_output(
+            ["git", "branch", "--show-current"],
+            cwd=project_dir,
+            stderr=subprocess.DEVNULL,
+        )
+        .decode()
+        .strip()
+        or None
+    )
+except Exception:
+    branch = None
+
+branch_str = f" ({branch})" if branch else ""
+left = f"{project_dir}{branch_str}"
+
+parts = [f"ctx {bar(ctx_pct)}"]
+if fh_pct is not None:
+    reset_str = f" | {time_until(fh_resets_at)}" if fh_resets_at else ""
+    parts.append(f"5h{reset_str} {bar(fh_pct)}")
+if sd_pct is not None:
+    parts.append(f"7d {bar(sd_pct)}")
+right = f"{model}  "
+right += "  ".join(parts)
+
+right_extra_pad = 18
+term_width = shutil.get_terminal_size().columns
+padding = max(
+    1, term_width - visible_len(left) - visible_len(right) - right_extra_pad
+)
+print(left + " " * padding + right)

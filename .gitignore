@@ -6,6 +6,10 @@
 !.bash_logout
 !.bash_profile
 !.bashrc
+!.claude/
+.claude/*
+!.claude/settings.json
+!.claude/statusline
 !.config/
 .config/*
 !.config/google-chrome/
