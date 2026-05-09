@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -ex
+
+claude mcp add --scope user --transport stdio \
+    -e "OUTLINE_API_URL=\${OUTLINE_API_URL}" \
+    -e "OUTLINE_API_KEY=\${OUTLINE_API_KEY}" \
+    -- mcp-outline uvx mcp-outline
