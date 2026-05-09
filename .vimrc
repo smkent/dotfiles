@@ -544,27 +544,6 @@ function! ALEToggleEnabled()
         \ ' for "' . @% . '"'
 endfunction
 
-function! ALEToggleVerbosity()
-    if &filetype == 'qf'
-        " The location window is focused. Close it so this action will apply
-        " to the corresponding buffer.
-        lclose | lclose
-    endif
-    let b:ale_quiet = 1 - get(b:, 'ale_quiet', 0)
-    if b:ale_quiet == 0
-        let b:ignore_arg_ale_python_flake8 = ''
-    else
-        let b:ignore_arg_ale_python_flake8 = '--ignore=W,E,F4'
-    endif
-    let b:ale_python_flake8_options =
-        \ get(b:, 'base_ale_python_flake8_options', '') . ' ' .
-        \ b:ignore_arg_ale_python_flake8
-    ALELint
-    echo 'ALE verbosity ' .
-        \ (empty(b:ignore_arg_ale_python_flake8) ? 'increased' : 'reduced') .
-        \ ' for "' . @% . '"'
-endfunction
-
 function! ToggleLocationList()
     let l:old_last_winnr = winnr('$')
     lclose | lclose
