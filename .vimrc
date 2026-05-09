@@ -529,17 +529,6 @@ let g:ale_sign_warning = "⚠"           " Warning sign symbol
 let g:ale_sign_style_error = "⇢"       " Dotted right arrow
 let g:ale_sign_style_warning = g:ale_sign_style_error
 
-" Linters and fixers
-let g:ale_python_black_auto_poetry = 1
-let g:ale_python_flake8_auto_poetry = 1
-let g:ale_python_isort_auto_poetry = 1
-let g:ale_python_mypy_auto_poetry = 1
-let g:ale_fixers = {
-            \ 'python': ['black', 'isort'],
-            \ }
-
-let g:ale_python_black_options = "-l 79"
-
 " ALE control mappings
 " Functions to control ALE on a per-buffer basis {{{
 function! ALEToggleEnabled()

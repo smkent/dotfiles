@@ -50,8 +50,8 @@ fonts](https://github.com/powerline/fonts).
 More features become available when optional dependencies are installed:
 
 * [shellcheck](https://github.com/koalaman/shellcheck) and
-  [flake8](https://pypi.python.org/pypi/flake8) (for
-  [ALE](https://github.com/w0rp/ale))
+  [ruff](https://docs.astral.sh/ruff/) (for
+  [ALE](https://github.com/dense-analysis/ale))
 * `ctags` (for
   [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
   typically available as the `exuberant-ctags` package)
