@@ -38,13 +38,16 @@ rl = data.get("rate_limits", {})
 fh = rl.get("five_hour", {})
 fh_pct = fh.get("used_percentage")
 fh_resets_at = fh.get("resets_at")
-sd_pct = rl.get("seven_day", {}).get("used_percentage")
+sd = rl.get("seven_day", {})
+sd_pct = sd.get("used_percentage")
+sd_resets_at = sd.get("resets_at")
 
 
 def time_until(ts):
     secs = max(0, int(ts - time.time()))
     h, m = divmod(secs // 60, 60)
-    return f"{h}h{m:02d}m" if h else f"{m}m"
+    d, h = divmod(h, 24)
+    return f"{d}d{h}h" if d else (f"{h}h{m:02d}m" if h else f"{m}m")
 
 
 try:
@@ -69,7 +72,8 @@ if fh_pct is not None:
     reset_str = f" | {time_until(fh_resets_at)}" if fh_resets_at else ""
     parts.append(f"5h{reset_str} {bar(fh_pct)}")
 if sd_pct is not None:
-    parts.append(f"7d {bar(sd_pct)}")
+    sd_reset_str = f" | {time_until(sd_resets_at)}" if sd_resets_at else ""
+    parts.append(f"7d{sd_reset_str} {bar(sd_pct)}")
 right = f"{model}  "
 right += "  ".join(parts)
 
