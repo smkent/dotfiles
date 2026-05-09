@@ -529,17 +529,6 @@ let g:ale_sign_warning = "⚠"           " Warning sign symbol
 let g:ale_sign_style_error = "⇢"       " Dotted right arrow
 let g:ale_sign_style_warning = g:ale_sign_style_error
 
-" Linters and fixers
-let g:ale_python_black_auto_poetry = 1
-let g:ale_python_flake8_auto_poetry = 1
-let g:ale_python_isort_auto_poetry = 1
-let g:ale_python_mypy_auto_poetry = 1
-let g:ale_fixers = {
-            \ 'python': ['black', 'isort'],
-            \ }
-
-let g:ale_python_black_options = "-l 79"
-
 " ALE control mappings
 " Functions to control ALE on a per-buffer basis {{{
 function! ALEToggleEnabled()
@@ -552,27 +541,6 @@ function! ALEToggleEnabled()
     ALEToggleBuffer
     echo 'ALE ' .
         \ (get(b:, 'ale_enabled', 1) == 1 ? 'enabled' : 'disabled') .
-        \ ' for "' . @% . '"'
-endfunction
-
-function! ALEToggleVerbosity()
-    if &filetype == 'qf'
-        " The location window is focused. Close it so this action will apply
-        " to the corresponding buffer.
-        lclose | lclose
-    endif
-    let b:ale_quiet = 1 - get(b:, 'ale_quiet', 0)
-    if b:ale_quiet == 0
-        let b:ignore_arg_ale_python_flake8 = ''
-    else
-        let b:ignore_arg_ale_python_flake8 = '--ignore=W,E,F4'
-    endif
-    let b:ale_python_flake8_options =
-        \ get(b:, 'base_ale_python_flake8_options', '') . ' ' .
-        \ b:ignore_arg_ale_python_flake8
-    ALELint
-    echo 'ALE verbosity ' .
-        \ (empty(b:ignore_arg_ale_python_flake8) ? 'increased' : 'reduced') .
         \ ' for "' . @% . '"'
 endfunction
 
