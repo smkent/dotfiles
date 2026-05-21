@@ -18,16 +18,15 @@ jobs:
     - name: 🪝 Cache pre-commit hooks
       uses: actions/cache@v3
       with:
-        path: ~/.cache/pre-commit
-        key: "pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml')
-          }}"
+        path: ~/.cache/prek
+        key: "prek-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}"
 
-    - name: ✨ Install pre-commit
+    - name: ✨ Install prek
       shell: bash
-      run: python3 -m pip install pre-commit
+      run: python3 -m pip install prek
 
     - name: 🔥 Test
-      run: pre-commit run --all-files
+      run: prek run --all-files
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
