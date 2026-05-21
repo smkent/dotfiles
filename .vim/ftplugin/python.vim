@@ -12,14 +12,9 @@ endif
 let b:ale_linters = ['ruff', 'ruff_format', 'ty', 'mypy']
 let b:ale_fixers = ['ruff', 'ruff_format']
 
-let b:ale_python_auto_poetry = 1
-let b:ale_python_mypy_auto_poetry = 1
-let b:ale_python_ruff_auto_poetry = 1
-let b:ale_python_ruff_format_auto_poetry = 1
-let b:ale_python_ty_auto_poetry = 1
-
-let b:ale_python_auto_uv = 1
-let b:ale_python_mypy_auto_uv = 1
-let b:ale_python_ruff_auto_uv = 1
-let b:ale_python_ruff_format_auto_uv = 1
-let b:ale_python_ty_auto_uv = 1
+for s:manager in ['poetry', 'uv']
+    let b:ale_python_auto_{s:manager} = 1
+    for s:tool in uniq(sort(b:ale_linters + b:ale_fixers))
+        let b:ale_python_{s:tool}_auto_{s:manager} = 1
+    endfor
+endfor
