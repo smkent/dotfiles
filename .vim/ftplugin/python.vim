@@ -4,7 +4,7 @@
 " the boundary
 let s:python_max_line_length = get(environ(), 'PYTHON_LINE_LENGTH', 79)
 
-let &l:textwidth = s:python_max_line_length
+let &l:textwidth = 0
 if exists('+colorcolumn')
     let &l:colorcolumn = s:python_max_line_length + 1
 endif
