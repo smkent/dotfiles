@@ -13,9 +13,6 @@ set termencoding=utf-8
 
 " Indentation settings
 set autoindent      " Use indentation of previous line
-set smartindent     " Use intelligent indentation for code
-
-" Set tab width to 4
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
@@ -364,9 +361,7 @@ Plug 'https://github.com/junegunn/fzf',
             \     'do': './install --completion --no-update-rc --no-key-bindings',
             \ }
 Plug 'https://github.com/junegunn/fzf.vim'
-if v:version >= 704
-    Plug 'https://github.com/ludovicchabant/vim-gutentags'
-endif
+Plug 'https://github.com/ludovicchabant/vim-gutentags'
 Plug 'https://github.com/maralla/completor.vim'
 Plug 'https://github.com/maxmellon/vim-jsx-pretty'
 Plug 'https://github.com/pangloss/vim-javascript'
@@ -382,19 +377,8 @@ Plug 'https://github.com/tpope/vim-fugitive'
 Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/vim-scripts/AnsiEsc.vim'
-" vim-gitgutter with real-time sign updates enabled occasionally produced
-" rendering errors prior to Vim 7.4.427. For more information, see:
-" - https://github.com/airblade/vim-gitgutter/issues/171
-" - http://ftp.vim.org/vim/patches/7.4/7.4.427
 if executable('git')
-    if has('patch-7.4.427')
-        Plug 'https://github.com/airblade/vim-gitgutter',
-                    \ { 'branch': 'main' }
-        " Reduce default refresh time from 4 seconds to 0.25 seconds
-        set updatetime=250
-    else
-        Plug 'https://github.com/mhinz/vim-signify'
-    endif
+    Plug 'https://github.com/mhinz/vim-signify'
 endif
 call plug#end()
 
