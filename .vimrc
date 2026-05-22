@@ -618,7 +618,6 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 " Autocompletion configuration (jedi-vim and completor) {{{
 
 let g:jedi#show_call_signatures_delay = 100
-nnoremap <silent> <C-]> :call jedi#goto()<CR>
 
 let g:completor_auto_trigger = 1
 
