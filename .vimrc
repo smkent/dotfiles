@@ -517,31 +517,13 @@ let g:ale_sign_style_warning = g:ale_sign_style_error
 " ALE control mappings
 " Functions to control ALE on a per-buffer basis {{{
 function! ALEToggleEnabled()
-    " Idea from http://stackoverflow.com/a/36683733
-    if &filetype == 'qf'
-        " The location window is focused. Close it so this action will apply
-        " to the corresponding buffer.
-        lclose | lclose
-    endif
     ALEToggleBuffer
     echo 'ALE ' .
         \ (get(b:, 'ale_enabled', 1) == 1 ? 'enabled' : 'disabled') .
         \ ' for "' . @% . '"'
 endfunction
-
-function! ToggleLocationList()
-    let l:old_last_winnr = winnr('$')
-    lclose | lclose
-    if l:old_last_winnr == winnr('$')
-        " Nothing was closed, open ALE error location panel
-        if len(getloclist(winnr('$')))
-            lopen
-        endif
-    endif
-endfunction
-
 " }}}
-nmap <silent> <Leader>l :call ToggleLocationList()<CR>
+
 nmap <silent> <Leader>d :call ALEToggleEnabled()<CR>
 
 " }}}
