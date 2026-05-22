@@ -378,7 +378,10 @@ Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/vim-scripts/AnsiEsc.vim'
 if executable('git')
-    Plug 'https://github.com/mhinz/vim-signify'
+    Plug 'https://github.com/airblade/vim-gitgutter',
+                \ { 'branch': 'main' }
+    " Reduce default refresh time from 4 seconds to 0.25 seconds
+    set updatetime=250
 endif
 call plug#end()
 
