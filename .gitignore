@@ -70,3 +70,4 @@
 .zsnes/*
 !.zsnes/zinput.cfg
 !README.md
+.DS_Store
