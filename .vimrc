@@ -177,7 +177,6 @@ inoremap <F9> <ESC>:setlocal spell!<CR>`^i
 
 " Navigate the location list using [l and ]l.
 " If the location list is empty, take no action.
-" If the location list is populated, open it if it was closed.
 " If the cursor is not positioned on the line for the currently selected item
 " in the location list, move the cursor to the currently selected item.
 " Otherwise, navigate to the previous/next location list item.
@@ -192,10 +191,8 @@ function! NavigateWrapLocationList(next)  " {{{
         if a:next | lfirst | else | llast | endif
     endtry
 endfunction  " }}}
-nmap <silent> ]l :call NavigateWrapLocationList(1)<CR>
 nmap <silent> [l :call NavigateWrapLocationList(0)<CR>
-" nmap <silent> ]l :lnext<CR>
-" nmap <silent> [l :lprev<CR>
+nmap <silent> ]l :call NavigateWrapLocationList(1)<CR>
 nmap <silent> [L :lfirst<CR>
 nmap <silent> ]L :llast<CR>
 
