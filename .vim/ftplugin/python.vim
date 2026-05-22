@@ -18,3 +18,5 @@ for s:manager in ['poetry', 'uv']
         let b:ale_python_{s:tool}_auto_{s:manager} = 1
     endfor
 endfor
+
+nnoremap <buffer> <silent> <C-]> :call jedi#goto()<CR>
