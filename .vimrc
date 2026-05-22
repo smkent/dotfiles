@@ -503,6 +503,22 @@ let g:ctrlp_user_command = {
 
 " ALE configuration {{{
 
+" Register oxfmt with ALE {{{
+call ale#Set('typescript_oxfmt_executable', 'oxfmt')
+call ale#Set('typescript_oxfmt_use_global', get(g:, 'ale_use_global_executables', 0))
+function! OxfmtFix(buffer) abort
+    let l:executable = ale#path#FindExecutable(a:buffer, 'typescript_oxfmt', [
+    \   'node_modules/.bin/oxfmt',
+    \])
+
+    return {
+    \   'command': ale#Escape(l:executable)
+    \       . ' --stdin-filepath %s',
+    \}
+endfunction
+call ale#fix#registry#Add('oxfmt', 'OxfmtFix', ['typescript', 'typescriptreact', 'javascript', 'javascriptreact'], 'oxfmt formatter')
+" }}}
+
 " Basic settings
 let g:ale_open_list = 0
 let g:ale_hover_cursor = 1
