@@ -162,7 +162,6 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 
 | Mapping | Meaning |
 | :-- | :-- |
-| `<Leader>l` | Toggle location list |
 | `<Leader>d` | Toggle ALE |
 
 ### tcomment plugin mappings
