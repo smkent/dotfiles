@@ -199,11 +199,11 @@ nmap <silent> ]L :llast<CR>
 " Navigate SCM conflict markers with [n and ]n.
 " From vim-unimpaired: https://github.com/tpope/vim-unimpaired
 " Context and ContextMotion helper functions {{{
-function! Context(reverse)
+function! Context(reverse) abort
     call search('^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)', a:reverse ? 'bW' : 'W')
 endfunction
 
-function! ContextMotion(reverse)
+function! ContextMotion(reverse) abort
     if a:reverse
         -
     endif
