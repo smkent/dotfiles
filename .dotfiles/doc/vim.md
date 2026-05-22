@@ -84,7 +84,7 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 | `q` | Confirm and quit (`:conf q`) |
 | `Q` | Save and quit (`:wq`) |
 | `Ctrl+e` | Open CtrlP in find buffer mode (`:CtrlPBuffer`) |
-| `Ctrl+]` | Go to definition using [jedi-vim](https://github.com/davidhalter/jedi-vim) |
+| `Ctrl+]` | Go to definition using ALE LSP or ctags |
 
 ## Additional mappings
 
@@ -162,7 +162,11 @@ here.](http://michael.peopleofhonoronly.com/vim/)
 
 | Mapping | Meaning |
 | :-- | :-- |
-| `<Leader>d` | Toggle ALE |
+| `K` | Show language server hover info |
+| `<Leader>d` | Toggle ALE for current buffer |
+| `<Leader>a` | `:ALECodeAction` |
+| `<Leader>u` | `:ALEFindReferences`  |
+| `<Leader>n` | `:ALERename` |
 
 ### tcomment plugin mappings
 
