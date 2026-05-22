@@ -19,4 +19,7 @@ for s:manager in ['poetry', 'uv']
     endfor
 endfor
 
-nnoremap <buffer> <silent> <C-]> :call jedi#goto()<CR>
+let b:ale_completion_enabled = 1
+let b:completor_auto_trigger = 0
+
+call ALEAddLSPMappings()

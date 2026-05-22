@@ -505,6 +505,7 @@ let g:ctrlp_user_command = {
 
 " Basic settings
 let g:ale_open_list = 0
+let g:ale_hover_cursor = 1
 let g:airline#extensions#ale#enabled = 1
 let g:ale_fix_on_save = 1
 let g:ale_echo_msg_format = '[%linter%] %s'
@@ -535,6 +536,20 @@ augroup ale_readonly
         \     let b:ale_fix_on_save = 0 |
         \ endif
 augroup END
+
+function! ALEAddLSPMappings() abort
+    nnoremap <buffer> <silent> <C-]> :ALEGoToDefinition<CR>
+    nnoremap <buffer> <silent> K :ALEHover<CR>
+    nnoremap <buffer> <silent> <leader>a :ALECodeAction<CR>
+    nnoremap <buffer> <silent> <leader>u :ALEFindReferences<CR>
+    nnoremap <buffer> <silent> <leader>n :ALERename<CR>
+endfunction
+
+" Show hover info in floating popup windows
+let g:ale_floating_preview = 1
+let g:ale_hover_to_floating_preview = 1
+let g:ale_detail_to_floating_preview = 1
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
 
 " }}}
 
@@ -603,9 +618,19 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 
 " }}}
 
-" Autocompletion configuration (jedi-vim and completor) {{{
+" Python call signatures configuration (jedi-vim) {{{
 
+let g:jedi#completions_enabled = 0
+let g:jedi#documentation_command = ''
+let g:jedi#goto_command = ''
+let g:jedi#rename_command = ''
+let g:jedi#usages_command = ''
+let g:jedi#show_call_signatures = 1
 let g:jedi#show_call_signatures_delay = 100
+
+" }}}
+
+" Autocompletion configuration (completor) {{{
 
 let g:completor_auto_trigger = 1
 
