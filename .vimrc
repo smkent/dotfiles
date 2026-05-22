@@ -515,16 +515,25 @@ let g:ale_sign_style_error = "⇢"       " Dotted right arrow
 let g:ale_sign_style_warning = g:ale_sign_style_error
 
 " ALE control mappings
-" Functions to control ALE on a per-buffer basis {{{
-function! ALEToggleEnabled()
+
+function! ALEToggleEnabled() abort
     ALEToggleBuffer
-    echo 'ALE ' .
-        \ (get(b:, 'ale_enabled', 1) == 1 ? 'enabled' : 'disabled') .
-        \ ' for "' . @% . '"'
+    let l:enabled = get(b:, 'ale_enabled', 1)
+    let b:ale_fix_on_save = l:enabled
+    echo 'ALE ' . (l:enabled == 1 ? 'enabled' : 'disabled') . ' for ' . @%
 endfunction
-" }}}
 
 nmap <silent> <Leader>d :call ALEToggleEnabled()<CR>
+
+" Disable ALE by default for read-only files
+augroup ale_readonly
+    autocmd!
+    autocmd BufReadPost *
+        \ if &readonly |
+        \     let b:ale_enabled = 0 |
+        \     let b:ale_fix_on_save = 0 |
+        \ endif
+augroup END
 
 " }}}
 
