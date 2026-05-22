@@ -546,7 +546,6 @@ endfunction
 " }}}
 nmap <silent> <Leader>l :call ToggleLocationList()<CR>
 nmap <silent> <Leader>d :call ALEToggleEnabled()<CR>
-nnoremap <F10> :ALEFix<CR>
 
 " }}}
 
