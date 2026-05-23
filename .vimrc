@@ -329,33 +329,45 @@ nnoremap <silent> <Leader>. :redraw!<CR>
 
 " }}}
 
+" Language configuration {{{
+
+" Vim {{{
+if version >= 802
+    let g:vim_indent = { 'line_continuation': &shiftwidth }
+else
+    let g:vim_indent_cont = &shiftwidth
+endif
+" }}}
+
+" }}}
+
 " Plugin installation {{{
 
 " Define list of plugins to be installed
 silent call plug#begin()  " Suppress error message if git is not installed
 if version <= 802
     Plug 'https://github.com/cespare/vim-toml',
-                \ { 'branch': 'main' }
+        \ { 'branch': 'main' }
 endif
 Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/davidhalter/jedi-vim'
 Plug 'https://github.com/dense-analysis/ale'
 Plug 'https://github.com/fatih/vim-go',
-            \ { 'do': ':GoUpdateBinaries' }
+    \ { 'do': ':GoUpdateBinaries' }
 Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 Plug 'https://github.com/honza/vim-snippets'
 Plug 'https://github.com/hynek/vim-python-pep8-indent'
 Plug 'https://github.com/isobit/vim-caddyfile'
 Plug 'https://github.com/jamessan/vim-gnupg',
-            \ { 'branch': 'main' }
+    \ { 'branch': 'main' }
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle',
-            \ { 'branch': 'main' }
+    \ { 'branch': 'main' }
 Plug 'https://github.com/junegunn/fzf',
-            \ {
-            \     'dir': '~/.fzf',
-            \     'do': './install --completion --no-update-rc --no-key-bindings',
-            \ }
+    \ {
+    \     'dir': '~/.fzf',
+    \     'do': './install --completion --no-update-rc --no-key-bindings',
+    \ }
 Plug 'https://github.com/junegunn/fzf.vim'
 Plug 'https://github.com/ludovicchabant/vim-gutentags'
 Plug 'https://github.com/maralla/completor.vim'
@@ -365,7 +377,7 @@ Plug 'https://github.com/ruanyl/vim-gh-line'
 Plug 'https://github.com/sirtaj/vim-openscad'
 Plug 'https://github.com/SirVer/ultisnips'
 Plug 'https://github.com/smkent/vim-pipe-preview',
-            \ { 'branch': 'main' }
+    \ { 'branch': 'main' }
 if version <= 802
     Plug 'https://github.com/stephpy/vim-yaml'
 endif
@@ -377,7 +389,7 @@ Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/vim-scripts/AnsiEsc.vim'
 if executable('git')
     Plug 'https://github.com/airblade/vim-gitgutter',
-                \ { 'branch': 'main' }
+        \ { 'branch': 'main' }
     " Reduce default refresh time from 4 seconds to 0.25 seconds
     set updatetime=250
 endif
@@ -456,9 +468,9 @@ nnoremap <silent> <C-p> :GFiles<CR>
 nnoremap <silent> <Leader>o :History<CR>
 
 let g:fzf_colors = {
-            \ 'pointer': ['fg', 'Title'],
-            \ 'spinner': ['fg', 'Constant'],
-            \ }
+    \ 'pointer': ['fg', 'Title'],
+    \ 'spinner': ['fg', 'Constant'],
+    \ }
 
 " }}}
 
@@ -473,8 +485,8 @@ let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = {
     \ 'types': {
-        \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
-        \ },
+    \     1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
+    \ },
     \ 'fallback': 'find %s -type f'
     \ }
 
@@ -581,10 +593,10 @@ let g:gutentags_generate_on_new = 0
 let g:gutentags_ctags_tagfile = '.tags'
 let g:gutentags_project_root = ['.tags', 'tags']
 let g:gutentags_file_list_command = {
-    \ 'markers': {
-        \ '.git': 'git ls-files -co --exclude-standard',
-        \ '.hg': 'hg locate',
-        \ },
+    \     'markers': {
+    \         '.git': 'git ls-files -co --exclude-standard',
+    \         '.hg': 'hg locate',
+    \     },
     \ }
 let g:gutentags_generate_on_empty_buffer = 1
 
