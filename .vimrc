@@ -333,8 +333,10 @@ nnoremap <silent> <Leader>. :redraw!<CR>
 
 " Define list of plugins to be installed
 silent call plug#begin()  " Suppress error message if git is not installed
-Plug 'https://github.com/cespare/vim-toml',
-            \ { 'branch': 'main' }
+if version <= 802
+    Plug 'https://github.com/cespare/vim-toml',
+                \ { 'branch': 'main' }
+endif
 Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/davidhalter/jedi-vim'
@@ -364,7 +366,9 @@ Plug 'https://github.com/sirtaj/vim-openscad'
 Plug 'https://github.com/SirVer/ultisnips'
 Plug 'https://github.com/smkent/vim-pipe-preview',
             \ { 'branch': 'main' }
-Plug 'https://github.com/stephpy/vim-yaml'
+if version <= 802
+    Plug 'https://github.com/stephpy/vim-yaml'
+endif
 Plug 'https://github.com/tomtom/tcomment_vim'
 Plug 'https://github.com/tpope/vim-dispatch'
 Plug 'https://github.com/tpope/vim-fugitive'
