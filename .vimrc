@@ -331,6 +331,20 @@ nnoremap <silent> <Leader>. :redraw!<CR>
 
 " Language configuration {{{
 
+" Python {{{
+if version >= 802
+    let g:python_indent = {
+        \ 'closed_paren_align_last_line': v:false,
+        \ 'continue': 'shiftwidth()',
+        \ 'open_paren': 'shiftwidth()',
+        \ }
+else
+    let g:pyindent_disable_parentheses_indenting = v:false
+    let g:pyindent_continue = 'shiftwidth()'
+    let g:pyindent_open_paren = 'shiftwidth()'
+endif
+" }}}
+
 " Vim {{{
 if version >= 802
     let g:vim_indent = { 'line_continuation': &shiftwidth }
@@ -357,7 +371,6 @@ Plug 'https://github.com/fatih/vim-go',
     \ { 'do': ':GoUpdateBinaries' }
 Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 Plug 'https://github.com/honza/vim-snippets'
-Plug 'https://github.com/hynek/vim-python-pep8-indent'
 Plug 'https://github.com/isobit/vim-caddyfile'
 Plug 'https://github.com/jamessan/vim-gnupg',
     \ { 'branch': 'main' }
