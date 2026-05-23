@@ -95,9 +95,7 @@ augroup basic_autocommands
         \ if get(b:, 'highlight_trailing_whitespace', 1) |
         \     call matchadd('Error', '\s\+$', 5) |
         \ endif
-    if version >= 702
-        autocmd BufWinLeave * call clearmatches()
-    endif
+    autocmd BufWinLeave * call clearmatches()
 
     " Open help windows vertically if space permits
     " Based on http://vi.stackexchange.com/a/4464
