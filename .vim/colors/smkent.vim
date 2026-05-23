@@ -260,11 +260,6 @@ call s:C("mailQuoted6",     s:gray,             "",                 "")
 " Show buffer file names in Normal white instead of Comment gray
 hi link CtrlPBufferHid Normal
 
-" vim-signify sign highlight groups
-call s:C("SignifySignAdd",    s:light_green,    s:background,       "bold")
-call s:C("SignifySignDelete", s:red,            s:background,       "bold")
-call s:C("SignifySignChange", s:light_yellow,   s:background,       "bold")
-
 " vim-gitgutter sign highlight groups
 call s:C("GitGutterAdd",    s:light_green,      s:background,       "bold")
 call s:C("GitGutterDelete", s:red,              s:background,       "bold")

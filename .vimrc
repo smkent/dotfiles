@@ -431,26 +431,6 @@ let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
 
 " }}}
 
-" vim-signify configuration {{{
-
-let g:signify_vcs_list = [ 'git' ]
-
-" Map [c and ]c shortcuts to jump between hunks
-let g:signify_mapping_next_hunk = ']c'
-let g:signify_mapping_prev_hunk = '[c'
-
-" vim-signify integration with vim-airline
-" Only show modified counts in the status bar if they're non zero
-let g:airline#extensions#hunks#non_zero_only = 1
-
-let g:signify_sign_add = '+'
-let g:signify_sign_delete = '<'
-let g:signify_sign_change = '|'
-let g:signify_sign_delete_first_line = '^^'
-let g:signify_sign_changedelete = g:signify_sign_change . g:signify_sign_delete
-
-" }}}
-
 " vim-gitgutter configuration {{{
 
 " Customize sign characters
