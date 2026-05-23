@@ -37,7 +37,7 @@ $ git checkout .
 ### Configuration
 
 To configure your git email address and username to be hidden from shell
-prompts, run `[dotf](/.dotfiles/bin/dotf) config`.
+prompts, run [`dotf config`][dotf].
 
 To use a different profile picture, remove or replace `.face`.
 
@@ -55,13 +55,13 @@ More features become available when optional dependencies are installed:
   [ALE](https://github.com/dense-analysis/ale))
 * `ctags` (for
   [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
-  typically available as the `exuberant-ctags` package)
+  typically available as the `universal-ctags` package)
 * `xclip` (for copying to the system clipboard in tmux)
 * [terminal_markdown_viewer](https://github.com/axiros/terminal_markdown_viewer)
   (for previewing Markdown files with
   [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview))
 
-Run `[dotf](/.dotfiles/bin/dotf) deps` to see the executable path and version
+Run [`dotf deps`][dotf] to see the executable path and version
 information for programs that this repository configures or depends on.
 
 ## Features
@@ -74,7 +74,7 @@ with zsh on OS X.
 Prompt features:
 
 * Display username if different from the value of `prompt_hide_user` configured
-  via `[dotf](/.dotfiles/bin/dotf) config`.
+  via [`dotf config`][dotf].
 * Display current directory name if different from `${HOME}`
 * Display exit code of the previous command if nonzero (or `bg` / `^C` when
   backgrounding a job or typing Ctrl-C, respectively)
@@ -254,5 +254,6 @@ Original code in this repository is published under the MIT license. See
 [`.dotfiles/doc/LICENSE`](/.dotfiles/doc/LICENSE) for licensing information.
 
 
+[dotf]: /.dotfiles/bin/dotf
 [prek]: https://prek.j178.dev/
 [uv-tool]: https://docs.astral.sh/uv/guides/tools/
