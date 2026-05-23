@@ -51,7 +51,7 @@ More features become available when optional dependencies are installed:
 
 * [shellcheck](https://github.com/koalaman/shellcheck),
   [ruff](https://docs.astral.sh/ruff/), and
-  [ty](https://docs.astral.sh/ruff/) (for
+  [ty](https://docs.astral.sh/ty/) (for
   [ALE](https://github.com/dense-analysis/ale))
 * `ctags` (for
   [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
