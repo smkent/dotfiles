@@ -420,8 +420,7 @@ endif
 let g:airline_symbols.linenr = ''
 
 " Customize right statusbar section contents
-let g:airline_section_x = airline#section#create_right(
-    \ ['tagbar', 'filetype', 'ffenc'])
+let g:airline_section_x = airline#section#create_right(['filetype', 'ffenc'])
 let g:airline_section_y = airline#section#create(['%3p%%'])
 let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
 
