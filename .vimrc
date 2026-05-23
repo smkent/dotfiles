@@ -508,7 +508,7 @@ let g:ale_open_list = 0
 let g:ale_hover_cursor = 1
 let g:airline#extensions#ale#enabled = 1
 let g:ale_fix_on_save = 1
-let g:ale_echo_msg_format = '[%linter%] %s'
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
 
 " Sign column symbols
 let g:ale_sign_error = "✖"             " Block X
