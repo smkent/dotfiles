@@ -49,8 +49,9 @@ fonts](https://github.com/powerline/fonts).
 
 More features become available when optional dependencies are installed:
 
-* [shellcheck](https://github.com/koalaman/shellcheck) and
-  [ruff](https://docs.astral.sh/ruff/) (for
+* [shellcheck](https://github.com/koalaman/shellcheck),
+  [ruff](https://docs.astral.sh/ruff/), and
+  [ty](https://docs.astral.sh/ruff/) (for
   [ALE](https://github.com/dense-analysis/ale))
 * `ctags` (for
   [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
@@ -225,21 +226,20 @@ useful aliases are:
 
 ## Development
 
-Static checks are managed by [pre-commit][pre-commit].
+Static checks are managed by [prek][prek].
 
-Installation via [`pipx`][pipx]:
+Installation via [`uv tool`][uv-tool]:
 
 ```console
-pip install pipx
-pipx install pre-commit
-pre-commit install
+uv tool install prek
+prek install
 ```
 
 Installation via `pip`:
 
 ```console
-pip install pre-commit
-pre-commit install
+pip install prek
+prek install
 ```
 
 ## Licensing and attribution
@@ -254,5 +254,5 @@ Original code in this repository is published under the MIT license. See
 [`.dotfiles/doc/LICENSE`](/.dotfiles/doc/LICENSE) for licensing information.
 
 
-[pipx]: https://pypa.github.io/pipx/
-[pre-commit]: https://pre-commit.com/
+[prek]: https://prek.j178.dev/
+[uv-tool]: https://docs.astral.sh/uv/guides/tools/
