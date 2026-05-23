@@ -55,7 +55,7 @@ More features become available when optional dependencies are installed:
   [ALE](https://github.com/dense-analysis/ale))
 * `ctags` (for
   [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
-  typically available as the `exuberant-ctags` package)
+  typically available as the `universal-ctags` package)
 * `xclip` (for copying to the system clipboard in tmux)
 * [terminal_markdown_viewer](https://github.com/axiros/terminal_markdown_viewer)
   (for previewing Markdown files with
