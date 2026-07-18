@@ -12,6 +12,13 @@ endif
 let b:ale_linters = ['ruff', 'ruff_format', 'ty', 'mypy']
 let b:ale_fixers = ['ruff', 'ruff_format']
 
+" F841: unused-variable
+" T201: print
+" T203: pprint
+let s:ruff_unfixable = ['F841', 'T201', 'T203']
+let b:ale_python_ruff_options =
+    \ '--unsafe-fixes --extend-unfixable ' . join(s:ruff_unfixable, ',')
+
 for s:manager in ['poetry', 'uv']
     let b:ale_python_auto_{s:manager} = 1
     for s:tool in uniq(sort(b:ale_linters + b:ale_fixers))
