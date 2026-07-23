@@ -2,5 +2,22 @@
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__mcp-outline__fetch_attachment",
+      "mcp__mcp-outline__get_attachment_url",
+      "mcp__mcp-outline__get_collection_structure",
+      "mcp__mcp-outline__get_comment",
+      "mcp__mcp-outline__get_document_backlinks",
+      "mcp__mcp-outline__get_document_id_from_title",
+      "mcp__mcp-outline__list_archived_documents",
+      "mcp__mcp-outline__list_collections",
+      "mcp__mcp-outline__list_document_attachments",
+      "mcp__mcp-outline__list_document_comments",
+      "mcp__mcp-outline__list_trash",
+      "mcp__mcp-outline__read_document",
+      "mcp__mcp-outline__search_documents"
+    ]
   }
 }
