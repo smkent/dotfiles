@@ -452,6 +452,35 @@ export FZF_DEFAULT_OPTS="
 
 # }}}
 
+# mise configuration {{{
+
+if [  -x "$(command -v mise)" ]; then
+    eval "$(mise activate bash)";
+else
+    mise() {
+        local response
+        echo "mise is not installed."
+        echo
+        printf "%s" "Type \"yes\" to install mise and tools: "
+        read -r response
+        echo
+        if [ "${response}" != "yes" ]; then
+            echo "mise not installed."
+            return 1
+        else
+            mkdir -vp ~/.local/bin
+            (
+                set -x
+                curl -s https://mise.run
+            ) | sh
+            unset mise
+            mise install
+        fi
+    }
+fi
+
+# }}}
+
 # Python (pyenv) configuration {{{
 
 PYENV_ROOT="${HOME}/.pyenv"
