@@ -454,7 +454,7 @@ export FZF_DEFAULT_OPTS="
 
 # mise configuration {{{
 
-if [  -x "$(command -v mise)" ]; then
+if [ -x "$(command -v mise)" ]; then
     eval "$(mise activate bash)";
 else
     mise() {
