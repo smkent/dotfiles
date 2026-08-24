@@ -1,6 +1,7 @@
 [tools]
 claude-code = "latest"
 node = "latest"
+"pipx:ansible-core" = "latest"
 "pipx:ansible-lint" = "latest"
 "pipx:bdbox" = "latest"
 "pipx:copier" = "latest"
