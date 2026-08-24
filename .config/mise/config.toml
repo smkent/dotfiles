@@ -2,6 +2,8 @@
 node = "latest"
 "pipx:ansible-lint" = "latest"
 "pipx:bdbox" = "latest"
+"pipx:copier" = "latest"
+"pipx:copier-python" = "latest"
 "pipx:easyeda2kicad" = "latest"
 "pipx:linode-cli" = "latest"
 "pipx:mdv" = "latest"
