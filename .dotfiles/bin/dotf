@@ -22,6 +22,7 @@ DOTFILES_DEPENDENCIES = (
     "gimp",
     "git",
     "gpg",
+    "mise",
     "mdv",
     ("mutt", "{} -v"),
     "screen",
