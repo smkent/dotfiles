@@ -1,5 +1,6 @@
 [tools]
 claude-code = "latest"
+github-cli = "latest"
 node = "latest"
 "pipx:ansible-core" = "latest"
 "pipx:ansible-lint" = "latest"
