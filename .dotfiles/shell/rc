@@ -460,9 +460,9 @@ export GEM_HOME="${HOME}/.ruby"
 
 if [ -x "$(command -v mise)" ]; then
     if [ -n "${BASH_VERSION}" ]; then
-        eval "$(mise activate bash --shims)";
+        eval "$(command mise activate bash --shims)";
     elif [ -n "${ZSH_VERSION}" ]; then
-        eval "$(mise activate zsh --shims)";
+        eval "$(command mise activate zsh --shims)";
     fi
 fi
 
