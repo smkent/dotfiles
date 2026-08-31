@@ -2,5 +2,7 @@
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline"
-  }
+  },
+  "theme": "dark",
+  "tui": "fullscreen"
 }
