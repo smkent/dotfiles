@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+bin_name="yubioath"
+install_path="${MISE_TOOL_INSTALL_PATH-$(mise where "${MISE_TOOL_NAME-github:Yubico/yubioath-flutter}")}"
+app_id="com.yubico.yubioath"
+apps_dir="${HOME?}/.local/share/applications"
+desktop_file="${apps_dir}/${app_id}.desktop"
+
+mkdir -p "${apps_dir}"
+cat > "${desktop_file}" <<EOF
+[Desktop Entry]
+Name=Yubico Authenticator
+GenericName=Yubico Authenticator
+Exec=${install_path}/${bin_name}
+Icon=${install_path}/linux_support/${app_id}.png
+Type=Application
+Categories=Utility;
+Keywords=Yubico;Authenticator;
+EOF
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "${apps_dir}" || true
+fi

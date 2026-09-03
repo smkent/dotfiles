@@ -19,6 +19,8 @@
 !.config/google-chrome/NativeMessagingHosts/gpgmejson.json
 !.config/mise/
 .config/mise/*
+!.config/mise/conf.d/
+!.config/mise/hooks/
 !.config/mise/config.toml
 !.ctags
 !.dircolors
