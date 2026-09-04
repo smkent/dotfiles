@@ -1,0 +1,11 @@
+worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
+
+[merge]
+squash = false
+rebase = false
+
+[aliases]
+cb = "wt switch --create {{ args }}"
+co = "wt switch {{ args }}"
+ls = "wt list {{ args }}"
+rm = "wt remove {{ args }}"
