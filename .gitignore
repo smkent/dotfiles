@@ -17,6 +17,9 @@
 !.config/google-chrome/NativeMessagingHosts/
 .config/google-chrome/NativeMessagingHosts/*
 !.config/google-chrome/NativeMessagingHosts/gpgmejson.json
+!.config/herdr/
+.config/herdr/*
+!.config/herdr/config.toml
 !.config/mise/
 .config/mise/*
 !.config/mise/conf.d/
