@@ -1,0 +1,4 @@
+[tools."github:gneiss15/PrusaSlicer.AppImage"]
+os = "linux"
+postinstall = "{{ config_source | canonicalize | dirname | dirname }}/hooks/postinstall-github-gneiss15-PrusaSlicer-AppImage"
+version = "latest"
