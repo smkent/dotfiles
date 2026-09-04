@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+
+bin_name="PrusaSlicer.AppImage"
+install_path="${MISE_TOOL_INSTALL_PATH-$(mise where "${MISE_TOOL_NAME?}")}"
+app_id="com.prusa3d.PrusaSlicer"
+apps_dir="${HOME?}/.local/share/applications"
+desktop_file="${apps_dir}/${app_id}.desktop"
+config_dir="${HOME?}/.config/PrusaSlicer"
+
+curl -s -L \
+    -o "${install_path}/icon.svg" \
+    "https://github.com/prusa3d/PrusaSlicer/raw/refs/heads/master/resources/icons/PrusaSlicer.svg"
+
+mkdir -p "${apps_dir}"
+cat > "${desktop_file}" <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=PrusaSlicer
+Exec=${install_path}/${bin_name} %F
+Icon=${install_path}/icon.svg
+MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;
+Categories=Graphics;3DGraphics;Engineering;
+Keywords=3D;Printing;Slicer;slice;3D;printer;convert;gcode;stl;obj;amf;SLA
+StartupNotify=false
+StartupWMClass=prusa-slicer
+EOF
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "${apps_dir}" || true
+fi
+
+# Install config repository
+if [ ! -e "${config_dir}/.git" ]; then
+    mkdir -vp "${config_dir}"
+    cd "${config_dir}"
+    git clone https://github.com/smkent/prusa-slicer-config ".clone_temp"
+    mv ".clone_temp/.git" .
+    rm -rf ".clone_temp/"
+    git checkout -- .
+fi
