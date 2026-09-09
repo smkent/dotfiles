@@ -88,22 +88,42 @@ dusort() {
 
 # tmux {{{
 
-# tmux
+# "tmux attach"
 ta() {
-    args="${*}"
-    [ -n "${args}" ] && {
-        tmux setenv -t "${args}" __tmux_attach_time "$(date +%s)"
-        tmux attach -d -t "${args}"
+    [ -n "${*}" ] && {
+        tmux setenv -t "${@}" __tmux_attach_time "$(date +%s)"
+        tmux attach -d -t "${@}"
         return
     }
     tmux setenv __tmux_attach_time "$(date +%s)"
     tmux attach -d
 }
+
+# "tmux new"
 tn() {
-    args="${*}"
-    [ -n "${args}" ] && { tmux new-session -n '' -s "${args}"; return; }
+    local name
+    case "${#}" in
+        0) [ "${PWD}" != "${HOME}" ] && name="$(basename "${PWD}" | tr ':. ' '-')";;
+        *) name="${1}"; shift;;
+    esac
+    [ -n "${name}" ] && { tmux new-session -n '' -s "${name}" "${@}"; return; }
     tmux new-session -n ''
 }
+
+# "tmux project"
+tp() {
+    local dir
+    local name
+    dir="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+    name="${1:-$(basename "${dir}" | tr ':. ' '-')}"
+    if ! tmux has-session -t "=${name}" 2>/dev/null; then
+        tmux new-session -d -s "${name}" -c "${dir}" -n herdr
+        tmux send-keys -t "=${name}:0" "herdr session attach ${name}" C-m
+    fi
+    tmux setenv -t "${name}" __tmux_attach_time "$(date +%s)"
+    tmux attach -d -t "=${name}"
+}
+
 alias tl='tmux list-sessions'
 
 # }}}
