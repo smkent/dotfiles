@@ -1,4 +1,4 @@
-worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
+worktree-path = "{{ repo_path }}/.worktrees/{{ repo }}.{{ branch | sanitize }}"
 
 [merge]
 squash = false
