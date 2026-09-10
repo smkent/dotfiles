@@ -2,7 +2,6 @@
 claude-code = "latest"
 github-cli = "latest"
 herdr = "latest"
-node = "latest"
 "pipx:ansible-core" = "latest"
 "pipx:ansible-lint" = "latest"
 "pipx:bdbox" = "latest"
