@@ -1,36 +1,36 @@
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v6.0.0
-  hooks:
-  - id: check-merge-conflict
-  - id: end-of-file-fixer
-  - id: debug-statements
-  - id: trailing-whitespace
-- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.16.0
-  hooks:
-  - id: pretty-format-yaml
-    args: [--preserve-quotes, --autofix, --indent, '2', --line-width, '79']
-- repo: local
-  hooks:
-  - id: ruff
-    name: ruff
-    entry: ruff check --fix
-    language: system
-    types_or: [python, pyi]
-  - id: ruff-format
-    name: ruff-format
-    entry: ruff format
-    language: system
-    types_or: [python, pyi]
-  - id: ty
-    name: ty
-    entry: ty check
-    language: system
-    types: [python]
-  - id: shellcheck
-    name: shellcheck
-    language: system
-    entry: shellcheck
-    types: [shell]
-    exclude: '^\.zshrc'
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: trailing-whitespace
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.16.0
+    hooks:
+      - id: pretty-format-yaml
+        args: [--preserve-quotes, --autofix, --offset, '2', --line-width, '79']
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        entry: ruff check --fix
+        language: system
+        types_or: [python, pyi]
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format
+        language: system
+        types_or: [python, pyi]
+      - id: ty
+        name: ty
+        entry: ty check
+        language: system
+        types: [python]
+      - id: shellcheck
+        name: shellcheck
+        language: system
+        entry: shellcheck
+        types: [shell]
+        exclude: '^\.zshrc'
