@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# shellcheck disable=SC1090
 [ -f ~/.dotfiles/shell/rc ] && source ~/.dotfiles/shell/rc
 
 # Basic settings {{{

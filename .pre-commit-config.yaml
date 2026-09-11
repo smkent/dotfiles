@@ -11,15 +11,26 @@ repos:
   hooks:
   - id: pretty-format-yaml
     args: [--preserve-quotes, --autofix, --indent, '2', --line-width, '79']
-- repo: https://github.com/shellcheck-py/shellcheck-py
-  rev: v0.11.0.1-1
-  hooks:
-  - id: shellcheck
-    args: ["-e", "SC1090"]
-    exclude: '^\.zshrc'
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.16.6
+- repo: local
   hooks:
   - id: ruff
-    args: ["--fix"]
+    name: ruff
+    entry: ruff check --fix
+    language: system
+    types_or: [python, pyi]
   - id: ruff-format
+    name: ruff-format
+    entry: ruff format
+    language: system
+    types_or: [python, pyi]
+  - id: ty
+    name: ty
+    entry: ty check
+    language: system
+    types: [python]
+  - id: shellcheck
+    name: shellcheck
+    language: system
+    entry: shellcheck
+    types: [shell]
+    exclude: '^\.zshrc'
