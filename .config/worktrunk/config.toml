@@ -5,7 +5,10 @@ squash = false
 rebase = false
 
 [aliases]
+"-" = "wt switch -"
+"^" = "wt switch {{ primary_worktree_path }} {{ args }}"
 cb = "wt switch --create {{ args }}"
 co = "wt switch {{ args }}"
 ls = "wt list {{ args }}"
+q = "wt switch {{ primary_worktree_path }} {{ args }}"
 rm = "wt remove {{ args }}"
