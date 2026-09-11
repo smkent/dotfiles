@@ -1,9 +1,5 @@
 worktree-path = "{{ repo_path }}/.worktrees/{{ repo }}.{{ branch | sanitize }}"
 
-[merge]
-squash = false
-rebase = false
-
 [aliases]
 "-" = "wt switch -"
 "^" = "wt switch {{ primary_worktree_path }} {{ args }}"
