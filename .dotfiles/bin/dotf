@@ -59,7 +59,9 @@ class Dotfiles:
             raise CLIError(f"Configuration exists in {rc_conf}")
 
         def _config_username() -> None:
-            username = self._prompt("Username", default=os.environ.get("USER"))
+            username = self._prompt(
+                "Username", default=os.environ.get("USER", "")
+            )
             if not username:
                 return
             config_dir.mkdir(exist_ok=True, parents=True)
@@ -147,7 +149,7 @@ class Dotfiles:
                 value = input(f"{prompt}: ").strip() or default
             except EOFError:
                 value = default
-                print("")
+                print()
             if required and not value:
                 print(
                     f"{CLIColors.YELLOW.value}"

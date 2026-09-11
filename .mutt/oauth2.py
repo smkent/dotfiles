@@ -232,7 +232,7 @@ def authorize_tokens(client_id, client_secret, authorization_code):
     request_url = accounts_url("o/oauth2/token")
 
     response = urllib.request.urlopen(
-        request_url, urllib.parse.urlencode(params)
+        request_url, urllib.parse.urlencode(params).encode("utf-8")
     ).read()
     return json.loads(response)
 
@@ -278,7 +278,7 @@ def generate_oauth2_string(username, access_token, base64_encode=True):
     """
     auth_string = f"user={username}\1auth=Bearer {access_token}\1\1"
     if base64_encode:
-        auth_string = base64.b64encode(auth_string)
+        auth_string = base64.b64encode(auth_string.encode("utf-8"))
     return auth_string
 
 
@@ -313,7 +313,9 @@ def test_smtp_authentication(user, auth_string):
     smtp_conn.set_debuglevel(True)
     smtp_conn.ehlo("test")
     smtp_conn.starttls()
-    smtp_conn.docmd("AUTH", "XOAUTH2 " + base64.b64encode(auth_string))
+    smtp_conn.docmd(
+        "AUTH", "XOAUTH2 " + base64.b64encode(auth_string).decode("utf-8")
+    )
 
 
 def require_options(options, *args):

@@ -25,7 +25,7 @@ class CLIError(Exception):
     pass
 
 
-def run(cmd: Sequence[str], *args: Any, **kwargs: Any) -> Any:
+def run(cmd: Sequence[str | Path], *args: Any, **kwargs: Any) -> Any:
     kwargs.setdefault("check", True)
     cmd = [str(c) for c in cmd]
     print("+", " ".join(shlex.quote(c) for c in cmd), file=sys.stderr)
@@ -124,7 +124,7 @@ class GnuPG:
             kwargs.setdefault("input", pgp_root_key)
             kwargs.setdefault("text", True)
             gpg_cmd += ["--pinentry-mode", "loopback", "--passphrase-fd", "0"]
-        return run(gpg_cmd + cmd, *args, **kwargs)
+        return run([*gpg_cmd, *cmd], *args, **kwargs)
 
     @cached_property
     def root_key_fpr(self) -> str:
@@ -373,8 +373,13 @@ class GPGFS:
             raise CLIError("Device path is required")
         with self._key_file() as key_args:
             sudo_run(
-                ["cryptsetup", "luksOpen", str(self.args.device), MAPPER_NAME]
-                + key_args
+                [
+                    "cryptsetup",
+                    "luksOpen",
+                    str(self.args.device),
+                    MAPPER_NAME,
+                    *key_args,
+                ]
             )
         # Ensure mapper device exists
         if not self.mapper_dev.is_block_device():
@@ -439,7 +444,7 @@ class GPGFS:
         # Close encrypted volume
         sudo_run(["cryptsetup", "luksClose", MAPPER_NAME])
 
-    def _mount_mapper_volume(self, mount_point: Path | None = None) -> None:
+    def _mount_mapper_volume(self, mount_point: Path) -> None:
         # Ensure mapper device exists
         if not self.mapper_dev.is_block_device():
             raise CLIError(f"{self.mapper_dev} not created")
@@ -501,7 +506,8 @@ class GPGFS:
             print(">>>")
             try:
                 subprocess.run(
-                    [self.gpg.environ.get("SHELL")], env=self.gpg.environ
+                    [self.gpg.environ.get("SHELL", "/bin/bash")],
+                    env=self.gpg.environ,
                 )
             finally:
                 print("<<<")
@@ -577,8 +583,8 @@ class GPGFS:
                     "--hash",
                     "sha512",
                     str(self.args.device),
+                    *key_args,
                 ]
-                + key_args
             )
         # Open encrypted volume
         self._unlock()
