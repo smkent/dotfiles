@@ -21,26 +21,24 @@ class YKAll:
             print(f"Error: {e}", file=sys.stderr)
             sys.exit(1)
 
-    def command_default(
-        self, custom_args: Sequence[str, str] | None = None
-    ) -> None:
+    def command_default(self) -> None:
         self._run_ykman(self.extra_args)
 
     def command_addtotp(self) -> None:
         self._run_ykman(
-            ["oath", "accounts", "add", "-t", "-f"] + self.extra_args
+            ["oath", "accounts", "add", "-t", "-f", *self.extra_args]
         )
 
     def command_deltotp(self) -> None:
-        self._run_ykman(["oath", "accounts", "delete"] + self.extra_args)
+        self._run_ykman(["oath", "accounts", "delete", *self.extra_args])
 
-    def _run_ykman(self, cmd_args: Sequence[str, str]) -> None:
+    def _run_ykman(self, cmd_args: Sequence[str]) -> None:
         self._run(["ykman", "list"])
         if not cmd_args:
             return
         for serial in sorted(self.serial_numbers):
             try:
-                self._run(["ykman", "--device", str(serial)] + cmd_args)
+                self._run(["ykman", "--device", str(serial), *cmd_args])
             except subprocess.CalledProcessError as e:
                 sys.exit(e.returncode)
             if {"-h", "--help"} & set(cmd_args):
@@ -56,11 +54,11 @@ class YKAll:
         return self._args[0]
 
     @cached_property
-    def extra_args(self) -> dict[str, str]:
+    def extra_args(self) -> Sequence[str]:
         return self._args[1]
 
     @cached_property
-    def _args(self) -> tuple[argparse.Namespace, dict[str, str]]:
+    def _args(self) -> tuple[argparse.Namespace, Sequence[str]]:
         ap = argparse.ArgumentParser(
             description="ykman helpers", add_help=False
         )
