@@ -5,4 +5,4 @@ os = "linux"
 postinstall = "{{ config_source | canonicalize | dirname | dirname }}/hooks/postinstall-github-Yubico-yubioath-flutter"
 rename_exe = { "authenticator" = "yubioath" }
 strip_components = 1
-version = "latest"
+version = "7.4.1"
