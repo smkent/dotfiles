@@ -25,6 +25,7 @@
 !.config/mise/conf.d/
 !.config/mise/hooks/
 !.config/mise/config.toml
+!.config/ruff/
 !.config/worktrunk/
 !.ctags
 !.dircolors
