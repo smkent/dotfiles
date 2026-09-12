@@ -65,8 +65,6 @@
 !.ssh/
 .ssh/*
 !.ssh/config
-!.ssh/config.d
-.ssh/config.d/local*
 !.ssh/sockets
 .ssh/sockets/*
 !.ssh/sockets/.keep
