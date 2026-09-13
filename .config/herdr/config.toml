@@ -32,6 +32,9 @@ resize_pane_right = "alt+right"
 name = "terminal"
 
 [ui]
+pane_gaps = false
+pane_outer_borders = false
+pane_scrollbars = false
 prompt_new_tab_name = false
 status_indicators = "symbols"
 tab_bar_position = "bottom"
