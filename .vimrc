@@ -120,6 +120,12 @@ if &term =~ '^screen'
     execute "set <xLeft>=\e[1;*D"
 endif
 
+" Split navigation
+nnoremap <silent> <C-h> <C-w>h
+nnoremap <silent> <C-j> <C-w>j
+nnoremap <silent> <C-k> <C-w>k
+nnoremap <silent> <C-l> <C-w>l
+
 " Resize windows with arrow keys
 " Up and down are reversed compared to YADR's example
 nnoremap <C-Up> <C-w>-
