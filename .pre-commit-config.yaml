@@ -34,3 +34,8 @@ repos:
         entry: shellcheck
         types: [shell]
         exclude: '^\.zshrc'
+      - id: taplo
+        name: taplo
+        entry: taplo format
+        language: system
+        types: [toml]
