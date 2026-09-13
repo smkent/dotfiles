@@ -5,3 +5,6 @@ prefix = "ctrl+a"
 
 [theme]
 name = "terminal"
+
+[ui]
+prompt_new_tab_name = false
