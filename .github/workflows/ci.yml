@@ -25,7 +25,7 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           cache: true
-          install_args: prek ruff shellcheck ty
+          install_args: prek ruff shellcheck taplo ty
 
       - name: 📐 Lint
         run: prek run --all-files
