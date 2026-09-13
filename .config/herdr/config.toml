@@ -8,3 +8,4 @@ name = "terminal"
 
 [ui]
 prompt_new_tab_name = false
+status_indicators = "symbols"
