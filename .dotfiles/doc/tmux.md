@@ -55,7 +55,7 @@ key bindings.
 | `<Prefix>l` | Move to pane right |
 | `<Prefix>Ctrl+a` | Move to the next pane |
 | `Alt+<Arrow Keys>` | Resize the current pane in the specified direction |
-| `<Prefix>r` | Reload [`.tmux.conf`](/.tmux.conf) |
+| `<Prefix>R` | Reload [`.tmux.conf`](/.tmux.conf) |
 
 Pane traversal with `Ctrl+[hjkl]` is from
 [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
