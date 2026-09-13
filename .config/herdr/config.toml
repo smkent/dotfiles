@@ -6,6 +6,10 @@ prefix = "ctrl+a"
 # Session control
 detach = ["prefix+d", "prefix+q"]
 
+# Agent navigation
+next_agent = "prefix+."
+previous_agent = "prefix+,"
+
 # Tab control
 rename_tab = ["prefix+shift+a", "prefix+shift+t"]
 
