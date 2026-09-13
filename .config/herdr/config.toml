@@ -3,6 +3,31 @@ onboarding = false
 [keys]
 prefix = "ctrl+a"
 
+# Session control
+detach = ["prefix+d", "prefix+q"]
+
+# Agent navigation
+next_agent = "prefix+."
+previous_agent = "prefix+,"
+
+# Tab control
+rename_tab = ["prefix+shift+a", "prefix+shift+t"]
+
+# Tab navigation
+previous_tab = ["f7", "prefix+p"]
+next_tab = ["f8", "prefix+n"]
+
+# Pane control
+# Remap prefix+s from default settings to split_horizontal
+settings = "prefix+shift+s"
+split_horizontal = ["prefix+s", "prefix+minus"]
+
+# Pane resize
+resize_pane_left = "alt+left"
+resize_pane_down = "alt+down"
+resize_pane_up = "alt+up"
+resize_pane_right = "alt+right"
+
 [theme]
 name = "terminal"
 
