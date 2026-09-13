@@ -36,5 +36,19 @@ pane_gaps = false
 pane_outer_borders = false
 pane_scrollbars = false
 prompt_new_tab_name = false
+sidebar_collapsed_mode = "hidden"
 status_indicators = "symbols"
 tab_bar_position = "bottom"
+tab_bar_right = [
+  { type = "text", text = "" },
+  { type = "hostname" },
+  { type = "datetime" },
+]
+
+[ui.sidebar.agents]
+row_gap = 0
+rows = [["state_icon", "machine", "workspace", "tab"]]
+
+[ui.sidebar.spaces]
+row_gap = 0
+rows = [["state_icon", "workspace", "git_status", "branch"]]
