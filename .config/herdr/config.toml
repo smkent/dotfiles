@@ -2,3 +2,6 @@ onboarding = false
 
 [keys]
 prefix = "ctrl+a"
+
+[theme]
+name = "terminal"
