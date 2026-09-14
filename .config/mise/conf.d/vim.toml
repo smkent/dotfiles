@@ -4,4 +4,4 @@ preinstall = { task = "dotfiles:vim:plugins" }
 [tasks."dotfiles:vim:plugins"]
 description = "Install vim plugins"
 hide = true
-run = 'command -v vim >/dev/null 2>&1 || exit 0; HOME="{{ config_root }}" vim -es -u "{{ config_root }}/.vimrc" -i NONE -c "PlugInstall --sync" -c "qa!"'
+run = 'command -v vim >/dev/null 2>&1 || exit 0; HOME="{{ config_root }}" vim -es -u "{{ config_root }}/.vimrc" -i NONE -c "PlugInstall" -c "qa!"'
