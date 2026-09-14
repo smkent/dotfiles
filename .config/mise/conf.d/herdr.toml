@@ -1,0 +1,6 @@
+[vars]
+herdr_plugins = "paulbkim-dev/vim-herdr-navigation"
+
+[tools.herdr]
+postinstall = "for p in {{ vars.herdr_plugins }}; do herdr plugin install \"${p}\" --yes; done"
+version = "latest"
