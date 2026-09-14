@@ -1,5 +1,5 @@
 [hooks]
-postinstall = [{ task = "dotfiles:vim:plugins" }]
+preinstall = [{ task = "dotfiles:vim:plugins" }]
 
 [tools]
 claude-code = "latest"
