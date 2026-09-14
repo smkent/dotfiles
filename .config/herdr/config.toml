@@ -52,6 +52,12 @@ type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
 
+[[keys.command]]
+key = "prefix+ctrl+l"
+type = "shell"
+command = "herdr pane send-keys \"${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID}}\" ctrl+l"
+description = "send ctrl+l"
+
 [theme]
 name = "terminal"
 
