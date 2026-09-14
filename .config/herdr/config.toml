@@ -48,8 +48,8 @@ description = "navigate up (vim/herdr)"
 
 [[keys.command]]
 key = "ctrl+l"
-type = "plugin_action"
-command = "vim-herdr-navigation.right"
+type = "shell"
+command = "${HOME}/.config/herdr/scripts/vim-herdr-navigation-wrapper right"
 description = "navigate right (vim/herdr)"
 
 [[keys.command]]
