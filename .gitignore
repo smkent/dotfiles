@@ -20,6 +20,7 @@
 !.config/herdr/
 .config/herdr/*
 !.config/herdr/config.toml
+!.config/herdr/scripts/
 !.config/mise/
 .config/mise/*
 !.config/mise/conf.d/

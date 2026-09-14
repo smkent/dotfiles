@@ -369,7 +369,9 @@ if version <= 802
     Plug 'https://github.com/cespare/vim-toml',
         \ { 'branch': 'main' }
 endif
-Plug 'https://github.com/christoomey/vim-tmux-navigator'
+if !empty($TMUX)
+    Plug 'https://github.com/christoomey/vim-tmux-navigator'
+endif
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/davidhalter/jedi-vim'
 Plug 'https://github.com/dense-analysis/ale'
@@ -413,6 +415,33 @@ if executable('git')
     set updatetime=250
 endif
 call plug#end()
+
+" vim-herdr-navigation, plugin managed by herdr
+if !empty($HERDR_ENV)
+    " Load plugin
+    let s:vim_herdr_navigation = ''
+    if executable('herdr') && executable('jq')
+        let s:vim_herdr_navigation_dir = trim(system(
+            \ "herdr plugin list --json | jq -r "
+            \ . "'.result.plugins.[] "
+            \ . "| select(.plugin_id == \"vim-herdr-navigation\") "
+            \ . "| .source.managed_path'"))
+        if v:shell_error == 0 && !empty(s:vim_herdr_navigation_dir)
+            let s:vim_herdr_navigation =
+                \ s:vim_herdr_navigation_dir . '/editor/vim.vim'
+        endif
+    endif
+    if filereadable(s:vim_herdr_navigation)
+        execute 'source' fnameescape(s:vim_herdr_navigation)
+    endif
+
+    " Avoid herdr navigation from leaving artifacts in departed vim buffer
+    autocmd FocusLost * redraw!
+
+    " Map herdr's Alt+Backspace with the meta bit set to expected word deletion
+    cnoremap <Char-0xff> <C-w>
+    inoremap <Char-0xff> <C-w>
+endif
 
 " Install plugins automatically if needed and if VIM_SKIP_PLUGINS is unset or 0
 if empty($VIM_SKIP_PLUGINS) || $VIM_SKIP_PLUGINS == 0

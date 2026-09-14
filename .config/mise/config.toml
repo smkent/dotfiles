@@ -4,7 +4,6 @@ postinstall = [{ task = "dotfiles:vim:plugins" }]
 [tools]
 claude-code = "latest"
 github-cli = "latest"
-herdr = "latest"
 "pipx:bdbox" = "latest"
 "pipx:copier" = "latest"
 "pipx:copier-python" = "latest"
