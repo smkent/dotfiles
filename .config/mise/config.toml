@@ -1,4 +1,5 @@
 [tools]
+betterleaks = "latest"
 claude-code = "latest"
 github-cli = "latest"
 "pipx:bdbox" = "latest"
