@@ -13,6 +13,11 @@ repos:
         args: [--preserve-quotes, --autofix, --offset, '2', --line-width, '79']
   - repo: local
     hooks:
+      - id: betterleaks
+        name: betterleaks
+        entry: betterleaks git . --pre-commit --staged --redact
+        language: system
+        pass_filenames: false
       - id: ruff
         name: ruff
         entry: ruff check --fix
