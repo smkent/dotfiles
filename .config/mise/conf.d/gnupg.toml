@@ -1,0 +1,11 @@
+[vars]
+pgp_key_fingerprint = "0x0342C80999FB1A06FD0F95338392C992D92500A9"
+
+[hooks]
+postinstall = { task = "dotfiles:gnupg:key" }
+
+[tasks."dotfiles:gnupg:key"]
+description = "Ensure PGP public key is installed in GnuPG keyring"
+hide = true
+run = 'command -v gpg >/dev/null 2>&1 || exit 0; gpg -k "{{ vars.pgp_key_fingerprint }}" >/dev/null 2>&1 || ( set -x; gpg --recv-keys "{{ vars.pgp_key_fingerprint }}" )'
+quiet = true
