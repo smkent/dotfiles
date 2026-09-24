@@ -177,8 +177,8 @@ Misc:
 
 #### Aliases
 
-See my [.gitconfig](/.gitconfig) for the full list of aliases. Some of the more
-useful aliases are:
+See my [git config](/.config/git/config) for the full list of aliases. Some of
+the more useful aliases are:
 
 * `ca`: "commit amend" (`git commit --amend`)
 * `cb`: "create branch" (Creates a new branch at either the specified point or

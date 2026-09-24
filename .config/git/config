@@ -3,7 +3,6 @@
 [core]
     editor = vim
     pager = less -F -R -X -x1,5
-    excludesfile = ~/.gitignore.global
 [color]
     ui = true
 [push]

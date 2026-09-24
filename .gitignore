@@ -13,6 +13,7 @@
 !.config/
 .config/*
 !.config/dircolors
+!.config/git/
 !.config/google-chrome/
 .config/google-chrome/*
 !.config/google-chrome/NativeMessagingHosts/
@@ -38,10 +39,8 @@
 .gimp-2.8/*
 !.gimp-2.8/fonts.conf
 !.gimp-2.8/scripts
-!.gitconfig
 !.github/
 !.gitignore
-!.gitignore.global
 !.gnupg/
 .gnupg/*
 !.gnupg/gpg.conf
