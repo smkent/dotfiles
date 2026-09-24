@@ -32,6 +32,7 @@
 !.config/smkent/
 .config/smkent/*
 !.config/smkent/dotfiles/
+!.config/tmux/
 !.config/worktrunk/
 !.ctags
 !.face
@@ -71,7 +72,6 @@
 !.ssh/sockets
 .ssh/sockets/*
 !.ssh/sockets/.keep
-!.tmux.conf
 !.vimrc
 !.vim/
 .vim/.netrwhist

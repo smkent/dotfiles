@@ -1,6 +1,7 @@
 # Tmux configuration
 
-This is a summary of the configuration in [`.tmux.conf`](/.tmux.conf).
+This is a summary of the configuration in
+[`.config/tmux/tmux.conf`](/.config/tmux/tmux.conf).
 
 ![tmux screenshot](/.config/smkent/dotfiles/doc/img/screenshot-tmux.png)
 
@@ -55,7 +56,7 @@ key bindings.
 | `<Prefix>l` | Move to pane right |
 | `<Prefix>Ctrl+a` | Move to the next pane |
 | `Alt+<Arrow Keys>` | Resize the current pane in the specified direction |
-| `<Prefix>R` | Reload [`.tmux.conf`](/.tmux.conf) |
+| `<Prefix>R` | Reload [`tmux.conf`](/.config/tmux/tmux.conf) |
 
 Pane traversal with `Ctrl+[hjkl]` is from
 [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
