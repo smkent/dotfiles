@@ -86,18 +86,18 @@ Prompt features:
 
 Automatic update and reload:
 
-* Changes to shell [`rc`](/.dotfiles/shell/rc) and any dependent files (such as
-  shell [`aliases`](/.dotfiles/shell/aliases)) cause the environment to be
-  automatically reloaded.
+* Changes to shell [`rc`](/.config/smkent/dotfiles/shell/rc) and any dependent
+  files (such as shell [`aliases`](/.config/smkent/dotfiles/shell/aliases))
+  cause the environment to be automatically reloaded.
 * Home directory repository updates are checked and fetched automatically via
-  [`dotfiles-auto-update`](/.dotfiles/bin/dotfiles-auto-update).
+  [`dotfiles-auto-update`](/.config/smkent/dotfiles/bin/dotfiles-auto-update).
 
-![shell screenshot](/.dotfiles/img/screenshot-bashrc.png)
+![shell screenshot](/.config/smkent/dotfiles/doc/img/screenshot-bashrc.png)
 
 ### Tmux
 
 For a more detailed tmux configuration summary, see
-[`.dotfiles/doc/tmux.md`](/.dotfiles/doc/tmux.md)
+[`.config/smkent/dotfiles/doc/tmux.md`](/.config/smkent/dotfiles/doc/tmux.md)
 
 * Use Ctrl+a as the prefix key (similar to GNU screen)
 * Use vi-style mode keys
@@ -118,12 +118,12 @@ For a more detailed tmux configuration summary, see
   * `ta`: Attach to session. Takes an optional session name argument.
   * `tl`: List sessions.
 
-![tmux screenshot](/.dotfiles/img/screenshot-tmux.png)
+![tmux screenshot](/.config/smkent/dotfiles/doc/img/screenshot-tmux.png)
 
 ### Vim
 
 For more detailed vim configuration summary, see
-[`.dotfiles/doc/vim.md`](/.dotfiles/doc/vim.md)
+[`.config/smkent/dotfiles/doc/vim.md`](/.config/smkent/dotfiles/doc/vim.md)
 
 Basic settings:
 
@@ -147,7 +147,7 @@ Misc:
 * Some basic and [vim-surround](https://github.com/tpope/vim-surround) keymaps
   from [YADR (Yet Another Dotfile Repo)](https://github.com/skwp/dotfiles/)
 
-![vim screenshot](/.dotfiles/img/screenshot-vim.png)
+![vim screenshot](/.config/smkent/dotfiles/doc/img/screenshot-vim.png)
 
 ### Git
 
@@ -174,7 +174,7 @@ Misc:
   green, changed files in brighter red, files with conflicts in yellow, and
   untracked files in blue
 
-![git colors screenshot](/.dotfiles/img/screenshot-git-colors.png)
+![git colors screenshot](/.config/smkent/dotfiles/doc/img/screenshot-git-colors.png)
 
 #### Aliases
 
@@ -222,7 +222,7 @@ useful aliases are:
 * PGP support with outgoing message signing enabled by default
 * Custom status bar formats
 
-![mutt screenshot](/.dotfiles/img/screenshot-mutt.png)
+![mutt screenshot](/.config/smkent/dotfiles/doc/img/screenshot-mutt.png)
 
 ## Development
 
@@ -251,9 +251,10 @@ repository; sources are cited within the code base and/or in the commit(s) in
 which pieces of third-party code were added to the repository.
 
 Original code in this repository is published under the MIT license. See
-[`.dotfiles/doc/LICENSE`](/.dotfiles/doc/LICENSE) for licensing information.
+[`.config/smkent/dotfiles/doc/LICENSE`](/.config/smkent/dotfiles/doc/LICENSE)
+for licensing information.
 
 
-[dotf]: /.dotfiles/bin/dotf
+[dotf]: /.config/smkent/dotfiles/bin/dotf
 [prek]: https://prek.j178.dev/
 [uv-tool]: https://docs.astral.sh/uv/guides/tools/

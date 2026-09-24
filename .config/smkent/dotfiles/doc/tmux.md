@@ -2,7 +2,7 @@
 
 This is a summary of the configuration in [`.tmux.conf`](/.tmux.conf).
 
-![tmux screenshot](/.dotfiles/img/screenshot-tmux.png)
+![tmux screenshot](/.config/smkent/dotfiles/doc/img/screenshot-tmux.png)
 
 # Basic settings
 

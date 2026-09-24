@@ -1,6 +1,8 @@
 #!/bin/zsh
 
-[ -f ~/.dotfiles/shell/rc ] && source ~/.dotfiles/shell/rc
+__shell_rc="${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/shell/rc"
+# shellcheck disable=SC1090
+[ -f "${__shell_rc}" ] && . "${__shell_rc}"
 
 # Basic settings {{{
 
