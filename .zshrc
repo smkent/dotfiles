@@ -34,3 +34,5 @@ if [ "$(uname -s)" = "Darwin" ]; then
         compinit -i
     fi
 fi
+
+# vim: set fdls=0 fdm=marker:
