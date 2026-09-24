@@ -489,6 +489,7 @@ fi
 # https://github.com/ndbroadbent/dotfiles/blob/master/bashrc/auto_reload.sh
 
 # Check for and process environment updates as part of PROMPT_COMMAND execution
+__shell_rc="${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/shell/rc"
 __auto_update_check()
 {
     local rc_mod_time=
@@ -505,7 +506,8 @@ __auto_update_check()
     rc_mod_time=$(__stat_mtime "${__auto_reload_files[@]}" | sort | tail -n1)
     if [ "${__auto_reload_last_modified-0}" -gt 0 ] &&
             [ "${rc_mod_time}" -gt "${__auto_reload_last_modified}" ]; then
-        source ~/.dotfiles/shell/rc
+        # shellcheck disable=SC1091
+        . "${__shell_rc}"
     fi
     export __auto_reload_last_modified="${rc_mod_time}"
 
@@ -540,7 +542,7 @@ __auto_reload_source_alias()
     builtin source "${@}"
 }
 
-__auto_reload_files=("${HOME}/.dotfiles/shell/rc")
+__auto_reload_files=("${__shell_rc}")
 export __auto_reload_files
 alias .='__auto_reload_source_alias'
 
@@ -556,7 +558,7 @@ __source_if_exists()
 }
 
 # Aliases and helper functions
-__source_if_exists ~/.dotfiles/shell/aliases
+__source_if_exists "$(dirname "${__shell_rc}")/aliases"
 
 # Local configuration files
 __source_if_exists "${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles/shell-rc"

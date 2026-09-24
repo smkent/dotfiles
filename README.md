@@ -86,9 +86,9 @@ Prompt features:
 
 Automatic update and reload:
 
-* Changes to shell [`rc`](/.dotfiles/shell/rc) and any dependent files (such as
-  shell [`aliases`](/.dotfiles/shell/aliases)) cause the environment to be
-  automatically reloaded.
+* Changes to shell [`rc`](/.config/smkent/dotfiles/shell/rc) and any dependent
+  files (such as shell [`aliases`](/.config/smkent/dotfiles/shell/aliases))
+  cause the environment to be automatically reloaded.
 * Home directory repository updates are checked and fetched automatically via
   [`dotfiles-auto-update`](/.dotfiles/bin/dotfiles-auto-update).
 

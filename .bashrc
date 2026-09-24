@@ -1,7 +1,8 @@
 #!/bin/bash
 
+__shell_rc="${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/shell/rc"
 # shellcheck disable=SC1090
-[ -f ~/.dotfiles/shell/rc ] && source ~/.dotfiles/shell/rc
+[ -f "${__shell_rc}" ] && . "${__shell_rc}"
 
 # Basic settings {{{
 

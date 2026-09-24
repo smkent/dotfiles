@@ -27,6 +27,9 @@
 !.config/mise/hooks/
 !.config/mise/config.toml
 !.config/ruff/
+!.config/smkent/
+.config/smkent/*
+!.config/smkent/dotfiles/
 !.config/worktrunk/
 !.ctags
 !.dircolors
