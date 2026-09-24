@@ -2,8 +2,7 @@
 
 My Linux environment configuration
 
-Quick jump: [shell](#shell), [git](#git), [mutt](#mutt), [tmux](#tmux),
-[vim](#vim)
+Quick jump: [shell](#shell), [git](#git), [tmux](#tmux), [vim](#vim)
 
 ## Design
 
@@ -207,22 +206,6 @@ useful aliases are:
   remote tracking branch)
 * `ub`: "upstream branch" (Shows the output of `git show-branch` for the
   current branch and its upstream tracking branch)
-
-### Mutt
-
-* Configure the sidebar but hide it by default (requires Mutt 1.7.0+ or the
-  sidebar patch)
-* Sort and display messages by thread
-* Message index color highlights, including highlighting messages sent only to
-  me and PGP-encrypted messages
-* Compose mail using vim
-* Vim-style navigation keybindings (`gg`, `G`, `Ctrl+b`, `Ctrl+f`)
-* [`format=flowed`](http://joeclark.org/ffaq.html) support when composing and
-  reading mail
-* PGP support with outgoing message signing enabled by default
-* Custom status bar formats
-
-![mutt screenshot](/.config/smkent/dotfiles/doc/img/screenshot-mutt.png)
 
 ## Development
 
