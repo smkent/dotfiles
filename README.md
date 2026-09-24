@@ -90,7 +90,7 @@ Automatic update and reload:
   files (such as shell [`aliases`](/.config/smkent/dotfiles/shell/aliases))
   cause the environment to be automatically reloaded.
 * Home directory repository updates are checked and fetched automatically via
-  [`dotfiles-auto-update`](/.dotfiles/bin/dotfiles-auto-update).
+  [`dotfiles-auto-update`](/.config/smkent/dotfiles/bin/dotfiles-auto-update).
 
 ![shell screenshot](/.config/smkent/dotfiles/doc/img/screenshot-bashrc.png)
 
@@ -255,6 +255,6 @@ Original code in this repository is published under the MIT license. See
 for licensing information.
 
 
-[dotf]: /.dotfiles/bin/dotf
+[dotf]: /.config/smkent/dotfiles/bin/dotf
 [prek]: https://prek.j178.dev/
 [uv-tool]: https://docs.astral.sh/uv/guides/tools/

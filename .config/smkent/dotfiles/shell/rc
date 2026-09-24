@@ -319,7 +319,7 @@ __prepend_path_if_exists()
     return 0
 }
 __prepend_path_if_exists "/opt/homebrew/bin"
-__prepend_path_if_exists "${HOME}/.dotfiles/bin"
+__prepend_path_if_exists "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin"
 __prepend_path_if_exists "${HOME}/.local/bin"
 __prepend_path_if_exists "${HOME}/bin"
 
@@ -518,7 +518,9 @@ __auto_update_check()
     if [ -f "${update_ref_file}" ]; then
         # If a previous check found an update, and it has not yet been applied,
         # apply it
-        ~/.dotfiles/bin/dotfiles-auto-update --quiet update \
+        "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin/dotfiles-auto-update" \
+            --quiet \
+            update \
             --skip-ref="$(cat "${update_ref_file}")"
         rm -f "${update_ref_file}"
     else
@@ -526,7 +528,10 @@ __auto_update_check()
         if [ "$(date +%s)" -ge \
                 "$((${git_check_time:-0}+git_update_check_interval))" ]; then
             touch "${update_timestamp_file}"
-            ~/.dotfiles/bin/dotfiles-auto-update --quiet --fork check \
+            "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin/dotfiles-auto-update" \
+                --quiet \
+                --fork \
+                check \
                 --new-ref-file "${update_ref_file}"
         fi
     fi
