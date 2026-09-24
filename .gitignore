@@ -48,6 +48,7 @@
 !.gnupg/gpg-agent.conf
 !.gnupg/dirmngr.conf
 !.gnupg/scdaemon.conf
+!.hidden
 !.local/
 .local/*
 !.local/state/
