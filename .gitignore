@@ -12,6 +12,7 @@
 !.claude/statusline
 !.config/
 .config/*
+!.config/dircolors
 !.config/google-chrome/
 .config/google-chrome/*
 !.config/google-chrome/NativeMessagingHosts/
@@ -32,7 +33,6 @@
 !.config/smkent/dotfiles/
 !.config/worktrunk/
 !.ctags
-!.dircolors
 !.face
 !.gimp-2.8/
 .gimp-2.8/*
