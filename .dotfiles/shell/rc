@@ -16,7 +16,8 @@ auto_update_check_interval=30
 tmux_env_update_check_interval=30
 git_update_check_interval=7200  # 2 hours
 
-[ -f ~/.dotfiles/.data/config-rc ] && source ~/.dotfiles/.data/config-rc
+__shell_config_rc="${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles/config-rc"
+[ -f "${__shell_config_rc}" ] && . "${__shell_config_rc}"
 
 # }}}
 
@@ -329,7 +330,7 @@ __prepend_path_if_exists "${HOME}/bin"
 # dotfiles repository configuration {{{
 
 # Specify the data directory for dotfiles settings and state storage
-export DOTFILES_DATA="${HOME}/.dotfiles/.data"
+export DOTFILES_DATA="${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles"
 
 # }}}
 
@@ -558,8 +559,8 @@ __source_if_exists()
 __source_if_exists ~/.dotfiles/shell/aliases
 
 # Local configuration files
-__source_if_exists ~/.local/shell-rc
-__source_if_exists ~/.local/shell-aliases
+__source_if_exists "${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles/shell-rc"
+__source_if_exists "${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles/shell-aliases"
 
 # }}}
 
