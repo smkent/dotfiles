@@ -2,7 +2,7 @@
 
 This is a summary of the configuration in [`.vimrc`](/.vimrc).
 
-![vim screenshot](/.dotfiles/img/screenshot-vim.png)
+![vim screenshot](/.config/smkent/dotfiles/doc/img/screenshot-vim.png)
 
 # Basic settings
 
