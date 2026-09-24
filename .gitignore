@@ -58,11 +58,6 @@
 .local/state/smkent/dotfiles/*
 !.local/state/smkent/dotfiles/.keep
 !.mailcap
-!.mutt/
-.mutt/certificates
-.mutt/cache
-.mutt/accounts
-!.muttrc
 !.mozilla/
 .mozilla/*
 !.mozilla/native-messaging-hosts/

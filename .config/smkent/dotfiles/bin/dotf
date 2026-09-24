@@ -24,7 +24,6 @@ DOTFILES_DEPENDENCIES = (
     "gpg",
     "mise",
     "mdv",
-    ("mutt", "{} -v"),
     "screen",
     ("shellcheck", "{} --version | grep ^version:"),
     "ruff",
