@@ -339,8 +339,8 @@ export DOTFILES_DATA="${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles"
 # Color configuration
 if [ ${__colors_supported} -ge 2 ]; then
     if [ "$(uname -s)" != "Darwin" ]; then
-        if [ ${__colors_supported} -ge 256 ] && [ -r ~/.dircolors ]; then
-            eval "$(dircolors -b ~/.dircolors)"
+        if [ ${__colors_supported} -ge 256 ] && [ -r "${XDG_CONFIG_HOME-${HOME}/.config}/dircolors" ]; then
+            eval "$(dircolors -b "${XDG_CONFIG_HOME-${HOME}/.config}/dircolors")"
         else
             eval "$(dircolors -b)"
         fi
