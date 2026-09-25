@@ -19,4 +19,11 @@ shopt -s checkwinsize
 
 # }}}
 
+# Completion {{{
+
+# shellcheck disable=SC1091
+[ -f /etc/profile.d/bash_completion.sh ] && . /etc/profile.d/bash_completion.sh
+
+# }}}
+
 # vim: set fdls=0 fdm=marker:
