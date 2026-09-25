@@ -1,0 +1,25 @@
+title = "dotfiles betterleaks config"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "PGP public key fingerprints"
+regexes = ['''fingerprint\s*=\s*"0x[0-9A-Fa-f]{40}"''']
+regexTarget = "line"
+[[rules.allowlists]]
+description = "Example client secret in Google gmail-oauth2-tools docstring"
+condition = "AND"
+paths = ['''(^|/)\.mutt/oauth2\.py$''']
+regexes = ['''^VWFn8LIKAMC-MsjBMhJeOplZ$''']
+
+[[rules]]
+id = "generic-credential-uri"
+[[rules.allowlists]]
+description = "vim-plug empty git:: credential to suppress auth prompts"
+condition = "AND"
+paths = ['''(^|/)\.vim/autoload/plug\.vim$''']
+regexes = ['''git::@github\.com''']
+regexTarget = "line"

@@ -6,6 +6,7 @@
 !.bash_logout
 !.bash_profile
 !.bashrc
+!.betterleaks.toml
 !.claude/
 .claude/*
 !.claude/settings.json
