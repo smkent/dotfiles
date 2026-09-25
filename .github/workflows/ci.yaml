@@ -7,6 +7,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   ci:
     name: Lint
@@ -15,23 +18,14 @@ jobs:
       - name: 💾 Check out repository
         uses: actions/checkout@v7
 
+      - name: 🍳 Set up repository
+        uses: ./.github/actions/setup
+
       - name: 🪝 Cache pre-commit hooks
         uses: actions/cache@v6
         with:
           path: ~/.cache/prek
           key: "prek-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}"
-
-      - name: 🔌 Cache vim plugins
-        uses: actions/cache@v6
-        with:
-          path: ${{ github.workspace }}/.vim/plugged
-          key: "vim-plugged-${{ runner.os }}-${{ hashFiles('.vimrc') }}"
-
-      - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
-        with:
-          cache: true
-          install_args: betterleaks prek ruff shellcheck taplo ty
 
       - name: 📐 Lint
         run: prek run --all-files
@@ -39,25 +33,14 @@ jobs:
   betterleaks:
     name: Secret scan
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: 💾 Check out repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: 🔌 Cache vim plugins
-        uses: actions/cache@v6
-        with:
-          path: ${{ github.workspace }}/.vim/plugged
-          key: "vim-plugged-${{ runner.os }}-${{ hashFiles('.vimrc') }}"
-
-      - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
-        with:
-          cache: true
-          install_args: betterleaks
+      - name: 🍳 Set up repository
+        uses: ./.github/actions/setup
 
       - name: 🔍 Check for secrets
         run: mise run dotfiles:betterleaks:scan
