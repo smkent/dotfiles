@@ -9,7 +9,7 @@ Quick jump: [shell](#shell), [git](#git), [tmux](#tmux), [vim](#vim)
 This repository contains flat files meant to be used in place within `${HOME}`.
 
 My dotfiles are designed be portable with minimal required dependencies (git,
-bash/zsh, Python, and the
+bash/zsh, [mise][mise], Python, and the
 [Powerline fonts](https://github.com/powerline/fonts)).
 
 ## Installation
@@ -40,13 +40,22 @@ prompts, run [`dotf config`][dotf].
 
 To use a different profile picture, remove or replace `.face`.
 
-### Dependency installation
+### Tools installation
 
 My [vim-airline](https://github.com/vim-airline/vim-airline) and
 [tmux](https://github.com/tmux/tmux) configurations require the [Powerline
 fonts](https://github.com/powerline/fonts).
 
-More features become available when optional dependencies are installed:
+Additional tools are managed with [mise][mise]
+([installation][mise-installation]).
+
+To install these, run:
+
+```shell
+mise install
+```
+
+More features become available when optional tools are installed:
 
 * [shellcheck](https://github.com/koalaman/shellcheck),
   [ruff](https://docs.astral.sh/ruff/), and
@@ -211,18 +220,16 @@ the more useful aliases are:
 
 Static checks are managed by [prek][prek].
 
-Installation via [`uv tool`][uv-tool]:
+With [mise][mise] installed, ensure all needed tools are present with:
 
-```console
-uv tool install prek
-prek install
+```shell
+mise install
 ```
 
-Installation via `pip`:
+Run all static checks with:
 
-```console
-pip install prek
-prek install
+```shell
+prek -a
 ```
 
 ## Licensing and attribution
@@ -239,5 +246,6 @@ for licensing information.
 
 
 [dotf]: /.config/smkent/dotfiles/bin/dotf
+[mise-installation]: https://mise.jdx.dev/installing-mise.html
+[mise]: https://mise.jdx.dev
 [prek]: https://prek.j178.dev/
-[uv-tool]: https://docs.astral.sh/uv/guides/tools/
