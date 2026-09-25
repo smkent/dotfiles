@@ -1,0 +1,8 @@
+[tools]
+betterleaks = "latest"
+
+[tasks."dotfiles:betterleaks:scan"]
+description = "Scan git history for secrets"
+hide = true
+raw_args = true
+run = "betterleaks git . --redact"
