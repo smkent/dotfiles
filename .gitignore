@@ -79,7 +79,4 @@
 .vim/.netrwhist
 .vim/plugged/
 !.zshrc
-!.zsnes/
-.zsnes/*
-!.zsnes/zinput.cfg
 !README.md
