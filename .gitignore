@@ -13,6 +13,11 @@
 !.config/
 .config/*
 !.config/dircolors
+!.config/GIMP/
+.config/GIMP/*
+!.config/GIMP/3.2/
+.config/GIMP/3.2/*
+!.config/GIMP/3.2/scripts/
 !.config/git/
 !.config/google-chrome/
 .config/google-chrome/*
@@ -36,10 +41,6 @@
 !.config/worktrunk/
 !.ctags
 !.face
-!.gimp-2.8/
-.gimp-2.8/*
-!.gimp-2.8/fonts.conf
-!.gimp-2.8/scripts
 !.github/
 !.gitignore
 !.gnupg/
