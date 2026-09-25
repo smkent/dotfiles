@@ -1,0 +1,17 @@
+name: Set up repository
+description: Set up repository caches and tools
+
+runs:
+  using: composite
+  steps:
+    - name: 🔌 Cache vim plugins
+      uses: actions/cache@v6
+      with:
+        path: ${{ github.workspace }}/.vim/plugged
+        key: "vim-plugged-${{ runner.os }}-${{ hashFiles('.vimrc') }}"
+
+    - name: 🍳 Set up mise
+      uses: jdx/mise-action@v4
+      with:
+        cache: true
+        install_args: betterleaks prek ruff shellcheck taplo ty
