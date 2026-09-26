@@ -194,9 +194,9 @@ gpg_live() {
     fi
     (
         set -ex
-        "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin/gpgfs" -u
+        "${DOTFILES_CONFIG}/bin/gpgfs" -u
         cp -iv "${device_file}" "${fsfile}"
-        "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin/gpgfs" -d "${mountpoint}" -m "${fsfile}"
+        "${DOTFILES_CONFIG}/bin/gpgfs" -d "${mountpoint}" -m "${fsfile}"
     )
     GNUPGHOME="$(readlink -f "${mountpoint}/gnupg")"
     export GNUPGHOME
@@ -204,7 +204,7 @@ gpg_live() {
 
 gpg_finish() {
     local fsfile="fscopy"
-    "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin/gpgfs" -u
+    "${DOTFILES_CONFIG}/bin/gpgfs" -u
     export GNUPGHOME=
     local device_file
     device_file="$(__gpg_device_file)"
