@@ -49,12 +49,10 @@ class Dotfiles:
             sys.exit(1)
 
     def config(self) -> None:
-        xdg_state_home = Path(
-            os.environ.get(
-                "XDG_STATE_HOME", Path().home() / ".local" / "state"
-            )
+        xdg_data_home = Path(
+            os.environ.get("XDG_DATA_HOME", Path().home() / ".local" / "share")
         )
-        config_dir = xdg_state_home / "smkent" / "dotfiles"
+        config_dir = xdg_data_home / "smkent" / "dotfiles"
         rc_conf = config_dir / "config-rc"
         if not self.args.overwrite and rc_conf.exists():
             raise CLIError(f"Configuration exists in {rc_conf}")

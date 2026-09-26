@@ -16,8 +16,13 @@ auto_update_check_interval=30
 tmux_env_update_check_interval=30
 git_update_check_interval=7200  # 2 hours
 
-__shell_config_rc="${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles/config-rc"
-[ -f "${__shell_config_rc}" ] && . "${__shell_config_rc}"
+# Directories for dotfiles config, settings and state storage
+export DOTFILES_CONFIG="${XDG_DATA_HOME-${HOME}/.config}/smkent/dotfiles"
+export DOTFILES_DATA="${XDG_DATA_HOME-${HOME}/.local/share}/smkent/dotfiles"
+export DOTFILES_STATE="${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles"
+
+# shellcheck disable=SC1091
+[ -f "${DOTFILES_DATA}/config-rc" ] && . "${DOTFILES_DATA}/config-rc"
 
 # }}}
 
@@ -319,7 +324,7 @@ __prepend_path_if_exists()
     return 0
 }
 __prepend_path_if_exists "/opt/homebrew/bin"
-__prepend_path_if_exists "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin"
+__prepend_path_if_exists "${DOTFILES_CONFIG}/bin"
 __prepend_path_if_exists "${HOME}/.local/bin"
 __prepend_path_if_exists "${HOME}/bin"
 
@@ -328,9 +333,6 @@ __prepend_path_if_exists "${HOME}/bin"
 # Application settings {{{
 
 # dotfiles repository configuration {{{
-
-# Specify the data directory for dotfiles settings and state storage
-export DOTFILES_DATA="${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles"
 
 # }}}
 
@@ -489,7 +491,7 @@ fi
 # https://github.com/ndbroadbent/dotfiles/blob/master/bashrc/auto_reload.sh
 
 # Check for and process environment updates as part of PROMPT_COMMAND execution
-__shell_rc="${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/shell/rc"
+__shell_rc="${DOTFILES_CONFIG}/shell/rc"
 __auto_update_check()
 {
     local rc_mod_time=
@@ -513,14 +515,12 @@ __auto_update_check()
 
     # Check for dotfiles repository updates
     local git_check_time=
-    local update_ref_file="${DOTFILES_DATA}/update_ref"
-    local update_timestamp_file="${DOTFILES_DATA}/update_timestamp"
+    local update_ref_file="${DOTFILES_STATE}/update_ref"
+    local update_timestamp_file="${DOTFILES_STATE}/update_timestamp"
     if [ -f "${update_ref_file}" ]; then
         # If a previous check found an update, and it has not yet been applied,
         # apply it
-        "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin/dotfiles-auto-update" \
-            --quiet \
-            update \
+        "${DOTFILES_CONFIG}/bin/dotfiles-auto-update" --quiet update \
             --skip-ref="$(cat "${update_ref_file}")"
         rm -f "${update_ref_file}"
     else
@@ -528,10 +528,7 @@ __auto_update_check()
         if [ "$(date +%s)" -ge \
                 "$((${git_check_time:-0}+git_update_check_interval))" ]; then
             touch "${update_timestamp_file}"
-            "${XDG_CONFIG_HOME-${HOME}/.config}/smkent/dotfiles/bin/dotfiles-auto-update" \
-                --quiet \
-                --fork \
-                check \
+            "${DOTFILES_CONFIG}/bin/dotfiles-auto-update" --quiet --fork check \
                 --new-ref-file "${update_ref_file}"
         fi
     fi
@@ -563,17 +560,17 @@ __source_if_exists()
 }
 
 # Aliases and helper functions
-__source_if_exists "$(dirname "${__shell_rc}")/aliases"
+__source_if_exists "${DOTFILES_CONFIG}/shell/aliases"
 
 # Local configuration files
-__source_if_exists "${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles/shell-rc"
-__source_if_exists "${XDG_STATE_HOME-${HOME}/.local/state}/smkent/dotfiles/shell-aliases"
+__source_if_exists "${DOTFILES_DATA}/shell-rc"
+__source_if_exists "${DOTFILES_DATA}/shell-aliases"
 
 # }}}
 
 # Display basic settings on first invocation {{{
 
-if [ ! -f "${DOTFILES_DATA}/welcome_message" ]; then
+if [ ! -f "${DOTFILES_STATE}/welcome_message" ]; then
     echo "===="
     echo "This appears to be a new dotfiles instance!"
     echo
@@ -587,7 +584,7 @@ if [ ! -f "${DOTFILES_DATA}/welcome_message" ]; then
     echo
     echo "Configure with $(tput bold)dotf config$(tput sgr0)"
     echo "===="
-    touch "${DOTFILES_DATA}/welcome_message"
+    touch "${DOTFILES_STATE}/welcome_message"
 fi
 
 # }}}
