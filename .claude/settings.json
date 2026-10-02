@@ -2,11 +2,11 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "*",
+        "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
           {
             "type": "command",
-            "command": "sh -c \"~/.claude/hooks/herdr-agent-state.sh session || exit 0\"",
+            "command": "sh -c \"~/.claude/hooks/herdr-agent-state.sh session\"",
             "timeout": 10
           }
         ]
