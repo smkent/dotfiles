@@ -6,7 +6,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections.abc import Iterator, Sequence
+from collections.abc import Generator, Sequence
 from contextlib import contextmanager, suppress
 from dataclasses import dataclass, fields
 from datetime import datetime, timezone
@@ -324,7 +324,7 @@ class GPGFS:
         )
 
     @contextmanager
-    def _key_file(self) -> Iterator[Sequence[str]]:
+    def _key_file(self) -> Generator[Sequence[str]]:
         if self.config.fs_passphrase:
             with tempfile.TemporaryDirectory() as d:
                 kf = Path(d) / "key"
@@ -334,7 +334,7 @@ class GPGFS:
         yield []
 
     @contextmanager
-    def _temp_vault_copy(self) -> Iterator[None]:
+    def _temp_vault_copy(self) -> Generator[None]:
         if not self.args.device:
             raise CLIError("Device is required")
         if not getattr(self.args, "vault_temp_copy", False):
@@ -355,7 +355,7 @@ class GPGFS:
             yield
 
     @contextmanager
-    def _vault_mounted(self) -> Iterator[None]:
+    def _vault_mounted(self) -> Generator[None]:
         with self._temp_vault_copy():
             should_unmount = self.command_mount(exist_ok=True)
             try:
