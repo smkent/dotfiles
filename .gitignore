@@ -39,6 +39,7 @@
 .config/smkent/*
 !.config/smkent/dotfiles/
 !.config/tmux/
+!.config/uv/
 !.config/worktrunk/
 !.ctags
 !.face
