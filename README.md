@@ -65,9 +65,6 @@ More features become available when optional tools are installed:
   [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags),
   typically available as the `universal-ctags` package)
 * `xclip` (for copying to the system clipboard in tmux)
-* [terminal_markdown_viewer](https://github.com/axiros/terminal_markdown_viewer)
-  (for previewing Markdown files with
-  [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview))
 
 Run [`dotf deps`][dotf] to see the executable path and version
 information for programs that this repository configures or depends on.

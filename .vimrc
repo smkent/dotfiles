@@ -393,8 +393,6 @@ Plug 'https://github.com/pangloss/vim-javascript'
 Plug 'https://github.com/ruanyl/vim-gh-line'
 Plug 'https://github.com/sirtaj/vim-openscad'
 Plug 'https://github.com/SirVer/ultisnips'
-Plug 'https://github.com/smkent/vim-pipe-preview',
-    \ { 'branch': 'main' }
 if version <= 802
     Plug 'https://github.com/stephpy/vim-yaml'
 endif
@@ -616,15 +614,6 @@ augroup AnsiEsc_unmap_autocommands
         \ execute 'nunmap <Leader>swp' |
         \ execute 'nunmap <Leader>rwp'
 augroup END
-
-" }}}
-
-" vim-pipe-preview configuration {{{
-
-" Preview markdown files using mdv with the "Marieke" color theme
-let g:pipe_preview_markdown_command = 'mdv -t "960.847" -'
-nnoremap <silent> <Leader>mn :<C-U>PipePreview<CR>
-nnoremap <silent> <Leader>mu :<C-U>PipePreviewUpdate<CR>
 
 " }}}
 

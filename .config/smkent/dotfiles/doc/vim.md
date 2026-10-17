@@ -28,9 +28,6 @@ This is a summary of the configuration in [`.vimrc`](/.vimrc).
 ## File type specific settings
 
 * `make`: Insert tabs (`noexpandtabs`)
-* `markdown`: Enable
-  [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview) using
-  [terminal_markdown_viewer](https://github.com/axiros/terminal_markdown_viewer)
 * `gitcommit`: Enable spell checking
 * `gitrebase`: Abbreviate instances of `pick` to `p` on startup
 
@@ -59,7 +56,6 @@ Managed by [vim-plug](https://github.com/junegunn/vim-plug)
 * [vim-javascript](https://github.com/pangloss/vim-javascript)
 * [vim-numbertoggle](https://github.com/jeffkreeftmeijer/vim-numbertoggle)
 * [vim-openscad](https://github.com/sirtaj/vim-openscad)
-* [vim-pipe-preview](https://github.com/smkent/vim-pipe-preview)
 * [vim-snippets](https://github.com/honza/vim-snippets)
 * [vim-surround](https://github.com/tpope/vim-surround)
 * [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
@@ -207,13 +203,6 @@ Repo)](https://github.com/skwp/dotfiles/)
 | `<Leader>r]` | Delete `[]` contents under cursor and enter insert mode |
 | `<Leader>r{` | Delete next `{}` contents and enter insert mode |
 | `<Leader>r}` | Delete `{}` contents under cursor and enter insert mode |
-
-### vim-pipe-preview plugin mappings
-
-| Mapping | Meaning |
-| :-- | :-- |
-| `<Leader>mn` | Open preview window for the current buffer |
-| `<Leader>mu` | Update preview window for the current buffer |
 
 ### Miscellaneous mappings
 
