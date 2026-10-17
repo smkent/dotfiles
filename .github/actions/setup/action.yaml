@@ -7,7 +7,9 @@ runs:
     - name: 🔌 Cache vim plugins
       uses: actions/cache@v6
       with:
-        path: ${{ github.workspace }}/.vim/plugged
+        path: |
+          ${{ github.workspace }}/.fzf
+          ${{ github.workspace }}/.vim/plugged
         key: "vim-plugged-${{ runner.os }}-${{ hashFiles('.vimrc') }}"
 
     - name: 🍳 Set up mise
