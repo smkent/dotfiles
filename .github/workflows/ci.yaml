@@ -43,7 +43,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: 🔍 Check for secrets
-        run: mise run dotfiles:betterleaks:scan
+        run: mise run --skip-tools dotfiles:betterleaks:scan
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
