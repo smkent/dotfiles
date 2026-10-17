@@ -384,11 +384,7 @@ Plug 'https://github.com/jamessan/vim-gnupg',
     \ { 'branch': 'main' }
 Plug 'https://github.com/jeffkreeftmeijer/vim-numbertoggle',
     \ { 'branch': 'main' }
-Plug 'https://github.com/junegunn/fzf',
-    \ {
-    \     'dir': '~/.fzf',
-    \     'do': './install --completion --no-update-rc --no-key-bindings',
-    \ }
+Plug 'https://github.com/junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'https://github.com/junegunn/fzf.vim'
 Plug 'https://github.com/ludovicchabant/vim-gutentags'
 Plug 'https://github.com/maralla/completor.vim'
