@@ -35,6 +35,7 @@ run = "betterleaks git . --redact"
 
 [tasks."dotfiles:test"]
 description = "Run tests"
+hide = true
 raw_args = true
 run = "echo \"No test command defined. Set the \\`dotfiles:test\\` command in mise.toml -> [tasks.\"dotfiles:test\"] -> \\`run\\`.\""
 
