@@ -1,44 +1,68 @@
 name: CI
 
 on:
-  pull_request:
   push:
     branches:
       - main
-  workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   ci:
     name: Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: 💾 Check out repository
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: 🍳 Set up repository
         uses: ./.github/actions/setup
 
       - name: 📐 Lint
-        run: prek run --all-files
+        run: mise run dotfiles:lint
+
+      - name: 🔥 Test
+        run: mise run dotfiles:test
 
   betterleaks:
     name: Secret scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: 💾 Check out repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: 🍳 Set up repository
         uses: ./.github/actions/setup
 
       - name: 🔍 Check for secrets
-        run: mise run --skip-tools dotfiles:betterleaks:scan
+        run: mise run dotfiles:secretscan
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  commit-messages:
+    name: Commit messages
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 💾 Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: ✉️ Check commit messages
+        uses: commit-check/commit-check-action@v2
+        with:
+          branch: false
