@@ -21,12 +21,6 @@ jobs:
       - name: 🍳 Set up repository
         uses: ./.github/actions/setup
 
-      - name: 🪝 Cache pre-commit hooks
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/prek
-          key: "prek-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}"
-
       - name: 📐 Lint
         run: prek run --all-files
 
