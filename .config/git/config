@@ -162,4 +162,4 @@
 [include]
     path = ~/.local/gitconfig
 [url "git@github.com:"]
-    pushInsteadOf = https://github.com
+    pushInsteadOf = https://github.com/
