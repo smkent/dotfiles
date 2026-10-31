@@ -41,6 +41,7 @@
 !.config/tmux/
 !.config/uv/
 !.config/worktrunk/
+!.copier-answers.yml
 !.ctags
 !.face
 !.github/
@@ -62,6 +63,7 @@
 .local/state/smkent/dotfiles/*
 !.local/state/smkent/dotfiles/.keep
 !.mailcap
+!.mise.toml
 !.mozilla/
 .mozilla/*
 !.mozilla/native-messaging-hosts/

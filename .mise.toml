@@ -1,0 +1,45 @@
+min_version = "2026.2.5"
+
+[hooks]
+preinstall = { task = "dotfiles:vim:plugins" }
+postinstall = ["[ ! -e .git ] || prek --quiet install"]
+
+[tools]
+betterleaks = "latest"
+jactionlint = "latest"
+"pipx:commit-check" = "latest"
+"pipx:copier" = "latest"
+prek = "latest"
+ruff = "latest"
+shellcheck = "latest"
+taplo = "latest"
+ty = "latest"
+uv = "latest"
+
+[tasks."dotfiles:lint"]
+description = "Run all formatters and static checks"
+hide = true
+raw_args = true
+run = "prek run --all-files"
+
+[tasks."dotfiles:lt"]
+description = "Run all formatters and static checks (same as dotfiles:lint)"
+hide = true
+run = [{ task = "dotfiles:lint" }, { task = "dotfiles:test" }]
+
+[tasks."dotfiles:secretscan"]
+description = "Scan git history for secrets"
+hide = true
+raw_args = true
+run = "betterleaks git . --redact"
+
+[tasks."dotfiles:test"]
+description = "Run tests"
+raw_args = true
+run = "echo \"No test command defined. Set the \\`dotfiles:test\\` command in mise.toml -> [tasks.\"dotfiles:test\"] -> \\`run\\`.\""
+
+[tasks."dotfiles:vim:plugins"]
+description = "Install vim plugins"
+hide = true
+run = 'command -v vim >/dev/null 2>&1 || exit 0; HOME="{{ config_root }}" TMUX="/dev/null" vim -es -u "{{ config_root }}/.vimrc" -i NONE -c "Plug{{ usage.action | title }}" -c "qa!"'
+usage = 'arg "<action>" default="install" help="vim-plug action" { choices "install" "update" }'

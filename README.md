@@ -2,6 +2,11 @@
 
 My Linux environment configuration
 
+[![License](https://img.shields.io/badge/license-MIT-67ac09)](https://github.com/smkent/dotfiles/blob/main/.config/smkent/dotfiles/doc/LICENSE)
+[![CI](https://github.com/smkent/dotfiles/actions/workflows/ci.yaml/badge.svg)](https://github.com/smkent/dotfiles/actions/workflows/ci.yaml)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot)](https://renovatebot.com)
+[![GitHub stars](https://img.shields.io/github/stars/smkent/dotfiles?style=social)](https://github.com/smkent/dotfiles)
+
 Quick jump: [shell](#shell), [git](#git), [tmux](#tmux), [vim](#vim)
 
 ## Design
@@ -226,7 +231,7 @@ mise install
 Run all static checks with:
 
 ```shell
-prek -a
+mise run dotfiles:lint
 ```
 
 ## Licensing and attribution
@@ -237,11 +242,17 @@ source. Every effort has been made to identify third-party code within this
 repository; sources are cited within the code base and/or in the commit(s) in
 which pieces of third-party code were added to the repository.
 
-Original code in this repository is published under the MIT license. See
+Original code in this repository is
+copyright (C) 2016 Stephen Kent and contributors,
+published under the MIT license. See
 [`.config/smkent/dotfiles/doc/LICENSE`](/.config/smkent/dotfiles/doc/LICENSE)
 for licensing information.
 
+## Project template
 
+This project is based on and maintained with [copier-project][copier-project].
+
+[copier-project]: https://smkent.github.io/copier-project
 [dotf]: /.config/smkent/dotfiles/bin/dotf
 [mise-installation]: https://mise.jdx.dev/installing-mise.html
 [mise]: https://mise.jdx.dev

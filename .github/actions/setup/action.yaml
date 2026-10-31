@@ -8,10 +8,10 @@ runs:
       uses: actions/cache@v6
       with:
         path: ${{ github.workspace }}/.vim/plugged
-        key: "vim-plugged-${{ runner.os }}-${{ hashFiles('.vimrc') }}"
+        key: vim-plugged-${{ runner.os }}-${{ hashFiles('.vimrc') }}
 
     - name: 🍳 Set up mise
       uses: jdx/mise-action@v5
       with:
         cache: true
-        install_args: betterleaks prek ruff shellcheck taplo ty
+        install: true
