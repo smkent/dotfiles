@@ -31,7 +31,7 @@ run = [{ task = "dotfiles:lint" }, { task = "dotfiles:test" }]
 description = "Scan git history for secrets"
 hide = true
 raw_args = true
-run = "betterleaks git . --redact"
+run = "betterleaks git . --redact --config .betterleaks.toml"
 
 [tasks."dotfiles:test"]
 description = "Run tests"
