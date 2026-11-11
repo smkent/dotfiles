@@ -157,11 +157,8 @@ alias vimx='\vim'
 
 # ssh {{{
 
-# Start agent
-alias sstart='eval $(ssh-agent) && ssh-add'
-
-# "git grep"
-alias sstop='kill ${SSH_AGENT_PID}'
+alias sshc='ssh -O check'
+alias sshx='ssh -O exit'
 
 # }}}
 
