@@ -76,7 +76,7 @@ class Dotfiles:
             rc_conf.write_text(os.linesep.join(rc_content) + os.linesep)
 
         def _config_git_email() -> None:
-            conf = Path().home() / ".local" / "gitconfig"
+            conf = config_dir / "gitconfig"
             git_email = ""
             with suppress(subprocess.CalledProcessError):
                 git_email = subprocess.check_output(

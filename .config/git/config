@@ -160,6 +160,6 @@
                  git config --local --unset \"branch.${b}.merge\"; }; f"
     wt = worktree
 [include]
-    path = ~/.local/gitconfig
+    path = ~/.local/share/smkent/dotfiles/gitconfig
 [url "git@github.com:"]
     pushInsteadOf = https://github.com/
