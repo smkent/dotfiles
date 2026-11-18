@@ -118,7 +118,6 @@ tp() {
     name="${1:-$(basename "${dir}" | tr ':. ' '-')}"
     if ! tmux has-session -t "=${name}" 2>/dev/null; then
         tmux new-session -d -s "${name}" -c "${dir}" -n herdr
-        tmux send-keys -t "=${name}:0" "herdr session attach ${name}" C-m
     fi
     tmux setenv -t "${name}" __tmux_attach_time "$(date +%s)"
     tmux attach -d -t "=${name}"
